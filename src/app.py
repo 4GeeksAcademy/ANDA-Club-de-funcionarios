@@ -10,13 +10,19 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from flask_bcrypt import Bcrypt
+from datetime import timedelta
 # from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') # Clave secreta en .env
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=365)  # Configura 1 año de expiración para el token
+jwt = JWTManager(app)
+bcrypt = Bcrypt(app)
 app.url_map.strict_slashes = False
 
 # database condiguration
