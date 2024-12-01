@@ -42,7 +42,7 @@ class Reservations(db.Model):
     def __repr__(self):
         return f'<Reservations {self.event_name}>'
     
-    def serialize(self):
+    def serialize(self): #serialice
         return {
             "id": self.id, 
             "event_name": self.event_name,
