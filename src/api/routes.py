@@ -24,16 +24,22 @@ def get_pending_users():
     Devuelve una lista de usuarios con estado 'en_revision'.
     Solo accesible para administradores autenticados.
     """
+    # Obtener el ID del usuario autenticado desde el token JWT
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
     
+    # Verificar que el usuario actual exista y sea administrador
     if not current_user or current_user.role != 'admin':
         return jsonify({"msg": "Unauthorized"}), 403
 
+    # Consultar todos los usuarios cuyo estado sea 'en_revision'
     pending_users = User.query.filter_by(status='en_revision').all()
+
+    # Si no hay usuarios pendientes, devolver un mensaje
     if not pending_users:
         return jsonify({"msg": "No pending users found"}), 200
 
+    # Devolver la lista de usuarios pendientes serializados
     return jsonify([user.serialize() for user in pending_users]), 200
 
 
@@ -42,34 +48,43 @@ def get_pending_users():
 def update_user_status(user_id):
     """
     Actualiza el estado de un usuario.
-    Solo accesible para administradores.
+    Solo accesible para administradores autenticados.
     """
+    # Obtener el ID del usuario autenticado desde el token JWT
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
     
+    # Verificar que el usuario actual exista y sea administrador
     if not current_user or current_user.role != 'admin':
         return jsonify({"error": "Unauthorized"}), 403
-    
+
+    # Buscar al usuario al que se le quiere cambiar el estado por su ID
     user = User.query.get(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
     
+    # Verificar que se envíe un cuerpo en la petición y que contenga el campo 'status'
     body = request.get_json()
     if not body or 'status' not in body:
         return jsonify({"error": "Status field is required"}), 400
     
+    # Obtener el nuevo estado desde el cuerpo de la petición
     new_status = body.get('status')
+    
+    # Validar que el nuevo estado sea válido ('activo' o 'en_revision')
     if new_status not in ['activo', 'en_revision']:
         return jsonify({"error": "Invalid status"}), 400
     
+    # Verificar si el estado ya está establecido para evitar cambios innecesarios
     if user.status == new_status:
         return jsonify({"message": "User status is already set to the specified value"}), 200
     
+    # Actualizar el estado del usuario y guardar los cambios en la base de datos
     user.status = new_status
     db.session.commit()
     
+    # Confirmar que el cambio de estado fue exitoso
     return jsonify({"message": "User status updated successfully"}), 200
-
 
 # -----------------------------------------------------------------
 # AUTHENTICATION ROUTES
