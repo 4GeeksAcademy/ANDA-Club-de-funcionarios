@@ -5,6 +5,8 @@ import pytz
 
 db = SQLAlchemy()
 
+def lazy_utc_now(): return datetime.now(pytz.utc) #funcion para manejar fecha y hora UTC y que no me ponga una hora fija 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(50), nullable=False)
@@ -12,8 +14,8 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), unique=False, nullable=False)
     role = db.Column(db.Enum('user', 'admin', name='role_enum'), default='user', nullable=False)
     status = db.Column(db.Enum('activo', 'en_revision', name='role_status'), default='en_revision', nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(pytz.utc)) # Importe libreria pytz para obtener la hora UTC
-    updated_at = db.Column(db.DateTime, default=datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
+    created_at = db.Column(db.DateTime, default=lazy_utc_now) 
+    updated_at = db.Column(db.DateTime, default=lazy_utc_now, onupdate=lazy_utc_now)
    
     # relacion con Reservations
     reservations = db.relationship('Reservations', back_populates='user')
@@ -41,8 +43,8 @@ class Reservations(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', nullable=False)) 
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(pytz.utc))
-    updated_at = db.Column(db.DateTime, default=datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
+    created_at = db.Column(db.DateTime, default=lazy_utc_now)
+    updated_at = db.Column(db.DateTime, default=lazy_utc_now, onupdate=lazy_utc_now)
 
     #Relacion inversa con User
     user = db.relationship('User', back_populates = 'reservations')
@@ -73,8 +75,8 @@ class Books(db.Model):
         name='book_gender_enum'), nullable=False)
     # Campo availability como Boolean (True: Disponible, False: No disponible)
     availability= db.Column(db.Boolean, default=True, nullable=False)
-    created_at= db.Column(db.DateTime, default=datetime.now(pytz.utc))
-    updated_at= db.Column(db.DateTime, default=datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
+    created_at= db.Column(db.DateTime, default=lazy_utc_now)
+    updated_at= db.Column(db.DateTime, default=lazy_utc_now, onupdate=lazy_utc_now)
     
     #relacion con Books_reservations
     books_reservations = db.relationship('Books_reservations', back_populates='book')
@@ -103,8 +105,8 @@ class Books_reservations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id', nullable = False))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', nullable = False)) 
-    reserved_at = db.Column(db.DateTime, default=datetime.now(pytz.utc))
-    returned_at = db.Column(db.DateTime, default=datetime.now(pytz.utc), onupdate=datetime.now(pytz.utc))
+    reserved_at = db.Column(db.DateTime, default=lazy_utc_now)
+    returned_at = db.Column(db.DateTime, default=lazy_utc_now, onupdate=lazy_utc_now)
     
     #relacion inversa con User
     user = db.relationship('User', back_populates = 'books_reservations')
