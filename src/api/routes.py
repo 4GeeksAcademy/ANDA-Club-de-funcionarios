@@ -3,9 +3,12 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
+from api.models import Reservations
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import get_jwt_identity
+
 
 api = Blueprint('api', __name__)
 bcrypt = Bcrypt()
@@ -154,6 +157,105 @@ def login():
         "user": user.serialize()
     }), 200
 
+# -----------------------------------------------------------------
+# RESERVATION MANAGEMENT ROUTES
+# Rutas para gestionar las reservas de locales
+# -----------------------------------------------------------------
+
+@api.route('/reservations', methods=['GET'])
+@jwt_required()
+def get_all_reservations():
+    """
+    Obtiene todas las reservas registradas en el sistema.
+    Solo usuarios autenticados pueden acceder.
+    """
+    # Obtener el usuario autenticado
+    current_user_id = get_jwt_identity()
+    reservations = Reservations.query.filter_by(user_id=current_user_id).all()
+
+    # Serializar y devolver las reservas
+    return jsonify([reservation.serialize() for reservation in reservations]), 200
+
+
+@api.route('/reservations', methods=['POST'])
+@jwt_required()
+def create_reservation():
+    """
+    Crea una nueva reserva en el sistema.
+    Requiere que el usuario esté autenticado.
+    """
+    data = request.get_json()
+
+    # Validar campos obligatorios
+    if not data or not data.get('event_name') or not data.get('start_time') or not data.get('end_time'):
+        return jsonify({"msg": "Event name, start_time, and end_time are required"}), 400
+
+    # Crear nueva reserva
+    new_reservation = Reservations(
+        event_name=data['event_name'],
+        user_id=get_jwt_identity(),
+        start_time=datetime.fromisoformat(data['start_time']),
+        end_time=datetime.fromisoformat(data['end_time'])
+    )
+
+    # Guardar en la base de datos
+    db.session.add(new_reservation)
+    db.session.commit()
+
+    return jsonify(new_reservation.serialize()), 201
+
+
+@api.route('/reservations/<int:reservation_id>', methods=['PUT'])
+@jwt_required()
+def update_reservation(reservation_id):
+    """
+    Actualiza una reserva existente.
+    Requiere que el usuario esté autenticado.
+    """
+    reservation = Reservations.query.get(reservation_id)
+    if not reservation:
+        return jsonify({"msg": "Reservation not found"}), 404
+
+    # Validar campos y actualizar
+    data = request.get_json()
+    reservation.event_name = data.get('event_name', reservation.event_name)
+    reservation.start_time = datetime.fromisoformat(data.get('start_time', reservation.start_time.isoformat()))
+    reservation.end_time = datetime.fromisoformat(data.get('end_time', reservation.end_time.isoformat()))
+
+    db.session.commit()
+
+    return jsonify(reservation.serialize()), 200
+
+
+@api.route('/reservations/<int:reservation_id>', methods=['GET'])
+@jwt_required()
+def get_reservation_details(reservation_id):
+    """
+    Obtiene los detalles de una reserva específica.
+    Requiere autenticación.
+    """
+    reservation = Reservations.query.get(reservation_id)
+    if not reservation:
+        return jsonify({"msg": "Reservation not found"}), 404
+
+    return jsonify(reservation.serialize()), 200
+
+
+@api.route('/reservations/<int:reservation_id>', methods=['DELETE'])
+@jwt_required()
+def cancel_reservation(reservation_id):
+    """
+    Cancela una reserva existente.
+    Requiere autenticación.
+    """
+    reservation = Reservations.query.get(reservation_id)
+    if not reservation:
+        return jsonify({"msg": "Reservation not found"}), 404
+
+    db.session.delete(reservation)
+    db.session.commit()
+
+    return jsonify({"msg": "Reservation deleted successfully"}), 200
 
 # -----------------------------------------------------------------
 # EXAMPLE ROUTE
