@@ -7,7 +7,8 @@ from api.models import Reservations
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_required
+
 
 
 api = Blueprint('api', __name__)
