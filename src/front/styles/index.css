@@ -1,3 +1,19 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
+.sidebar {
+    transition: width 0.3s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+    }
+
+    .sidebar .nav-link {
+        text-align: center;
+        font-size: 14px;
+    }
+}
+
