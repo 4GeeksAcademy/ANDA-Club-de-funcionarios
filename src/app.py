@@ -6,13 +6,14 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
+from dotenv import load_dotenv # Cargar variables de entorno
 # from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
@@ -24,8 +25,9 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=365)  # Configura 1 año
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 app.url_map.strict_slashes = False
+load_dotenv() # Cargar el archivo .env
 
-# database condiguration
+# database configuration
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace(
@@ -48,6 +50,77 @@ app.register_blueprint(api, url_prefix='/api')
 
 # Handle/serialize errors like a JSON object
 
+# -----------------------------------------------------------------
+# AUTHENTICATION ROUTES
+# Rutas de autenticación de usuarios (registro y login)
+# -----------------------------------------------------------------
+
+@api.route('/register', methods=['POST'])
+def register():
+    """
+    Registra un nuevo usuario con estado inicial 'en_revision'.
+    """
+    data = request.get_json()
+
+    # Validar que se envíen los campos requeridos
+    if not data or not data.get('user_name') or not data.get('email') or not data.get('password'):
+        return jsonify({"msg": "Username, email, and password are required"}), 400
+
+    # Verificar que el email no exista en la base de datos
+    if User.query.filter_by(email=data['email']).first():
+        return jsonify({"msg": "Email already exists"}), 400
+
+    # Crear un nuevo usuario con el estado 'en_revision'
+    new_user = User(
+        user_name=data['user_name'],
+        email=data['email'],
+        password_hash=bcrypt.generate_password_hash(data['password']).decode('utf-8'),
+        role='user',  # Por defecto, el rol es 'user'
+        status='en_revision'  # El estado inicial es 'en_revision'
+    )
+
+    # Guardar el usuario en la base de datos
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"msg": "User registered successfully. Awaiting admin approval."}), 201
+
+
+@api.route('/login', methods=['POST'])
+def login():
+    """
+    Autentica al usuario y genera un token de acceso JWT.
+    Solo usuarios con estado 'activo' pueden iniciar sesión.
+    """
+    data = request.get_json()
+
+    # Validar que se envíen el email y la contraseña
+    if not data or not data.get('email') or not data.get('password'):
+        return jsonify({"msg": "Email and password are required"}), 400
+
+    # Buscar al usuario por email
+    user = User.query.filter_by(email=data['email']).first()
+
+    # Validar si el usuario no existe o su contraseña no coincide
+    if not user or not bcrypt.check_password_hash(user.password_hash, data['password']):
+        return jsonify({"msg": "Invalid email or password"}), 401
+
+    # Verificar el estado del usuario
+    if user.status != 'activo':
+        return jsonify({"msg": "User is not authorized to log in"}), 403
+
+    # Generar el token de acceso
+    access_token = create_access_token(identity=user.id)
+
+    return jsonify({
+        "msg": "Login successful",
+        "access_token": access_token,
+        "user": user.serialize()
+    }), 200
+
+# -----------------------------------------------------------------
+# Manejo de errores
+# -----------------------------------------------------------------
 
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
