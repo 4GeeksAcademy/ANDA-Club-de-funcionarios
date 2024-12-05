@@ -9,6 +9,7 @@ import { EditarCargarLibro } from "./pages/EditarCargarLibro";
 import { SubirLibro } from "./pages/SubirLibro";
 import { EditarCargarSalon } from "./pages/EditarCargarSalon";
 import { AdministradorUsuarios } from "./pages/AdministradorUsuarios";
+import  PanelUsuario  from "./pages/Paneldeusuario";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
@@ -40,6 +41,7 @@ const Layout = () => {
                                 <Route element={<SubirLibro />} path="/subir_libro" />
                                 <Route element={<EditarCargarSalon />} path="/editar_cargar_salon"/>
                                 <Route element={<AdministradorUsuarios />} path="/administrador_usuarios"/>
+                                <Route element={<PanelUsuario />} path="/panel_usuario"/>
                                 <Route element={<Demo />} path="/demo" />
                                 <Route element={<Single />} path="/single/:theid"/>
                                 <Route element={<h1>Not found!</h1>} />
