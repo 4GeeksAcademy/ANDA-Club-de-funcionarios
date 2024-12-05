@@ -2,8 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
-from api.models import Reservations
+from api.models import db, User, Reservations, Books
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
@@ -89,74 +88,6 @@ def update_user_status(user_id):
     
     # Confirmar que el cambio de estado fue exitoso
     return jsonify({"message": "User status updated successfully"}), 200
-
-# -----------------------------------------------------------------
-# AUTHENTICATION ROUTES
-# Rutas de autenticación de usuarios (registro y login)
-# -----------------------------------------------------------------
-
-@api.route('/register', methods=['POST'])
-def register():
-    """
-    Registra un nuevo usuario con estado inicial 'en_revision'.
-    """
-    data = request.get_json()
-
-    # Validar que se envíen los campos requeridos
-    if not data or not data.get('user_name') or not data.get('email') or not data.get('password'):
-        return jsonify({"msg": "Username, email, and password are required"}), 400
-
-    # Verificar que el email no exista en la base de datos
-    if User.query.filter_by(email=data['email']).first():
-        return jsonify({"msg": "Email already exists"}), 400
-
-    # Crear un nuevo usuario con el estado 'en_revision'
-    new_user = User(
-        user_name=data['user_name'],
-        email=data['email'],
-        password_hash=bcrypt.generate_password_hash(data['password']).decode('utf-8'),
-        role='user',  # Por defecto, el rol es 'user'
-        status='en_revision'  # El estado inicial es 'en_revision'
-    )
-
-    # Guardar el usuario en la base de datos
-    db.session.add(new_user)
-    db.session.commit()
-
-    return jsonify({"msg": "User registered successfully. Awaiting admin approval."}), 201
-
-
-@api.route('/login', methods=['POST'])
-def login():
-    """
-    Autentica al usuario y genera un token de acceso JWT.
-    Solo usuarios con estado 'activo' pueden iniciar sesión.
-    """
-    data = request.get_json()
-
-    # Validar que se envíen el email y la contraseña
-    if not data or not data.get('email') or not data.get('password'):
-        return jsonify({"msg": "Email and password are required"}), 400
-
-    # Buscar al usuario por email
-    user = User.query.filter_by(email=data['email']).first()
-
-    # Validar si el usuario no existe o su contraseña no coincide
-    if not user or not bcrypt.check_password_hash(user.password_hash, data['password']):
-        return jsonify({"msg": "Invalid email or password"}), 401
-
-    # Verificar el estado del usuario
-    if user.status != 'activo':
-        return jsonify({"msg": "User is not authorized to log in"}), 403
-
-    # Generar el token de acceso
-    access_token = create_access_token(identity=user.id)
-
-    return jsonify({
-        "msg": "Login successful",
-        "access_token": access_token,
-        "user": user.serialize()
-    }), 200
 
 # -----------------------------------------------------------------
 # RESERVATION MANAGEMENT ROUTES
@@ -257,6 +188,181 @@ def cancel_reservation(reservation_id):
     db.session.commit()
 
     return jsonify({"msg": "Reservation deleted successfully"}), 200
+
+# -----------------------------------------------------------------
+# LIBRARY MANAGEMENT ROUTES
+# Rutas para gestionar los libros en la biblioteca
+# -----------------------------------------------------------------
+
+@api.route('/books', methods=['GET'])
+def get_all_books():
+    """
+    Lista todos los libros disponibles en la biblioteca.
+    """
+    books = Books.query.filter_by(availability=True).all()
+    return jsonify([book.serialize() for book in books]), 200
+
+
+@api.route('/books/<int:book_id>', methods=['GET'])
+def get_book_details(book_id):
+    """
+    Obtiene los detalles de un libro específico.
+    """
+    book = Books.query.get(book_id)
+    if not book:
+        return jsonify({"msg": "Book not found"}), 404
+
+    return jsonify(book.serialize()), 200
+
+
+@api.route('/books', methods=['POST'])
+@jwt_required()
+def add_new_book():
+    """
+    Agrega un nuevo libro al catálogo.
+    Solo accesible para administradores.
+    """
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+
+    if not current_user or current_user.role != 'admin':
+        return jsonify({"msg": "Unauthorized"}), 403
+
+    data = request.get_json()
+    if not data or not data.get('title') or not data.get('author') or not data.get('book_gender'):
+        return jsonify({"msg": "Title, author, and book_gender are required"}), 400
+
+    new_book = Books(
+        title=data['title'],
+        author=data['author'],
+        book_gender=data['book_gender']
+    )
+
+    db.session.add(new_book)
+    db.session.commit()
+
+    return jsonify(new_book.serialize()), 201
+
+
+@api.route('/books/<int:book_id>', methods=['PUT'])
+@jwt_required()
+def edit_book(book_id):
+    """
+    Edita la información de un libro.
+    Solo accesible para administradores.
+    """
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+
+    if not current_user or current_user.role != 'admin':
+        return jsonify({"msg": "Unauthorized"}), 403
+
+    book = Books.query.get(book_id)
+    if not book:
+        return jsonify({"msg": "Book not found"}), 404
+
+    data = request.get_json()
+    book.title = data.get('title', book.title)
+    book.author = data.get('author', book.author)
+    book.book_gender = data.get('book_gender', book.book_gender)
+    book.availability = data.get('availability', book.availability)
+
+    db.session.commit()
+
+    return jsonify(book.serialize()), 200
+
+
+@api.route('/books/<int:book_id>', methods=['DELETE'])
+@jwt_required()
+def delete_book(book_id):
+    """
+    Elimina un libro del catálogo.
+    Solo accesible para administradores.
+    """
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+
+    if not current_user or current_user.role != 'admin':
+        return jsonify({"msg": "Unauthorized"}), 403
+
+    book = Books.query.get(book_id)
+    if not book:
+        return jsonify({"msg": "Book not found"}), 404
+
+    db.session.delete(book)
+    db.session.commit()
+
+    return jsonify({"msg": "Book deleted successfully"}), 200
+
+# -----------------------------------------------------------------
+# BOOK RESERVATION ROUTES
+# Rutas para gestionar las reservas de libros
+# -----------------------------------------------------------------
+
+@api.route('/book-reservations', methods=['POST'])
+@jwt_required()
+def reserve_book():
+    """
+    Realiza una reserva de un libro.
+    Requiere autenticación.
+    """
+    data = request.get_json()
+
+    # Validar campos requeridos
+    if not data or not data.get('book_id'):
+        return jsonify({"msg": "Book ID is required"}), 400
+
+    # Verificar que el libro exista
+    book = Books.query.get(data['book_id'])
+    if not book:
+        return jsonify({"msg": "Book not found"}), 404
+
+    # Verificar que el libro esté disponible
+    if not book.availability:
+        return jsonify({"msg": "Book is not available"}), 400
+
+    # Crear reserva de libro
+    book_reservation = Books_reservations(
+        book_id=data['book_id'],
+        user_id=get_jwt_identity(),
+        reserved_at=datetime.utcnow()
+    )
+
+    # Marcar el libro como no disponible
+    book.availability = False
+
+    # Guardar en la base de datos
+    db.session.add(book_reservation)
+    db.session.commit()
+
+    return jsonify({"msg": "Book reserved successfully", "reservation": book_reservation.serialize()}), 201
+
+
+@api.route('/book-reservations/<int:reservation_id>', methods=['PUT'])
+@jwt_required()
+def return_book(reservation_id):
+    """
+    Marca un libro como devuelto.
+    Requiere autenticación.
+    """
+    # Verificar que la reserva exista
+    reservation = Books_reservations.query.get(reservation_id)
+    if not reservation:
+        return jsonify({"msg": "Reservation not found"}), 404
+
+    # Verificar que el libro exista
+    book = Books.query.get(reservation.book_id)
+    if not book:
+        return jsonify({"msg": "Book not found"}), 404
+
+    # Marcar la reserva como devuelta y el libro como disponible
+    reservation.returned_at = datetime.utcnow()
+    book.availability = True
+
+    # Guardar cambios en la base de datos
+    db.session.commit()
+
+    return jsonify({"msg": "Book returned successfully", "reservation": reservation.serialize()}), 200
 
 # -----------------------------------------------------------------
 # EXAMPLE ROUTE
