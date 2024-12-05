@@ -295,6 +295,76 @@ def delete_book(book_id):
     return jsonify({"msg": "Book deleted successfully"}), 200
 
 # -----------------------------------------------------------------
+# BOOK RESERVATION ROUTES
+# Rutas para gestionar las reservas de libros
+# -----------------------------------------------------------------
+
+@api.route('/book-reservations', methods=['POST'])
+@jwt_required()
+def reserve_book():
+    """
+    Realiza una reserva de un libro.
+    Requiere autenticación.
+    """
+    data = request.get_json()
+
+    # Validar campos requeridos
+    if not data or not data.get('book_id'):
+        return jsonify({"msg": "Book ID is required"}), 400
+
+    # Verificar que el libro exista
+    book = Books.query.get(data['book_id'])
+    if not book:
+        return jsonify({"msg": "Book not found"}), 404
+
+    # Verificar que el libro esté disponible
+    if not book.availability:
+        return jsonify({"msg": "Book is not available"}), 400
+
+    # Crear reserva de libro
+    book_reservation = Books_reservations(
+        book_id=data['book_id'],
+        user_id=get_jwt_identity(),
+        reserved_at=datetime.utcnow()
+    )
+
+    # Marcar el libro como no disponible
+    book.availability = False
+
+    # Guardar en la base de datos
+    db.session.add(book_reservation)
+    db.session.commit()
+
+    return jsonify({"msg": "Book reserved successfully", "reservation": book_reservation.serialize()}), 201
+
+
+@api.route('/book-reservations/<int:reservation_id>', methods=['PUT'])
+@jwt_required()
+def return_book(reservation_id):
+    """
+    Marca un libro como devuelto.
+    Requiere autenticación.
+    """
+    # Verificar que la reserva exista
+    reservation = Books_reservations.query.get(reservation_id)
+    if not reservation:
+        return jsonify({"msg": "Reservation not found"}), 404
+
+    # Verificar que el libro exista
+    book = Books.query.get(reservation.book_id)
+    if not book:
+        return jsonify({"msg": "Book not found"}), 404
+
+    # Marcar la reserva como devuelta y el libro como disponible
+    reservation.returned_at = datetime.utcnow()
+    book.availability = True
+
+    # Guardar cambios en la base de datos
+    db.session.commit()
+
+    return jsonify({"msg": "Book returned successfully", "reservation": reservation.serialize()}), 200
+
+# -----------------------------------------------------------------
 # EXAMPLE ROUTE
 # -----------------------------------------------------------------
 
