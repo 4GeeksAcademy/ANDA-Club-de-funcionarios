@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
-{/*import { Home } from "./pages/home";*/}
+import { Home } from "./pages/home";
 import { TuPerfil } from "./pages/TuPerfil";
 import { EditarCargarLibro } from "./pages/EditarCargarLibro";
 import { SubirLibro } from "./pages/SubirLibro";
@@ -32,14 +32,13 @@ const Layout = () => {
                         <Sidebar />
                         <div className="flex-grow-1 p-3">
                             <Routes>
-                                {/* Navigate redirige automáticamente de "/" al "/perfil_administrador" */}
-                                {/* <Route element={<Home />} path="/" />*/}
-                                <Route path="/" element={<Navigate to="/perfil_administrador" replace />} />
+                                {/* Navigate redirige automáticamente de "/" al "/perfil_administrador" */} 
                                 <Route element={<TuPerfil />} path="/perfil_administrador" />
                                 <Route element={<EditarCargarLibro />} path="/editar_cargar_libro"/>
                                 <Route element={<SubirLibro />} path="/subir_libro" />
                                 <Route element={<EditarCargarSalon />} path="/editar_cargar_salon"/>
                                 <Route element={<AdministradorUsuarios />} path="/administrador_usuarios"/>
+                                <Route element={<Home />} path="/" />
                                 <Route element={<Demo />} path="/demo" />
                                 <Route element={<Single />} path="/single/:theid"/>
                                 <Route element={<h1>Not found!</h1>} />
