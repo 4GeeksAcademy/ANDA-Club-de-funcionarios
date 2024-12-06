@@ -88,6 +88,107 @@ def update_user_status(user_id):
     
     # Confirmar que el cambio de estado fue exitoso
     return jsonify({"message": "User status updated successfully"}), 200
+# -----------------------------------------------------------------
+# USER PROFILE MANAGEMENT ROUTES
+# Rutas para gestionar los perfiles de usuarios
+# -----------------------------------------------------------------
+
+@api.route('/user-profiles', methods=['GET'])
+@jwt_required()
+def get_user_profiles():
+    """
+    Obtiene todos los perfiles de usuarios registrados en el sistema.
+    Solo accesible para administradores.
+    """
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+
+    # Verificar que el usuario actual sea administrador
+    if not current_user or current_user.role != 'admin':
+        return jsonify({"msg": "Unauthorized"}), 403
+
+    profiles = UserProfiles.query.all()
+    return jsonify([profile.serialize() for profile in profiles]), 200
+
+
+@api.route('/user-profiles/<int:user_id>', methods=['GET'])
+@jwt_required()
+def get_user_profile(user_id):
+    """
+    Obtiene el perfil de un usuario específico por su ID.
+    Requiere autenticación.
+    """
+    profile = UserProfiles.query.filter_by(user_id=user_id).first()
+    if not profile:
+        return jsonify({"msg": "User profile not found"}), 404
+
+    return jsonify(profile.serialize()), 200
+
+
+@api.route('/user-profiles', methods=['POST'])
+@jwt_required()
+def create_user_profile():
+    """
+    Crea un nuevo perfil para un usuario.
+    Requiere autenticación.
+    """
+    data = request.get_json()
+
+    # Validar campos requeridos
+    if not data or not data.get('user_id') or not data.get('first_name') or not data.get('last_name'):
+        return jsonify({"msg": "user_id, first_name, and last_name are required"}), 400
+
+    # Verificar que el usuario exista
+    user = User.query.get(data['user_id'])
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
+
+    # Crear nuevo perfil
+    new_profile = UserProfiles(
+        user_id=data['user_id'],
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        email=data.get('email'),
+        identification=data.get('identification'),
+        address=data.get('address'),
+        phone_number=data.get('phone_number'),
+        birth_date=data.get('birth_date'),
+        department=data.get('department'),
+        sector=data.get('sector')
+    )
+
+    # Guardar en la base de datos
+    db.session.add(new_profile)
+    db.session.commit()
+
+    return jsonify(new_profile.serialize()), 201
+
+
+@api.route('/user-profiles/<int:user_id>', methods=['PUT'])
+@jwt_required()
+def update_user_profile(user_id):
+    """
+    Actualiza el perfil de un usuario existente.
+    Requiere autenticación.
+    """
+    profile = UserProfiles.query.filter_by(user_id=user_id).first()
+    if not profile:
+        return jsonify({"msg": "User profile not found"}), 404
+
+    data = request.get_json()
+    profile.first_name = data.get('first_name', profile.first_name)
+    profile.last_name = data.get('last_name', profile.last_name)
+    profile.email = data.get('email', profile.email)
+    profile.identification = data.get('identification', profile.identification)
+    profile.address = data.get('address', profile.address)
+    profile.phone_number = data.get('phone_number', profile.phone_number)
+    profile.birth_date = data.get('birth_date', profile.birth_date)
+    profile.department = data.get('department', profile.department)
+    profile.sector = data.get('sector', profile.sector)
+
+    db.session.commit()
+
+    return jsonify(profile.serialize()), 200
 
 # -----------------------------------------------------------------
 # RESERVATION MANAGEMENT ROUTES
