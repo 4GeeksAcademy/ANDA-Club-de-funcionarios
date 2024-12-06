@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import pytz
 import re #módulo re de Python para validar si un correo electrónico tiene un formato válido antes de que sea almacenado en la base de datos.
-from wtforms.validators import ValidationError
+from flask import ValidationError
 from sqlalchemy.orm import validates
 from marshmallow import ValidationError
 
@@ -175,7 +175,7 @@ class Books_reservations(db.Model):
     reserved_at = db.Column(db.DateTime(timezone=True), default=lazy_utc_now)
     returned_at = db.Column(db.DateTime(timezone=True), default=lazy_utc_now, onupdate=lazy_utc_now)
     
-    #relacion inversa con User. Cada reserva esta asociada a un unico usuario.
+    #relacion inversa con User. Cada reserva esta asociada a un unico usuario
     user = db.relationship('User', back_populates = 'books_reservations')
     #relacion inversa con books. Cada reserva esta asociada a un unico libro. 
     book = db.relationship('Books', back_populates='books_reservations')
