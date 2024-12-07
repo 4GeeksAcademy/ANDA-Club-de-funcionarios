@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
-
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
@@ -11,10 +10,6 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import { Login } from "./component/login";
-import { Register } from "./component/register";
-import { Recover_account1 } from "./component/recover_account1";
-import { Recover_account2 } from "./component/recover_account2";
 
 //create your first component
 const Layout = () => {
@@ -33,10 +28,6 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<Login />} path="/login" />
-                        <Route element={<Register />} path="/register" />
-                        <Route element={<Recover_account1 />} path="/recover_account1" />
-                        <Route element={<Recover_account2 />} path="/recover_account2" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />
