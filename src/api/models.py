@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
+import pendulum
 from datetime import datetime
-import pytz
 import re #módulo re de Python para validar si un correo electrónico tiene un formato válido antes de que sea almacenado en la base de datos.
 from flask import ValidationError
 from sqlalchemy.orm import validates
@@ -17,7 +17,9 @@ def validate_email(email):
 
 db = SQLAlchemy()
 
-def lazy_utc_now(): return datetime.now(pytz.utc) #funcion para manejar fecha y hora UTC y que no me ponga una hora fija 
+def lazy_utc_now():
+    return pendulum.now("UTC")  # Función para manejar la fecha y hora en UTC
+ 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -192,6 +194,3 @@ class Books_reservations(db.Model):
             "reserved_at": self.reserved_at.isoformat() if self.reserved_at else None,
             "returned_at": self.returned_at.isoformat() if self.returned_at else None, 
         }
-
-
-
