@@ -1,11 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-import pytz
+import pendulum
 
 
 db = SQLAlchemy()
 
-def lazy_utc_now(): return datetime.now(pytz.utc) #funcion para manejar fecha y hora UTC y que no me ponga una hora fija 
+def lazy_utc_now():
+    return pendulum.now("UTC")  # Función para manejar la fecha y hora en UTC
+ 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -106,7 +107,7 @@ class Books_reservations(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id')) 
     reserved_at = db.Column(db.DateTime, default=lazy_utc_now)
-    returned_at = db.Column(db.DateTime, default=lazy_utc_now, onupdate=lazy_utc_now)
+    returned_at = db.Column(db.DateTime, default=None, onupdate=lazy_utc_now)
     
     #relacion inversa con User
     user = db.relationship('User', back_populates = 'books_reservations')
@@ -125,6 +126,3 @@ class Books_reservations(db.Model):
             "reserved_at": self.reserved_at.isoformat() if self.reserved_at else None,
             "returned_at": self.returned_at.isoformat() if self.returned_at else None, 
         }
-
-
-

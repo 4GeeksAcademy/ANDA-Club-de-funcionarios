@@ -7,8 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import get_jwt_identity, jwt_required
-
-
+import pendulum
 
 api = Blueprint('api', __name__)
 bcrypt = Bcrypt()
@@ -227,8 +226,8 @@ def create_reservation():
     new_reservation = Reservations(
         event_name=data['event_name'],
         user_id=get_jwt_identity(),
-        start_time=datetime.fromisoformat(data['start_time']),
-        end_time=datetime.fromisoformat(data['end_time'])
+        start_time=pendulum.parse(data['start_time']),
+        end_time=pendulum.parse(data['end_time'])
     )
 
     # Guardar en la base de datos
@@ -252,8 +251,8 @@ def update_reservation(reservation_id):
     # Validar campos y actualizar
     data = request.get_json()
     reservation.event_name = data.get('event_name', reservation.event_name)
-    reservation.start_time = datetime.fromisoformat(data.get('start_time', reservation.start_time.isoformat()))
-    reservation.end_time = datetime.fromisoformat(data.get('end_time', reservation.end_time.isoformat()))
+    reservation.start_time = pendulum.parse(data.get('start_time', reservation.start_time.isoformat()))
+    reservation.end_time = pendulum.parse(data.get('end_time', reservation.end_time.isoformat()))
 
     db.session.commit()
 
@@ -426,7 +425,7 @@ def reserve_book():
     book_reservation = Books_reservations(
         book_id=data['book_id'],
         user_id=get_jwt_identity(),
-        reserved_at=datetime.utcnow()
+        reserved_at=pendulum.now("UTC")
     )
 
     # Marcar el libro como no disponible
