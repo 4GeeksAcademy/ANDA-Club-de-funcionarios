@@ -1,12 +1,12 @@
 from flask_sqlalchemy import SQLAlchemy
 import pendulum
-from datetime import datetime
 import re #módulo re de Python para validar si un correo electrónico tiene un formato válido antes de que sea almacenado en la base de datos.
-from flask import ValidationError
 from sqlalchemy.orm import validates
-from marshmallow import ValidationError
 
 
+# Clase personalizada para errores de validación (opcional)
+class ValidationError(Exception):
+    pass
 
 # Expresión regular para validar un email
 def validate_email(email):
