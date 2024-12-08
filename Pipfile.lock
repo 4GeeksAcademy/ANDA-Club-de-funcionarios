@@ -328,6 +328,14 @@
             "markers": "python_version >= '3.9'",
             "version": "==3.0.2"
         },
+        "marshmallow": {
+            "hashes": [
+                "sha256:3a8dfda6edd8dcdbf216c0ede1d1e78d230a6dc9c5a088f58c4083b974a0d468",
+                "sha256:fece2eb2c941180ea1b7fcbd4a83c51bfdd50093fdd3ad2585ee5e1df2508491"
+            ],
+            "index": "pypi",
+            "version": "==3.23.1"
+        },
         "packaging": {
             "hashes": [
                 "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759",
