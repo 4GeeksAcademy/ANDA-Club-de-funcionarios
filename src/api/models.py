@@ -60,6 +60,7 @@ class User(db.Model):
         "updated_at": self.updated_at.isoformat() if self.updated_at else None
     }
 
+#cambie campos obligatorios
 
 class UserProfiles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
