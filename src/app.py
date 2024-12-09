@@ -55,7 +55,7 @@ app.register_blueprint(api, url_prefix='/api')
 # Rutas de autenticación de usuarios (registro y login)
 # -----------------------------------------------------------------
 
-@api.route('/register', methods=['POST'])
+@app.route('/register', methods=['POST'])
 def register():
     """
     Registra un nuevo usuario con estado inicial 'en_revision'.
@@ -86,7 +86,7 @@ def register():
     return jsonify({"msg": "User registered successfully. Awaiting admin approval."}), 201
 
 
-@api.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
     """
     Autentica al usuario y genera un token de acceso JWT.

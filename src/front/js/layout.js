@@ -11,6 +11,7 @@ import { SubirLibro } from "./pages/SubirLibro";
 import { PanelAdministrador } from "./component/PanelAdministrador";
 import { EditarCargarSalon } from "./pages/EditarCargarSalon";
 import { AdministradorUsuarios } from "./pages/AdministradorUsuarios";
+import  PanelUsuario  from "./pages/Paneldeusuario";
 import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
