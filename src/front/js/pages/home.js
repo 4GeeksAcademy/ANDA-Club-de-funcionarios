@@ -15,7 +15,7 @@ export const Home = () => {
 			<div style={{ marginBottom: '1rem' }}>
 				<img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
 			</div>
-			<nav className="navbar"  style={{ backgroundColor: '#eef2ff', height: '3rem' }}>
+			<nav className="navbar" style={{ backgroundColor: '#eef2ff', height: '3rem' }}>
 				<div className="container">
 					<a className="navbar-brand" href="#"></a>
 				</div>
@@ -37,7 +37,7 @@ export const Home = () => {
 								className="btn btn-lg me-md-2"
 								style={{ backgroundColor: '#fff', borderColor: '#3865e5', color: '#3865e5' }}
 							>
-								<Link to='/About'>Mas informacion</Link>
+								<Link to='/About'>Más información</Link>
 							</button>
 						</div>
 					</div>
