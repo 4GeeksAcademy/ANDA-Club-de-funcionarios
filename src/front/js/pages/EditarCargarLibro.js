@@ -1,76 +1,39 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext";
+import { LibroCard } from "../component/LibroCard";
 
 export const EditarCargarLibro = () => {
+    const { store } = useContext(Context);
+    const navigate = useNavigate();
+
     return (
-        <div className="container">
+        <div className="container mt-5">
             <h2 className="mb-4">Editar / Subir Libro</h2>
-            <div className="card shadow-sm p-4">
 
-                {/* Botón para subir un nuevo libro */}
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                <button className="btn btn-dark" onClick={() => window.location.href = "/subir_libro"}>Subir +
+            {/* Botón para subir un nuevo libro */}
+            <div className="d-flex justify-content-end mb-3">
+                <button
+                    className="btn btn-dark"
+                    onClick={() => navigate("/panel_admin/subir_libro")}
+                >
+                    Subir +
                 </button>
-                </div>
+            </div>
 
-                {/* Tabla de libros */}
-                <table className="table table-bordered table-hover">
-                    <thead className="table-light">
-                        <tr>
-                            <th scope="col">Miniatura</th>
-                            <th scope="col">Título</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col">Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* Ejemplos de filas */}
-                        <tr>
-                            <td>
-                                <img
-                                    src="https://via.placeholder.com/50"
-                                    alt="Miniatura"
-                                    className="img-thumbnail"
-                                    style={{ width: "50px" }}
-                                />
-                            </td>
-                            <td>Libro 1</td>
-                            <td>
-                                <span className="badge bg-success">Live</span>
-                            </td>
-                            <td>
-                                <button className="btn btn-sm btn btn-dark me-2">Modificar</button>
-                                <button className="btn btn-sm btn-danger">Borrar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <img
-                                    src="https://via.placeholder.com/50"
-                                    alt="Miniatura"
-                                    className="img-thumbnail"
-                                    style={{ width: "50px" }}
-                                />
-                            </td>
-                            <td>Libro 2</td>
-                            <td>
-                                <span className="badge bg-secondary">Offline</span>
-                            </td>
-                            <td>
-                                <button className="btn btn-sm btn btn-dark me-2">Modificar</button>
-                                <button className="btn btn-sm btn-danger">Borrar</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                {/* Hojas de paginas */}
-                <nav>
-                    <ul className="pagination justify-content-center">
-                        <li className="page-item">
-                            <button className="page-link">1</button>
-                        </li>
-                     </ul>
-                </nav>
+            {/* Vista de libros cargados */}
+            <div className="row">
+                {store.libros && store.libros.length > 0 ? (
+                    store.libros.map((libro, index) => (
+                        <div key={index} className="col-12 col-md-6 col-lg-4 mb-4">
+                            <LibroCard libro={libro} />
+                        </div>
+                    ))
+                ) : (
+                    <div className="text-center text-muted">
+                        No hay libros cargados. Agrega uno nuevo con el botón "Subir +".
+                    </div>
+                )}
             </div>
         </div>
     );

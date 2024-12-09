@@ -2,18 +2,26 @@
     General Styles used on every website (Don't Repeat Yourself)
 */
 
-.sidebar {
-    transition: width 0.3s ease-in-out;
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        width: 80px;
-    }
-
-    .sidebar .nav-link {
-        text-align: center;
-        font-size: 14px;
-    }
-}
-
+/* Asegura un ancho fijo del sidebar */
+.sidebar.collapsed {
+    width: 80px;
+  }
+  
+  .sidebar .nav-link {
+    white-space: nowrap;
+  }
+  
+  .sidebar .nav-link span {
+    display: inline-block;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .sidebar.collapsed .nav-link span {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .bg-dark {
+    height: 150px !important; /* Establezco altura fija en todas las pantallas */
+  }
+  
