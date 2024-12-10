@@ -28,7 +28,7 @@ export const Recover_account1 = () => {
                                 style={{ marginBottom: '20px' }}
                             />
                         </div>
-                        <Link to="/recover_account2">
+                        <Link to="/recover-account2">
                             <button
                                 type="submit"
                                 className="btn w-100"

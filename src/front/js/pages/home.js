@@ -30,8 +30,10 @@ export const Home = () => {
 						<h1 className="display-1 fw-bold  lh-1 mb-3" style={{ color: '#3865e5' }}>Club de funcionarios</h1>
 						<p className="lead fw-bold" style={{ fontSize: '1.5rem' }} >¡Disfruta de los beneficios pensados para ti!</p>
 						<div className="d-grid gap-2 d-md-flex justify-content-md-start" style={{ marginTop: '5rem' }}>
-							<button type="button" className=" btn btn-lg px-4 me-md-2"
-								style={{ backgroundColor: '#3865e5', borderColor: '#3865e5', color: '#fff' }}>Acceder</button>
+							<Link to="/login" >
+								<button type="button" className=" btn btn-lg px-4 me-md-2"
+									style={{ backgroundColor: '#3865e5', borderColor: '#3865e5', color: '#fff' }}>Acceder</button>
+							</Link>
 							<button
 								type="button"
 								className="btn btn-lg me-md-2"

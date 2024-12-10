@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const SidebarUser = () => {
+ const SidebarUser = () => {
     return (
         <nav
             className="bg-primary text-white d-flex flex-column"
@@ -13,12 +13,12 @@ export const SidebarUser = () => {
             </div>
             <ul className="nav flex-column flex-grow-1">
                 <li className="nav-item">
-                    <Link to="/perfil_usuario" className="nav-link text-white">
+                    <Link to="/perfil-usuario" className="nav-link text-white">
                         <i className="bi bi-person-circle me-2"></i> Tu Perfil
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/calendario_eventos" className="nav-link text-white">
+                    <Link to="/calendario-eventos" className="nav-link text-white">
                         <i className="bi bi-calendar-event me-2"></i> Calendario de Eventos
                     </Link>
                 </li>

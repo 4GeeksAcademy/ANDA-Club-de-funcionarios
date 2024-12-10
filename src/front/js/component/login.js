@@ -45,7 +45,7 @@ export const Login = () => {
 
                         </form>
                         <div className="d-flex justify-content-center mt-4">
-                            <Link to="/recover_account1">
+                            <Link to="/recover-account1">
                                 <a href="#" className="card-link">Recuperar contraseña</a>
                             </Link>
                         </div>

@@ -48,15 +48,15 @@ export const Register = () => {
                                         color: 'white'
                                     }}
                                 >
-                                     Regístrate
+                                    Regístarte
                                 </button>
                             </Link>
                         </form>
                         <div className="d-flex justify-content-center mt-4">
-                        <Link to="/login">
-                        <a href="#" className="card-link">¿Ya tienes una cuenta? Iniciar sesión</a>
+                            <Link to="/login">
+                                <a href="#" className="card-link">¿Ya tienes una cuenta? Iniciar sesión</a>
                             </Link>
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

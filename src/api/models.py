@@ -9,10 +9,8 @@ class ValidationError(Exception):
     pass
 
 # Expresión regular para validar un email
-def validate_email(email):
-    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+@anda\.com\.uy$'  # Solo acepta correos con dominio @anda.com.uy
-    if not re.match(email_regex, email):
-        raise ValidationError('Correo electrónico no válido.')
+def validate_email(email): email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'  # Acepta correos con cualquier dominio
+if not re.match(email_regex, email): raise ValidationError('Correo electrónico no válido.')
 
 
 db = SQLAlchemy()
