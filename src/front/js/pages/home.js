@@ -11,7 +11,7 @@ export const Home = () => {
 	const { store, actions } = useContext(Context);
 
 	return (
-		<div>
+		<div style={{ padding: '2rem' }}>
 			<div style={{ marginBottom: '1rem' }}>
 				<img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
 			</div>
@@ -39,7 +39,7 @@ export const Home = () => {
 								className="btn btn-lg me-md-2"
 								style={{ backgroundColor: '#fff', borderColor: '#3865e5', color: '#3865e5' }}
 							>
-								<Link to='/About'>Más información</Link>
+								<Link to='/about'>Más información</Link>
 							</button>
 						</div>
 					</div>
