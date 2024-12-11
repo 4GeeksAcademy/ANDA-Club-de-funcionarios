@@ -29,9 +29,11 @@ def get_pending_users():
     # Obtener el ID del usuario autenticado desde el token JWT
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
+
     
     # Verificar que el usuario actual exista y sea administrador
     if not current_user or current_user.role != 'admin':
+        
         return jsonify({"msg": "Unauthorized"}), 403
 
     # Consultar todos los usuarios cuyo estado sea 'en_revision'

@@ -9,8 +9,10 @@ class ValidationError(Exception):
     pass
 
 # Expresión regular para validar un email
-def validate_email(email): email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'  # Acepta correos con cualquier dominio
-if not re.match(email_regex, email): raise ValidationError('Correo electrónico no válido.')
+def validate_email(email): 
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'  # Acepta correos con cualquier dominio
+    if not re.match(email_regex, email):
+        raise ValidationError('Correo electrónico no válido.')
 
 
 db = SQLAlchemy()
@@ -32,7 +34,7 @@ class User(db.Model):
 
   # Validación del correo electrónico antes de guardarlo
     @validates('email')
-    def validate_email_field(self, email):
+    def validate_email_field(self, key, email):
         validate_email(email)
         return email
 
@@ -81,7 +83,7 @@ class UserProfiles(db.Model):
 
     # Validación del correo electrónico en UserProfiles
     @validates('email')
-    def validate_email_field(self, email):
+    def validate_userprofile_email(self,key, email):
         validate_email(email)
         return email
     
