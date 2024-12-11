@@ -3,8 +3,8 @@ import logoANDA from "../../img/logo-ANDA.png";
 import Interrogacion from '../../img/Interrogacion.png';
 const About = () => {
   return (
-    <div>
-      <div style={{ marginBottom: '1rem' }}>
+    <div style={{ padding: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1rem' }}>
         <img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
       </div>
 
@@ -73,10 +73,6 @@ const About = () => {
             </div>
 
           </div>
-
-
-
-
 
 
         </div>
