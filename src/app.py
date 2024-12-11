@@ -22,11 +22,11 @@ static_file_dir = os.path.join(os.path.dirname(
 app = Flask(__name__)
 load_dotenv()
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') # Clave secreta en .env
+print(f"JWT_SECRET_KEY cargado: {app.config['JWT_SECRET_KEY']}")
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=365)  # Configura 1 año de expiración para el token
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
 app.url_map.strict_slashes = False
-load_dotenv() # Cargar el archivo .env
 
 # database configuration
 db_url = os.getenv("DATABASE_URL")
