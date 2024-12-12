@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useState} from "react";
 import { Link } from "react-router-dom";
 
  const SidebarUser = () => {
+      const [isCollapsed, setIsCollapsed] = useState(false);
+    
+      const toggleCollapse = () => {
+        setIsCollapsed(!isCollapsed);
+      };
+      
     return (
         <nav
-            className="bg-primary text-white d-flex flex-column"
-            style={{ width: "250px", minHeight: "100vh" }}
+          className="text-white d-flex flex-column"
+            style={{ 
+                backgroundColor: "#3865e5", width: "250px", minHeight: "100vh",  
+            }}
         >
             <div className="p-3">
-                {/* Encabezado del Sidebar */}
-                <h4 className="text-center fw-bold">Perfil Anda</h4>
+                {/* Encabezado del Sidebar */}    
             </div>
             <ul className="nav flex-column flex-grow-1">
                 <li className="nav-item">
@@ -18,8 +25,8 @@ import { Link } from "react-router-dom";
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link to="/calendario-eventos" className="nav-link text-white">
-                        <i className="bi bi-calendar-event me-2"></i> Calendario de Eventos
+                    <Link to="/mis-reservas" className="nav-link text-white">
+                        <i className="bi bi-calendar-event me-2"></i> Mis reservas
                     </Link>
                 </li>
                 <li className="nav-item">

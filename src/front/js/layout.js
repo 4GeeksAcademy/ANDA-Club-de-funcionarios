@@ -11,7 +11,7 @@ import { SubirLibro } from "./pages/SubirLibro";
 import { PanelAdministrador } from "./component/PanelAdministrador";
 import { EditarCargarSalon } from "./pages/EditarCargarSalon";
 import { AdministradorUsuarios } from "./pages/AdministradorUsuarios";
-import PanelUsuario from "./pages/Paneldeusuario";
+import PanelUsuario from "./pages/PanelUsuario";
 import { Login } from "./component/login";
 import { HistorialUser } from "./pages/HistorialUser";
 import { TuPerfilUser } from "./pages/TuperfilUser";
