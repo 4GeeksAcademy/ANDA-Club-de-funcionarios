@@ -18,7 +18,7 @@ from dotenv import load_dotenv # Cargar variables de entorno
 
 #importo decorador necesario para proteger rutas 
 from functools import wraps 
-form flask_jwt_extended import get_jwt_identity 
+from flask_jwt_extended import get_jwt_identity
 
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
