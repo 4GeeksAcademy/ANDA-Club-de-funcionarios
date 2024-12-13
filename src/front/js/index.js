@@ -7,7 +7,13 @@ import "../styles/index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 //import your own components
-import Layout from "./layout";
+import { BrowserRouter } from "react-router-dom";  // Import BrowserRouter
+import Layout from "./layout"; // Import Layout
 
 //render your react application
-ReactDOM.render(<Layout />, document.querySelector("#app"));
+ReactDOM.render(
+  <BrowserRouter>  {/* Envuelve el componente Layout en BrowserRouter */}
+    <Layout />
+  </BrowserRouter>,
+  document.querySelector("#app")
+);
