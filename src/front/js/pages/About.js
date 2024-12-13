@@ -31,18 +31,19 @@ const About = () => {
             <p>Accede a la biblioteca, elige un libro y realiza tu reserva.
               Consulta tu historial para ver todas tus reservas y préstamos en un sólo lugar.</p>
 
-            <h5 className="mt-5 mb-4">Preguntas Frecuentes (FAQs) </h5>
+            <h5 className="mt-5 mb-4">Preguntas Frecuentes</h5>
 
             <div className="accordion" id="accordionPanelsStayOpenExample">
               <div className="accordion-item">
-                <h2 class="accordion-header">
+                <h2 className="accordion-header">
                   <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style={{ borderColor: "#3865e5" }}>
-                    ¿Como reservo un evento?
+                    ¿Como reservo un salón para eventos?
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show" style={{ borderColor: "#3865e5" }}>
                   <div className="accordion-body">
-                    Respuesta 1
+                    Dirígete a la sección Eventos en la barra superior de tu perfil y consulta la disponibilidad del salón en el calendario.
+                    Si no está disponible, serás notificado ni bien se encuentre disponible o te facilitaremos otras fechas disponibles vía mail o whapp.
                   </div>
                 </div>
               </div>
@@ -54,7 +55,8 @@ const About = () => {
                 </h2>
                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                   <div className="accordion-body">
-                    Respuesta 2
+                    El préstamo de libros es de un mes a partir de la fecha que fue retirado. Serás notificado vía mail sobre el período de tu préstamo.
+                    Una vez vencido el plazo para la devolución, podrás comunicarte vía mail o WhatsApp avisando la demora.
                   </div>
                 </div>
               </div>
@@ -66,7 +68,7 @@ const About = () => {
                 </h2>
                 <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
                   <div className="accordion-body">
-                    Respuesta 3
+                    Podrás cancelar tus reservas en cualquier momento desde el Panel de Usuario, en la sección Mis Reservas.
                   </div>
                 </div>
               </div>

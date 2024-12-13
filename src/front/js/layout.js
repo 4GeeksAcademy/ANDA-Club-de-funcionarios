@@ -25,6 +25,11 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 
+import { ProtectedRoute } from './component/protectedRoute';
+
+
+
+
 const Layout = () => {
     const location = useLocation();  // Usamos useLocation para obtener la ruta actual
 
@@ -43,7 +48,8 @@ const Layout = () => {
         return !noNavbarRoutes.includes(location.pathname);  // Si la ruta no está en noNavbarRoutes, muestra el Navbar
     };
 
-    const role = "admin";
+    // Asumimos que `role` es recuperado del contexto o del estado del usuario, es solo un ejemplo
+    const role = "admin";  // Este valor debería venir del contexto de autenticación del usuario
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
@@ -55,34 +61,38 @@ const Layout = () => {
                 <div className="d-flex flex-grow-1">
                     <div className="flex-grow-1 p-0">
                         <Routes>
-                            {/* Panel de admin con sus rutas hijas correspondientes */}
-                            <Route element={<PanelAdministrador />} path="/panel-admin">
+                            {/* Rutas protegidas para el panel de administración */}
+                            <Route path="/panel-admin" element={
+                                <ProtectedRoute requiredRole="admin" userRole={role}> {/* Envia el role del usuario */}
+                                    <PanelAdministrador />
+                                </ProtectedRoute>
+                            }>
                                 <Route index element={<Navigate to="perfil-administrador" />} />
-                                <Route element={<TuPerfil />} path="perfil-administrador" />
-                                <Route element={<EditarCargarLibro />} path="editar-cargar-libro" />
-                                <Route element={<SubirLibro />} path="subir-libro" />
-                                <Route element={<EditarCargarSalon />} path="editar-cargar-salon" />
-                                <Route element={<AdministradorUsuarios />} path="administrador-usuarios" />
+                                <Route path="perfil-administrador" element={<TuPerfil />} />
+                                <Route path="editar-cargar-libro" element={<EditarCargarLibro />} />
+                                <Route path="subir-libro" element={<SubirLibro />} />
+                                <Route path="editar-cargar-salon" element={<EditarCargarSalon />} />
+                                <Route path="administrador-usuarios" element={<AdministradorUsuarios />} />
                             </Route>
 
                             {/* Rutas para el manejo de registro, login y recuperar contraseña */}
-                            <Route element={<Login />} path="/login" />
-                            <Route element={<Register />} path="/register" />
-                            <Route element={<Recover_account1 />} path="/recover-account1" />
-                            <Route element={<Recover_account2 />} path="/recover-account2" />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/recover-account1" element={<Recover_account1 />} />
+                            <Route path="/recover-account2" element={<Recover_account2 />} />
 
                             {/* Panel de Usuario con sus rutas hijas correspondientes */}
-                            <Route element={<PanelUsuario />} path="panel-de-usuario">
-                                <Route element={<TuPerfilUser />} path="perfil-usuario" />
-                                <Route element={<HistorialUser />} path="historial" />
-                                <Route element={<CalendarioEventosUser />} path="calendario-eventos" />
+                            <Route path="panel-de-usuario" element={<PanelUsuario />}>
+                                <Route path="perfil-usuario" element={<TuPerfilUser />} />
+                                <Route path="historial" element={<HistorialUser />} />
+                                <Route path="calendario-eventos" element={<CalendarioEventosUser />} />
                             </Route>
 
                             {/* Otras rutas */}
-                            <Route element={<Home />} path="/" />
-                            <Route element={<About />} path="/about" />
-                            <Route element={<Demo />} path="/demo" />
-                            <Route element={<Single />} path="/single/:theid" />
+                            <Route path="/" element={<Home />} />
+                            <Route path="/about" element={<About />} />
+                            <Route path="/demo" element={<Demo />} />
+                            <Route path="/single/:theid" element={<Single />} />
                             <Route element={<h1>Not found!</h1>} />
                         </Routes>
                     </div>
