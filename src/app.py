@@ -16,6 +16,11 @@ from datetime import timedelta
 from dotenv import load_dotenv # Cargar variables de entorno
 # from models import Person
 
+#importo decorador necesario para proteger rutas 
+from functools import wraps 
+form flask_jwt_extended import get_jwt_identity 
+
+
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
@@ -53,7 +58,7 @@ app.register_blueprint(api, url_prefix='/api')
 
 # -----------------------------------------------------------------
 # AUTHENTICATION ROUTES
-# Rutas de autenticación de usuarios (registro y login)
+# Rutas de autenticación de usuarios (registro y login)  
 # -----------------------------------------------------------------
 
 @app.route('/register', methods=['POST'])
@@ -118,6 +123,71 @@ def login():
         "access_token": access_token,
         "user": user.serialize()
     }), 200
+
+
+
+
+#-----------------------------------------------------------------------
+# Decorador para verificar si el usuario tiene el rol de administrador
+#------------------------------------------------------------------------
+
+def admin_required(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        # Obtener el ID del usuario actual desde el token JWT
+        current_user_id = get_jwt_identity()
+        # Buscar al usuario en la base de datos por su ID
+        user = User.query.get(current_user_id)
+
+        # Verificar si el usuario es un administrador
+        if user and user.role != 'admin':
+            # Si no es un admin, devolver un error de acceso denegado
+            return jsonify({"msg": "Acceso denegado: Solo administradores"}), 403
+
+        # Si el usuario es un admin, ejecutar la ruta protegida
+        return fn(*args, **kwargs)
+
+    return wrapper
+
+#Aplicar el decorador admin_required a las rutas de administración protegidas
+
+@app.route('/panel-admin', methods=['GET'])
+@jwt_required()  # Requiere que el usuario esté autenticado con un token JWT
+@admin_required  # Verifica que el usuario tenga el rol 'admin'
+def panel_admin():
+    return jsonify({"msg": "Bienvenido al Panel de Administrador!"}), 200
+
+@app.route('/perfil-administrador', methods=['GET'])
+@jwt_required()
+@admin_required
+def perfil_administrador():
+    return jsonify({"msg": "Bienvenido a tu Perfil de Administrador!"}), 200
+
+@app.route('/editar-cargar-libro', methods=['GET'])
+@jwt_required()
+@admin_required
+def editar_cargar_libro():
+    return jsonify({"msg": "Acceso para editar o cargar un libro!"}), 200
+
+@app.route('/subir-libro', methods=['GET'])
+@jwt_required()
+@admin_required
+def subir_libro():
+    return jsonify({"msg": "Sube el libro aquí!"}), 200
+
+@app.route('/editar-cargar-salon', methods=['GET'])
+@jwt_required()
+@admin_required
+def editar_cargar_salon():
+    return jsonify({"msg": "Acceso para editar o cargar salón!"}), 200
+
+@app.route('/administrador-usuarios', methods=['GET'])
+@jwt_required()
+@admin_required
+def administrador_usuarios():
+    return jsonify({"msg": "Administración de usuarios!"}), 200
+
+
 
 # -----------------------------------------------------------------
 # Manejo de errores
