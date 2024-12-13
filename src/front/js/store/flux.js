@@ -13,23 +13,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			user: null, // añado el campo `user` que contendrá la información del usuario
 		},
+
+
+
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
+			// Función para iniciar sesión
+			loginUser: (user) => {
+				// Esta acción recibirá un objeto `user` (por ejemplo: { role: "admin", name: "John" })
+				setStore({ user });  // Guardamos el usuario en el store
+			},
+
+			// Función para cerrar sesión
+			logoutUser: () => {
+				setStore({ user: null });  // Al cerrar sesión, eliminamos la información del usuario
 			},
 
 			getMessage: async () => {
-				try{
+				try {
 					// fetching data from the backend
 					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
 					const data = await resp.json()
 					setStore({ message: data.message })
 					// don't forget to return something, that is how the async resolves
 					return data;
-				}catch(error){
+				} catch (error) {
 					console.log("Error loading message from backend", error)
 				}
 			},

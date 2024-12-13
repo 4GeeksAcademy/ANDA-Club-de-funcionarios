@@ -176,7 +176,7 @@ class Books_reservations(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id')) 
     reserved_at = db.Column(db.DateTime(timezone=True), default=lazy_utc_now)
-    returned_at = db.Column(db.DateTime(timezone=True), default=lazy_utc_now, onupdate=lazy_utc_now)
+    returned_at = db.Column(db.DateTime(timezone=True), nullable=True)
     
     #relacion inversa con User. Cada reserva esta asociada a un unico usuario
     user = db.relationship('User', back_populates = 'books_reservations')

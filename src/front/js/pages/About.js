@@ -5,7 +5,9 @@ const About = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1rem' }}>
-        <img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
+        <a href='/'>
+          <img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
+        </a>
       </div>
 
       <nav className="navbar" style={{ backgroundColor: '#eef2ff', height: '3rem' }}>
@@ -43,42 +45,38 @@ const About = () => {
 
             <div className="accordion" id="accordionPanelsStayOpenExample">
               <div className="accordion-item">
-                <h2 class="accordion-header">
+                <h2 className="accordion-header">
                   <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style={{ borderColor: "#3865e5" }}>
-                    <strong>¿Cómo puedo registrarme?</strong>
+                    ¿Como reservo un evento?
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show" style={{ borderColor: "#3865e5" }}>
                   <div className="accordion-body">
-                    Para registrarte en nuestra web sólo necesitas tu mail de <strong>ANDA</strong> y algunos datos personales 
-                    generales como tu C.I, dirección y un número de contacto. 
+                    Respuesta 1
                   </div>
                 </div>
               </div>
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                    <strong>¿Qué pasa si no devuelvo un libro a tiempo?</strong>
+                    ¿Que pasa si no devuelvo un libro a tiempo?
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                   <div className="accordion-body">
-                    El plazo del préstamo es de un mes, el cual es notificado vía mail. 
-                    Una vez vencido el plazo, puedes avisar de tu demora por nuestros medios de contacto.
+                    Respuesta 2
                   </div>
                 </div>
               </div>
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                    <strong>¿Cómo puedo cancelar una reserva?</strong>
+                    ¿Como puedo cancelar una reserva?
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
                   <div className="accordion-body">
-                    Las reservas tanto de salones como de libros, se cancelan directamente en tu perfil,
-                    en la sección <strong>Mis reservas</strong> ubicada en el margen izquierdo.
-                  
+                    Respuesta 3
                   </div>
                 </div>
               </div>
