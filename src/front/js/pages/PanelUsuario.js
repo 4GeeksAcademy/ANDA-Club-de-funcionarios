@@ -1,5 +1,5 @@
 import React from "react";
-import SidebarUser from "../component/SidebarUser"; // Ensure the path is correct
+import { SidebarUser } from "../component/SidebarUser"; 
 import { Outlet } from "react-router-dom";
 
 const PanelUsuario = () => {

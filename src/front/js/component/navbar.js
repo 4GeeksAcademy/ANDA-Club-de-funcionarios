@@ -41,7 +41,7 @@ export const Navbar = () => {
         {/* Enlaces principales */}
         <li className="nav-item">
           <Link
-            to="/panel-de-usuario"
+            to="/panel-de-usuario/perfil-usuario"
             className={`nav-link ${activeLink === "/" ? "fw-bold" : ""}`}
             onClick={() => handleLinkClick("/panel-de-usuario")}
           >

@@ -1,49 +1,71 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
- const SidebarUser = () => {
-      const [isCollapsed, setIsCollapsed] = useState(false);
-    
-      const toggleCollapse = () => {
-        setIsCollapsed(!isCollapsed);
-      };
-      
-    return (
-        <nav
-          className="text-white d-flex flex-column"
-            style={{ 
-                backgroundColor: "#3865e5", width: "250px", minHeight: "100vh",  
-            }}
-        >
-            <div className="p-3">
-                {/* Encabezado del Sidebar */}    
-            </div>
-            <ul className="nav flex-column flex-grow-1">
-                <li className="nav-item">
-                    <Link to="/perfil-usuario" className="nav-link text-white">
-                        <i className="bi bi-person-circle me-2"></i> Tu Perfil
-                    </Link>
-                </li>
-                <li className="nav-item">
-                    <Link to="/mis-reservas" className="nav-link text-white">
-                        <i className="bi bi-calendar-event me-2"></i> Mis reservas
-                    </Link>
-                </li>
-                <li className="nav-item">
-                    <Link to="/historial" className="nav-link text-white">
-                        <i className="bi bi-clock-history me-2"></i> Historial
-                    </Link>
-                </li>
-            </ul>
-            <ul className="nav flex-column">
-                <li className="nav-item">
-                    <button className="btn btn-link text-danger nav-link">
-                        <i className="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
-                    </button>
-                </li>
-            </ul>
-        </nav>
-    );
-};
+export const SidebarUser = () => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-export default SidebarUser;
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  return (
+    <nav
+      className={`bg- text-white sidebar d-flex flex-column ${isCollapsed ? "collapsed" : ""
+        }`}
+      style={{
+        backgroundColor: "#3865e5",
+        width: isCollapsed ? "80px" : "250px",
+        transition: "width 0.3s ease-in-out",
+        minHeight: "100%",
+
+      }}
+    >
+      {/* Botón para colapsar/expandir */}
+      <button
+        className="btn btn-link text-white"
+        onClick={toggleCollapse}
+        style={{
+          textAlign: "center",
+          margin: "10px 0",
+        }}
+      >
+        <i className={`fas ${isCollapsed ? "fa-chevron-right" : "fa-chevron-left"}`}></i>
+      </button>
+
+      <ul className="nav flex-column flex-grow-1">
+        <li className="nav-item">
+          <Link to="perfil-usuario" className="nav-link text-white text-center">
+            <i className="fas fa-user"></i>
+            {!isCollapsed && <span className="ms-2">Tu Perfil</span>}
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="reserva-libro" className="nav-link text-white text-center">
+            <i className="fa-solid fa-book-open"></i>
+            {!isCollapsed && <span className="ms-2">Reservar libro</span>}
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="reservar-salon" className="nav-link text-white text-center">
+            <i className="fa-regular fa-calendar"></i>
+            {!isCollapsed && <span className="ms-2">Reservar salón</span>}
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link to="mis-reservas" className="nav-link text-white text-center">
+            <i className="fa-regular fa-calendar-days"></i>
+            {!isCollapsed && <span className="ms-2">Mis reservas</span>}
+          </Link>
+        </li>
+      </ul>
+      <ul className="nav flex-column">
+        <li className="nav-item">
+          <button className="btn btn-link text-light nav-link text-center">
+            <i className="fas fa-sign-out"></i>
+            {!isCollapsed && <span className="ms-2">Cerrar Sesión</span>}
+          </button>
+        </li>
+      </ul>
+    </nav>
+  );
+};
