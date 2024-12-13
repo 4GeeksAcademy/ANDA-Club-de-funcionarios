@@ -22,7 +22,6 @@ static_file_dir = os.path.join(os.path.dirname(
 app = Flask(__name__)
 load_dotenv()
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') # Clave secreta en .env
-print(f"JWT_SECRET_KEY cargado: {app.config['JWT_SECRET_KEY']}")
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=365)  # Configura 1 año de expiración para el token
 jwt = JWTManager(app)
 bcrypt = Bcrypt(app)
@@ -56,7 +55,7 @@ app.register_blueprint(api, url_prefix='/api')
 # Rutas de autenticación de usuarios (registro y login)
 # -----------------------------------------------------------------
 
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
     """
     Registra un nuevo usuario con estado inicial 'en_revision'.
@@ -87,7 +86,7 @@ def register():
     return jsonify({"msg": "User registered successfully. Awaiting admin approval."}), 201
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     """
     Autentica al usuario y genera un token de acceso JWT.
@@ -111,7 +110,7 @@ def login():
         return jsonify({"msg": "User is not authorized to log in"}), 403
 
     # Generar el token de acceso
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id))
 
     return jsonify({
         "msg": "Login successful",

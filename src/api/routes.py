@@ -2,12 +2,13 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Reservations, Books
+from api.models import db, User, Reservations, Books, UserProfiles, Books_reservations
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import pendulum
+from datetime import datetime, timezone
 
 api = Blueprint('api', __name__)
 bcrypt = Bcrypt()
@@ -89,6 +90,7 @@ def update_user_status(user_id):
     
     # Confirmar que el cambio de estado fue exitoso
     return jsonify({"message": "User status updated successfully"}), 200
+
 # -----------------------------------------------------------------
 # USER PROFILE MANAGEMENT ROUTES
 # Rutas para gestionar los perfiles de usuarios
@@ -119,6 +121,14 @@ def get_user_profile(user_id):
     Obtiene el perfil de un usuario específico por su ID.
     Requiere autenticación.
     """
+
+    # Verificar que el usuario actual sea el mismo que el del perfil o administrador
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+    if user_id != int(current_user_id) and (not current_user or current_user.role != 'admin'):
+        return jsonify({"msg": "You are not authorized to view this profile"}), 403
+    
+    # Query para obtener el perfil asociado al usuario especificado
     profile = UserProfiles.query.filter_by(user_id=user_id).first()
     if not profile:
         return jsonify({"msg": "User profile not found"}), 404
@@ -138,7 +148,13 @@ def create_user_profile():
     # Validar campos requeridos
     if not data or not data.get('user_id') or not data.get('first_name') or not data.get('last_name'):
         return jsonify({"msg": "user_id, first_name, and last_name are required"}), 400
-
+    
+    # Verificar que el usuario actual sea el mismo que el del perfil o administrador
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+    if data['user_id'] != int(current_user_id) and (not current_user or current_user.role != 'admin'):
+        return jsonify({"msg": "You are not authorized to create this profile"}), 403
+    
     # Verificar que el usuario exista
     user = User.query.get(data['user_id'])
     if not user:
@@ -172,10 +188,18 @@ def update_user_profile(user_id):
     Actualiza el perfil de un usuario existente.
     Requiere autenticación.
     """
+    # Verificar que el usuario actual sea el mismo que el del perfil o administrador
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+    if user_id != int(current_user_id) and (not current_user or current_user.role != 'admin'):
+        return jsonify({"msg": "You are not authorized to update this profile"}), 403
+    
+    # Query para obtener el perfil asociado al usuario especificado
     profile = UserProfiles.query.filter_by(user_id=user_id).first()
     if not profile:
         return jsonify({"msg": "User profile not found"}), 404
-
+    
+    # Actualizar los campos del perfil
     data = request.get_json()
     profile.first_name = data.get('first_name', profile.first_name)
     profile.last_name = data.get('last_name', profile.last_name)
@@ -249,7 +273,12 @@ def update_reservation(reservation_id):
     reservation = Reservations.query.get(reservation_id)
     if not reservation:
         return jsonify({"msg": "Reservation not found"}), 404
-
+    
+    # Verificar que el usuario actual sea el mismo que realizó la reserva
+    current_user_id = get_jwt_identity()
+    if reservation.user_id != int(current_user_id):
+        return jsonify({"msg": "You are not authorized to update this reservation"}), 403
+    
     # Validar campos y actualizar
     data = request.get_json()
     reservation.event_name = data.get('event_name', reservation.event_name)
@@ -272,6 +301,11 @@ def get_reservation_details(reservation_id):
     if not reservation:
         return jsonify({"msg": "Reservation not found"}), 404
 
+    # Verificar que el usuario actual sea el mismo que realizó la reserva
+    current_user_id = get_jwt_identity()
+    if reservation.user_id != int(current_user_id):
+        return jsonify({"msg": "You are not authorized to view this reservation"}), 403
+    
     return jsonify(reservation.serialize()), 200
 
 
@@ -286,6 +320,11 @@ def cancel_reservation(reservation_id):
     if not reservation:
         return jsonify({"msg": "Reservation not found"}), 404
 
+    # Verificar que el usuario actual sea el mismo que realizó la reserva
+    current_user_id = get_jwt_identity()
+    if reservation.user_id != int(current_user_id):
+        return jsonify({"msg": "You are not authorized to delete this reservation"}), 403
+    
     db.session.delete(reservation)
     db.session.commit()
 
@@ -327,6 +366,7 @@ def add_new_book():
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
 
+    # Verificar que el usuario actual sea administrador
     if not current_user or current_user.role != 'admin':
         return jsonify({"msg": "Unauthorized"}), 403
 
@@ -356,6 +396,7 @@ def edit_book(book_id):
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
 
+    # Verificar que el usuario actual sea administrador
     if not current_user or current_user.role != 'admin':
         return jsonify({"msg": "Unauthorized"}), 403
 
@@ -384,6 +425,7 @@ def delete_book(book_id):
     current_user_id = get_jwt_identity()
     current_user = User.query.get(current_user_id)
 
+    # Verificar que el usuario actual sea administrador
     if not current_user or current_user.role != 'admin':
         return jsonify({"msg": "Unauthorized"}), 403
 
@@ -447,21 +489,32 @@ def return_book(reservation_id):
     Marca un libro como devuelto.
     Requiere autenticación.
     """
+    # Obtener el usuario actual
+    current_user_id = get_jwt_identity()
+
     # Verificar que la reserva exista
     reservation = Books_reservations.query.get(reservation_id)
     if not reservation:
         return jsonify({"msg": "Reservation not found"}), 404
 
+    # Verificar que el usuario sea el mismo que realizó la reserva
+    if reservation.user_id != int(current_user_id):
+        return jsonify({"msg": "You are not authorized to return this book"}), 403
+
     # Verificar que el libro exista
     book = Books.query.get(reservation.book_id)
     if not book:
         return jsonify({"msg": "Book not found"}), 404
-
-    # Marcar la reserva como devuelta y el libro como disponible
-    reservation.returned_at = datetime.utcnow()
+    
+    # Verificar si el libro ya fue devuelto
+    if reservation.returned_at:
+        return jsonify({"msg": "The book is already returned"}), 400
+    
+    # Actualizar estado de la reserva y el libro
+    reservation.returned_at = datetime.now(datetime.timezone.utc)
     book.availability = True
 
-    # Guardar cambios en la base de datos
+    # Guardar cambios
     db.session.commit()
 
     return jsonify({"msg": "Book returned successfully", "reservation": reservation.serialize()}), 200
