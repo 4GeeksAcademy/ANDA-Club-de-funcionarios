@@ -5,7 +5,9 @@ const About = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1rem' }}>
-        <img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
+        <a href='/'>
+          <img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
+        </a>
       </div>
 
       <nav className="navbar" style={{ backgroundColor: '#eef2ff', height: '3rem' }}>
@@ -37,7 +39,7 @@ const About = () => {
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style={{ borderColor: "#3865e5" }}>
-                    ¿Como reservo un salón para eventos?
+                    <strong>¿Como reservo un salón para eventos?</strong>
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show" style={{ borderColor: "#3865e5" }}>
@@ -50,7 +52,7 @@ const About = () => {
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                    ¿Que pasa si no devuelvo un libro a tiempo?
+                    <strong>¿Que pasa si no devuelvo un libro a tiempo?</strong>
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
@@ -63,7 +65,7 @@ const About = () => {
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                    ¿Como puedo cancelar una reserva?
+                    <strong>¿Como puedo cancelar una reserva?</strong>
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
