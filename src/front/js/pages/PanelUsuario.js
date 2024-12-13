@@ -1,21 +1,37 @@
 import React from "react";
-import { SidebarUser } from "../component/SidebarUser"; 
+import { SidebarUser } from "../component/SidebarUser";
 import { Outlet } from "react-router-dom";
+import bannerImage from "../../img/panel_de_funcionario.png"
 
 const PanelUsuario = () => {
   return (
     <div className="d-flex flex-column" style={{ height: "100vh" }}>
-      <div
-        className="text-white text-start py-3 px-4"
-        style={{
-          backgroundColor: "#3865e5", 
-          width: "100%",
-          height: "100px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
+  <div
+    className="text-white text-start py-3 px-4"
+    style={{
+      backgroundSize: "contain",
+      backgroundPosition: "center 100%",
+      backgroundColor: "#3865e5",
+      width: "100%",
+      height: "120px", // Adjust for a smaller banner
+      position: "relative", // Enable positioning for child elements
+    }}
+  >
+    <img src={bannerImage}
+      className="img-fluid"
+      alt="People"
+      style={{
+        display: "block",
+        position: "absolute",
+        backgroundrepeat: "no-repeat",
+        right: "30px", // Slight margin from right
+        height: "220px", // Scale image to fit within the banner height
+        bottom: "-110px",
+        //maxHeight: "100%", // Prevent image from exceeding a specific size
+        objectFit: "contain", // Maintain aspect ratio
+        clipPath: "inset(0 0 50% 0)"
+      }}
+    />
         <h3 className="mb-1">Panel de usuario</h3>
         <p className="mb-0">
           Aquí tienes todo lo que necesitas para gestionar tus eventos y libros.

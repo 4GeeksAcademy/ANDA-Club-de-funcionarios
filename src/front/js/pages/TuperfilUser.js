@@ -2,8 +2,8 @@ import React from "react";
 
 export const TuPerfilUser = () => {
     return (
-        <div className="container mt-4">
-            <h2>Perfil de Usuario</h2>
+        <div className="container mt-4 align-center">
+            <h4 className="text-left p-4">Perfil de usuario</h4>
             <form>
                 <div className="row mb-3">
                     <div className="col-md-6">

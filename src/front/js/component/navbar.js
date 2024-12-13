@@ -90,7 +90,7 @@ export const Navbar = () => {
         {/* Dropdown de usuario */}
         <div className="dropdown">
           <button
-            className="btn btn-dark dropdown-toggle"
+            className="btn btn-dark dropdown-toggle align-center"
             type="button"
             id="dropdownMenuButton"
             data-bs-toggle="dropdown"
@@ -108,7 +108,7 @@ export const Navbar = () => {
               </Link>
             </li>
             <li>
-              <button className="dropdown-item text-danger">
+              <button className="dropdown-item text-primary">
                 Cerrar Sesión
               </button>
             </li>
