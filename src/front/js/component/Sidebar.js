@@ -10,14 +10,13 @@ export const Sidebar = () => {
 
   return (
     <nav
-      className={`bg-dark text-white sidebar d-flex flex-column ${
-        isCollapsed ? "collapsed" : ""
-      }`}
+      className={`bg-dark text-white sidebar d-flex flex-column ${isCollapsed ? "collapsed" : ""
+        }`}
       style={{
         width: isCollapsed ? "80px" : "250px",
         transition: "width 0.3s ease-in-out",
         minHeight: "100%",
-    
+
       }}
     >
       {/* Botón para colapsar/expandir */}
