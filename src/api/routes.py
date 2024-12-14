@@ -8,7 +8,6 @@ from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import pendulum
-from datetime import datetime, timezone
 
 api = Blueprint('api', __name__)
 bcrypt = Bcrypt()

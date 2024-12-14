@@ -3,6 +3,7 @@ This module takes care of starting the API Server, Loading the DB and Adding the
 """
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
@@ -17,15 +18,13 @@ from dotenv import load_dotenv # Cargar variables de entorno
 # from models import Person
 
 #importo decorador necesario para proteger rutas 
-from functools import wraps 
-from flask_jwt_extended import get_jwt_identity
-
+from functools import wraps
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
-app = Flask(__name__)
 load_dotenv()
+app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') # Clave secreta en .env
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=365)  # Configura 1 año de expiración para el token
 jwt = JWTManager(app)
@@ -43,6 +42,12 @@ else:
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+
+# Habilitar CORS
+CORS(app)
+
+# Configuración adicional
+app.url_map.strict_slashes = False
 
 # add the admin
 setup_admin(app)
@@ -66,7 +71,6 @@ def register():
     Registra un nuevo usuario con estado inicial 'en_revision'.
     """
     data = request.get_json()
-
     # Validar que se envíen los campos requeridos
     if not data or not data.get('user_name') or not data.get('email') or not data.get('password'):
         return jsonify({"msg": "Username, email, and password are required"}), 400
@@ -98,7 +102,7 @@ def login():
     Solo usuarios con estado 'activo' pueden iniciar sesión.
     """
     data = request.get_json()
-
+    print("Datos recibidos en el backend:", data)
     # Validar que se envíen el email y la contraseña
     if not data or not data.get('email') or not data.get('password'):
         return jsonify({"msg": "Email and password are required"}), 400
