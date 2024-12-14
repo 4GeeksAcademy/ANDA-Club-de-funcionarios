@@ -520,6 +520,43 @@ def return_book(reservation_id):
     return jsonify({"msg": "Book returned successfully", "reservation": reservation.serialize()}), 200
 
 # -----------------------------------------------------------------
+# ADMIN USER TEST CREATION ENDPOINT
+# -----------------------------------------------------------------
+
+@api.route('/create-admin', methods=['POST'])
+def create_admin():
+    """
+    Endpoint para crear un usuario administrador sin autenticación (solo para pruebas).
+    """
+    data = request.get_json()
+
+    # Validar que se envíen los campos requeridos
+    if not data or not data.get('email') or not data.get('password'):
+        return jsonify({"msg": "Email and password are required"}), 400
+
+    # Verificar si el admin ya existe
+    existing_admin = User.query.filter_by(email=data['email']).first()
+    if existing_admin:
+        return jsonify({"msg": "Admin already exists."}), 400
+
+    # Crear el admin
+    admin = User(
+        user_name="admin",
+        email=data['email'],
+        password_hash=bcrypt.generate_password_hash(data['password']).decode('utf-8'),
+        role="admin",
+        status="activo"
+    )
+
+    db.session.add(admin)
+    try:
+        db.session.commit()
+        return jsonify({"msg": f"Admin {data['email']} created successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"msg": f"Error creating admin: {str(e)}"}), 500
+
+# -----------------------------------------------------------------
 # EXAMPLE ROUTE
 # -----------------------------------------------------------------
 
