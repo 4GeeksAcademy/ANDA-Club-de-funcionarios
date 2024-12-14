@@ -34,25 +34,25 @@ export const Sidebar = () => {
 
       <ul className="nav flex-column flex-grow-1">
         <li className="nav-item">
-          <Link to="perfil_administrador" className="nav-link text-white text-center">
+          <Link to="perfil-administrador" className="nav-link text-white text-center">
             <i className="fas fa-user"></i>
             {!isCollapsed && <span className="ms-2">Tu Perfil</span>}
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="editar_cargar_libro" className="nav-link text-white text-center">
+          <Link to="editar-cargar-libro" className="nav-link text-white text-center">
             <i className="fa-solid fa-book-open"></i>
             {!isCollapsed && <span className="ms-2">Editar y/o cargar libro</span>}
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="editar_cargar_salon" className="nav-link text-white text-center">
+          <Link to="editar-cargar-salon" className="nav-link text-white text-center">
             <i className="fa-regular fa-calendar"></i>
             {!isCollapsed && <span className="ms-2">Editar salón</span>}
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="administrador_usuarios" className="nav-link text-white text-center">
+          <Link to="administrador-usuarios" className="nav-link text-white text-center">
             <i className="fa-solid fa-users-gear"></i>
             {!isCollapsed && <span className="ms-2">Administrador de usuarios</span>}
           </Link>
