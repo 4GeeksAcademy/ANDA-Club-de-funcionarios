@@ -14,17 +14,60 @@ const getState = ({ getStore, getActions, setStore }) => {
 					initial: "white"
 				}
 			],
-			user: null, // añado el campo `user` que contendrá la información del usuario
+			user: null,
 		},
 
 
 
 		actions: {
-			// Función para iniciar sesión
-			loginUser: (user) => {
-				// Esta acción recibirá un objeto `user` (por ejemplo: { role: "admin", name: "John" })
-				setStore({ user });  // Guardamos el usuario en el store
+
+			loginUser: async (email, password) => {
+				try {
+					console.log("Datos enviados al backend:", { email, password });
+					const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ email, password }),
+					});
+					if (response.ok) {
+						const data = await response.json();
+						localStorage.setItem("token", data.access_token); // Guarda el token en localStorage
+						setStore({ user: data.user }); // Guarda la información del usuario en el store
+						return true;
+					} else {
+						console.error("Error al iniciar sesión");
+						return false;
+					}
+				} catch (error) {
+					console.error("Error en la solicitud de login:", error);
+					return false;
+				}
 			},
+			
+			registerUser: async (userData) => {
+				try {
+					const response = await fetch(`${process.env.BACKEND_URL}/api/register`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(userData),
+					});
+			
+					if (response.ok) {
+						const data = await response.json();
+						console.log("Usuario registrado exitosamente:", data);
+						return true;
+					} else {
+						const errorData = await response.json();
+						console.error("Error al registrar el usuario:", errorData.msg);
+						return false;
+					}
+				} catch (error) {
+					console.error("Error en la solicitud de registro:", error);
+					return false;
+				}
+			},
+			
+			
 
 			// Función para cerrar sesión
 			logoutUser: () => {
