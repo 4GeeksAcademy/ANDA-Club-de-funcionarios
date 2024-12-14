@@ -71,6 +71,7 @@ def register():
     Registra un nuevo usuario con estado inicial 'en_revision'.
     """
     data = request.get_json()
+    
     # Validar que se envíen los campos requeridos
     if not data or not data.get('user_name') or not data.get('email') or not data.get('password'):
         return jsonify({"msg": "Username, email, and password are required"}), 400
@@ -102,7 +103,7 @@ def login():
     Solo usuarios con estado 'activo' pueden iniciar sesión.
     """
     data = request.get_json()
-    print("Datos recibidos en el backend:", data)
+
     # Validar que se envíen el email y la contraseña
     if not data or not data.get('email') or not data.get('password'):
         return jsonify({"msg": "Email and password are required"}), 400
