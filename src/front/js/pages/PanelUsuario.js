@@ -24,11 +24,10 @@ const PanelUsuario = () => {
         display: "block",
         position: "absolute",
         backgroundrepeat: "no-repeat",
-        right: "30px", // Slight margin from right
-        height: "220px", // Scale image to fit within the banner height
+        right: "5px", 
+        height: "220px", 
         bottom: "-110px",
-        //maxHeight: "100%", // Prevent image from exceeding a specific size
-        objectFit: "contain", // Maintain aspect ratio
+        objectFit: "contain",
         clipPath: "inset(0 0 50% 0)"
       }}
     />
