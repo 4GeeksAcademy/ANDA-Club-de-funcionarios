@@ -11,12 +11,12 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
     useEffect(() => {
         // Si el rol del usuario no coincide con el requerido, redirige a otra página
-        if (store.user.role !== requiredRole) {
+        if (!store.user || store.user.role !== requiredRole) {
             navigate("/");  // Redirigir al home
         }
     }, [store.user.role, location, navigate]);
 
-    return children;  // Si el usuario tiene el rol correcto, renderiza el contenido protegido
+    return store.user && store.user.role === requiredRole ? children : null;  // Si el usuario tiene el rol correcto, renderiza el contenido protegido
 };
 
 

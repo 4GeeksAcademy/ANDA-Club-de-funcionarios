@@ -24,7 +24,7 @@ import { Biblioteca } from "./pages/Biblioteca";
 import { Reservas } from "./pages/Reservas";
 
 import { Single } from "./pages/single";
-import injectContext from "./store/appContext";
+import injectContext, { Context } from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 
@@ -34,7 +34,9 @@ import { ProtectedRoute } from './component/protectedRoute';
 
 
 const Layout = () => {
-    const location = useLocation();  // Usamos useLocation para obtener la ruta actual
+    const location = useLocation();  // Obtenemos la ruta actual
+    const { store } = React.useContext(Context);
+    const role = store.user?.role || "guest";
 
     // Rutas donde no se debe mostrar el Navbar
     const noNavbarRoutes = [
@@ -50,9 +52,6 @@ const Layout = () => {
     const mostrarNavbar = () => {
         return !noNavbarRoutes.includes(location.pathname);  // Si la ruta no está en noNavbarRoutes, muestra el Navbar
     };
-
-    // Asumimos que `role` es recuperado del contexto o del estado del usuario, es solo un ejemplo
-    const role = "admin";  // Este valor debería venir del contexto de autenticación del usuario
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
