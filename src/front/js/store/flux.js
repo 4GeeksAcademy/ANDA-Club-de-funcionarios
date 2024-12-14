@@ -24,7 +24,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			loginUser: async (email, password) => {
 				try {
-					console.log("Datos enviados al backend:", { email, password });
 					const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
