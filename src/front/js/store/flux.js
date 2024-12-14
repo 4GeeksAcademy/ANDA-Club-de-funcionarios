@@ -91,7 +91,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				//get the store
 				const store = getStore();
 
-    };
+    		}
+		}
+	};
 };
 
 export default getState;
