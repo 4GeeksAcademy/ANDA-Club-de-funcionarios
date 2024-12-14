@@ -4,6 +4,15 @@ import getState from "./flux.js";
 // Don't change, here is where we initialize our context, by default it's just going to be null.
 export const Context = React.createContext(null);
 
+// Función para usar el contexto en los componentes
+export const useContextApp = () => {
+    const context = useContext(Context);
+    if (!context) {
+        throw new Error("useContextApp debe usarse dentro de un proveedor de Contexto.");
+    }
+    return context;
+};
+
 // This function injects the global store to any view/component where you want to use it, we will inject the context to layout.js, you can see it here:
 // https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
 const injectContext = PassedComponent => {
