@@ -5,7 +5,9 @@ const About = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '1rem' }}>
-        <img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
+        <a href='/'>
+          <img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
+        </a>
       </div>
 
       <nav className="navbar" style={{ backgroundColor: '#eef2ff', height: '3rem' }}>
@@ -31,42 +33,44 @@ const About = () => {
             <p>Accede a la biblioteca, elige un libro y realiza tu reserva.
               Consulta tu historial para ver todas tus reservas y préstamos en un sólo lugar.</p>
 
-            <h5 className="mt-5 mb-4">Preguntas Frecuentes (FAQs) </h5>
+            <h5 className="mt-5 mb-4">Preguntas Frecuentes</h5>
 
             <div className="accordion" id="accordionPanelsStayOpenExample">
               <div className="accordion-item">
-                <h2 class="accordion-header">
+                <h2 className="accordion-header">
                   <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style={{ borderColor: "#3865e5" }}>
-                    ¿Como reservo un evento?
+                    <strong>¿Como reservo un salón para eventos?</strong>
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse show" style={{ borderColor: "#3865e5" }}>
                   <div className="accordion-body">
-                    Respuesta 1
+                    Dirígete a la sección Eventos en la barra superior de tu perfil y consulta la disponibilidad del salón en el calendario.
+                    Si no está disponible, serás notificado ni bien se encuentre disponible o te facilitaremos otras fechas disponibles vía mail o whapp.
                   </div>
                 </div>
               </div>
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                    ¿Que pasa si no devuelvo un libro a tiempo?
+                    <strong>¿Que pasa si no devuelvo un libro a tiempo?</strong>
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
                   <div className="accordion-body">
-                    Respuesta 2
+                    El préstamo de libros es de un mes a partir de la fecha que fue retirado. Serás notificado vía mail sobre el período de tu préstamo.
+                    Una vez vencido el plazo para la devolución, podrás comunicarte vía mail o WhatsApp avisando la demora.
                   </div>
                 </div>
               </div>
               <div className="accordion-item">
                 <h2 className="accordion-header">
                   <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                    ¿Como puedo cancelar una reserva?
+                    <strong>¿Como puedo cancelar una reserva?</strong>
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
                   <div className="accordion-body">
-                    Respuesta 3
+                    Podrás cancelar tus reservas en cualquier momento desde el Panel de Usuario, en la sección Mis Reservas.
                   </div>
                 </div>
               </div>

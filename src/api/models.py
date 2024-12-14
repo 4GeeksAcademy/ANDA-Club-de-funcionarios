@@ -22,6 +22,7 @@ def lazy_utc_now():
  
 
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     user_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -64,7 +65,7 @@ class User(db.Model):
 
 class UserProfiles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -110,7 +111,7 @@ class UserProfiles(db.Model):
 class Reservations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     event_name = db.Column(db.String(100), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     created_at = db.Column(db.DateTime(timezone=True), default=lazy_utc_now)
@@ -174,9 +175,9 @@ class Books(db.Model):
 class Books_reservations(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) 
     reserved_at = db.Column(db.DateTime(timezone=True), default=lazy_utc_now)
-    returned_at = db.Column(db.DateTime(timezone=True), default=lazy_utc_now, onupdate=lazy_utc_now)
+    returned_at = db.Column(db.DateTime(timezone=True), nullable=True)
     
     #relacion inversa con User. Cada reserva esta asociada a un unico usuario
     user = db.relationship('User', back_populates = 'books_reservations')

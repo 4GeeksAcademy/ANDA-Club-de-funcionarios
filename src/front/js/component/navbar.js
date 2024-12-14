@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom'; 
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
@@ -7,6 +8,27 @@ export const Navbar = () => {
   const handleLinkClick = (path) => {
     setActiveLink(path); // Actualiza el enlace activo al hacer clic
   };
+//
+
+//    const {store} = useContext(Context)
+//    const navigate = useNavigate()
+//    const { location } = useLocation()
+
+//    const admminRoutes = ['/edit/users', '/dashboard/admin', '/add/book', '/user/profile']
+
+//   useEffect(()=>{
+//       if(store.user.role != 'admin' && adminRoutes.includes(location.pathname)){
+//           navigate("/user/dashboard")   (lo redirijo a cualquier pagina)
+//       }
+//   },[location])
+
+ //  return (<div>
+ //       { store.user.role == 'admin" && <AdminButton /> }     (para ocultar el elemento que quiera, por ejemplo el boton admin)
+        
+ //   </div>)
+//}
+
+
 
   return (
     <header>
