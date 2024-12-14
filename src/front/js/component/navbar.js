@@ -96,6 +96,7 @@ export const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0 text-center">
               <li className="nav-item">
+                
                 <Link
                   to="/"
                   className={`nav-link ${activeLink === "/" ? "fw-bold" : ""}`}

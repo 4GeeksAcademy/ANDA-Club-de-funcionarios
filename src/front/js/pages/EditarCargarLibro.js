@@ -10,31 +10,39 @@ export const EditarCargarLibro = () => {
     return (
         <div className="container mt-5">
             <h2 className="mb-4">Editar / Subir Libro</h2>
-
-            {/* Botón para subir un nuevo libro */}
-            <div className="d-flex justify-content-end mb-3">
+            <div className="d-flex justify-content-between mb-4">
                 <button
-                    className="btn btn-dark"
-                    onClick={() => navigate("/panel_admin/subir_libro")}
+                    className="btn btn-primary"
+                    onClick={() => navigate("/panel-admin/subir-libro")}
                 >
                     Subir +
                 </button>
+                <span className="text-muted">Has creado {store.libros.length} publicaciones</span>
             </div>
-
-            {/* Vista de libros cargados */}
-            <div className="row">
-                {store.libros && store.libros.length > 0 ? (
-                    store.libros.map((libro, index) => (
-                        <div key={index} className="col-12 col-md-6 col-lg-4 mb-4">
-                            <LibroCard libro={libro} />
-                        </div>
-                    ))
-                ) : (
-                    <div className="text-center text-muted">
-                        No hay libros cargados. Agrega uno nuevo con el botón "Subir +".
-                    </div>
-                )}
-            </div>
+            <table className="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Miniatura</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Género</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {store.libros.length > 0 ? (
+                        store.libros.map((libro, index) => (
+                            <LibroCard key={index} book={libro} />
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="6" className="text-center text-muted">
+                                No hay libros cargados. Agrega uno nuevo con el botón "Subir +".
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div>
     );
 };

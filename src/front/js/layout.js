@@ -20,6 +20,9 @@ import { Recover_account1 } from "./component/recover_account1";
 import { Recover_account2 } from "./component/recover_account2";
 import { Demo } from "./pages/demo";
 import { CalendarioEventosUser } from "./pages/CalendarioEventosUser";
+import { Biblioteca } from "./pages/Biblioteca";
+import { Reservas } from "./pages/Reservas";
+
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
@@ -86,6 +89,11 @@ const Layout = () => {
                                 <Route path="perfil-usuario" element={<TuPerfilUser />} />
                                 <Route path="historial" element={<HistorialUser />} />
                                 <Route path="calendario-eventos" element={<CalendarioEventosUser />} />
+                            </Route>
+
+                            {/* Biblioteca con sus rutas hijas correspondientes */}
+                            <Route element={<Biblioteca />} path="biblioteca">
+                                <Route element={<Reservas />} path="reservas" />
                             </Route>
 
                             {/* Otras rutas */}
