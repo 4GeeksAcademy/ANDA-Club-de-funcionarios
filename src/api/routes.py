@@ -511,7 +511,7 @@ def return_book(reservation_id):
         return jsonify({"msg": "The book is already returned"}), 400
     
     # Actualizar estado de la reserva y el libro
-    reservation.returned_at = datetime.now(datetime.timezone.utc)
+    reservation.returned_at = pendulum.now("UTC")
     book.availability = True
 
     # Guardar cambios
