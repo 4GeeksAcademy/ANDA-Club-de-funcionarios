@@ -6,7 +6,8 @@ from api.models import db, User, Reservations, Books, UserProfiles, Books_reserv
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token
+
 import pendulum
 
 api = Blueprint('api', __name__)
@@ -99,7 +100,8 @@ def update_user_status(user_id):
 @jwt_required()
 def get_user_profiles():
     """
-    Obtiene todos los perfiles de usuarios registrados en el sistema.
+    Obtiene todos los perfiles de usuarios registrados en el sistema,
+    incluyendo los usuarios activos sin perfiles creados.
     Solo accesible para administradores.
     """
     current_user_id = get_jwt_identity()
@@ -109,8 +111,40 @@ def get_user_profiles():
     if not current_user or current_user.role != 'admin':
         return jsonify({"msg": "Unauthorized"}), 403
 
+    # Obtener perfiles creados
     profiles = UserProfiles.query.all()
-    return jsonify([profile.serialize() for profile in profiles]), 200
+
+    # Obtener usuarios activos que no tienen un perfil
+    active_users_without_profiles = (
+        User.query.outerjoin(UserProfiles, User.id == UserProfiles.user_id)
+        .filter(UserProfiles.id.is_(None), User.status == 'activo')
+        .all()
+    )
+
+    # Combinar perfiles serializados con usuarios activos sin perfiles
+    result = (
+        [profile.serialize() for profile in profiles] +
+        [
+            {
+                "id": user.id,
+                "first_name": None,
+                "last_name": None,
+                "email": user.email,
+                "identification": None,
+                "address": None,
+                "phone_number": None,
+                "birth_date": None,
+                "department": None,
+                "sector": None,
+                "status": user.status,
+                "created_at": user.created_at.isoformat() if user.created_at else None,
+                "updated_at": user.updated_at.isoformat() if user.updated_at else None,
+            }
+            for user in active_users_without_profiles
+        ]
+    )
+
+    return jsonify(result), 200
 
 
 @api.route('/user-profiles/<int:user_id>', methods=['GET'])
@@ -517,43 +551,6 @@ def return_book(reservation_id):
     db.session.commit()
 
     return jsonify({"msg": "Book returned successfully", "reservation": reservation.serialize()}), 200
-
-# -----------------------------------------------------------------
-# ADMIN USER TEST CREATION ENDPOINT
-# -----------------------------------------------------------------
-
-@api.route('/create-admin', methods=['POST'])
-def create_admin():
-    """
-    Endpoint para crear un usuario administrador sin autenticación (solo para pruebas).
-    """
-    data = request.get_json()
-
-    # Validar que se envíen los campos requeridos
-    if not data or not data.get('email') or not data.get('password'):
-        return jsonify({"msg": "Email and password are required"}), 400
-
-    # Verificar si el admin ya existe
-    existing_admin = User.query.filter_by(email=data['email']).first()
-    if existing_admin:
-        return jsonify({"msg": "Admin already exists."}), 400
-
-    # Crear el admin
-    admin = User(
-        user_name="admin",
-        email=data['email'],
-        password_hash=bcrypt.generate_password_hash(data['password']).decode('utf-8'),
-        role="admin",
-        status="activo"
-    )
-
-    db.session.add(admin)
-    try:
-        db.session.commit()
-        return jsonify({"msg": f"Admin {data['email']} created successfully!"}), 201
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"msg": f"Error creating admin: {str(e)}"}), 500
 
 # -----------------------------------------------------------------
 # EXAMPLE ROUTE
