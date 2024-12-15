@@ -18,6 +18,16 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
 
         actions: {
+            
+            restoreSession: (token, user) => {
+                // Guarda el token y usuario en el localStorage
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(user));
+
+                // Actualiza el store con el usuario recuperado
+                setStore({ user: user });
+            },
+
             loginUser: async (email, password) => {
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
@@ -27,7 +37,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        localStorage.setItem("token", data.access_token); // Guarda el token en localStorage
+                        localStorage.setItem("token", data.access_token);
+                        localStorage.setItem("user", JSON.stringify(data.user));
                         setStore({ user: data.user }); // Guarda la información del usuario en el store
                         return true;
                     } else {
@@ -139,14 +150,16 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             logoutUser: () => {
-                setStore({ user: null }); // Al cerrar sesión, eliminamos la información del usuario
-                localStorage.removeItem("token"); // Elimina el token del localStorage
+                // Elimina los datos de sesión
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                setStore({ user: null });
             },
 
             getMessage: async () => {
                 try {
-                    const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
-                    const data = await resp.json();
+                    const response = await fetch(process.env.BACKEND_URL + "/api/hello");
+                    const data = await response.json();
                     setStore({ message: data.message });
                     return data;
                 } catch (error) {
