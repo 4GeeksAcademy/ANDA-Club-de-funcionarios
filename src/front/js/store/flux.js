@@ -2,6 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             message: null,
+            libros: [],
             demo: [
                 {
                     title: "FIRST",
