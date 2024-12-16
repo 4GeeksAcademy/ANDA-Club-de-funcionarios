@@ -4,6 +4,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             message: null,
             libros: [], 
             reservas: [],
+            userProfiles: [],
             user: null,
             demo: [
                 {
@@ -319,6 +320,95 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
+            // Obtener todos los perfiles de usuario (GET /user-profiles)
+            fetchUserProfiles: async () => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/user-profiles`, {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        setStore({ userProfiles: data });
+                        console.log("Perfiles cargados:", data);
+                    } else {
+                        console.error("Error al cargar perfiles");
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de perfiles:", error);
+                }
+            },
+
+            // Obtener perfil de un usuario específico (GET /user-profiles/:id)
+            fetchUserProfileById: async (id) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/user-profiles/${id}`, {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        return data;
+                    } else {
+                        console.error("Error al obtener perfil del usuario");
+                        return null;
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de perfil específico:", error);
+                    return null;
+                }
+            },
+
+            // Crear un perfil de usuario (POST /user-profiles)
+            createUserProfile: async (profile) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/user-profiles`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        body: JSON.stringify(profile),
+                    });
+                    if (response.ok) {
+                        const newProfile = await response.json();
+                        getActions().fetchUserProfiles();
+                        return newProfile;
+                    } else {
+                        console.error("Error al crear perfil");
+                    }
+                } catch (error) {
+                    console.error("Error en la creación del perfil:", error);
+                }
+            },
+
+            // Actualizar un perfil de usuario (PUT /user-profiles/:id)
+            updateUserProfile: async (id, profile) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/user-profiles/${id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        body: JSON.stringify(profile),
+                    });
+                    if (response.ok) {
+                        const updatedProfile = await response.json();
+                        getActions().fetchUserProfiles();
+                        return updatedProfile;
+                    } else {
+                        console.error("Error al actualizar perfil");
+                    }
+                } catch (error) {
+                    console.error("Error en la actualización del perfil:", error);
+                }
+            },
+            
             getMessage: async () => {
                 try {
                     const response = await fetch(process.env.BACKEND_URL + "/api/hello");

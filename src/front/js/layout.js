@@ -14,7 +14,7 @@ import { AdministradorUsuarios } from "./pages/AdministradorUsuarios";
 import PanelUsuario from "./pages/PanelUsuario";
 import { Login } from "./component/login";
 import { HistorialUser } from "./pages/HistorialUser";
-import { TuPerfilUser } from "./pages/TuperfilUser";
+import { TuPerfilUser } from "./pages/TuPerfilUser";
 import { Register } from "./component/register";
 import { Recover_account1 } from "./component/recover_account1";
 import { Recover_account2 } from "./component/recover_account2";
