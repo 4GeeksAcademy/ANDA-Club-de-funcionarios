@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import { Outlet, useLocation, useNavigate, Link } from "react-router-dom";
+import { getReservas, crearReserva, getReservaById, actualizarReserva, eliminarReserva } from '../services/ReservasService';
 
 export const CalendarioEventosUser = () => {
+
+    const location = useLocation();
+    const navigate = useNavigate(); // Hook para navegación
+
+
+    const [reservas, setReservas] = useState([]); // Estado para manejar la carga de datos
+    const [error, setError] = useState(null);  // Estado para manejar errores
+
+    // Función para cargar las reservas
+    const cargarReservas = async () => {
+        try {
+
+            const data = await getReservas();  // Llamada al servicio
+            setReservas(data);  // Actualizar el estado con las reservas obtenidas
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const deleteReserva = (idReserva) => {
+
+        eliminarReserva(idReserva);
+        cargarReservas();
+    };
+
+    useEffect(() => {
+        cargarReservas();  // Llamar a la función cuando el componente se monte
+    }, []);
+
     return (
         <div className="container mt-4">
             <h2>Reservas Activas</h2>
+            <Link to={`/crear-editar-evento`} className="btn btn-primary">
+                Realizar Reserva
+            </Link>
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -14,22 +48,21 @@ export const CalendarioEventosUser = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>El Principito</td>
-                        <td>Libro</td>
-                        <td>alexander.folsy@gmail.com</td>
-                        <td>
-                            <button className="btn btn-danger">Cancelar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Delux</td>
-                        <td>Salón</td>
-                        <td>alexander.folsy@gmail.com</td>
-                        <td>
-                            <button className="btn btn-danger">Cancelar</button>
-                        </td>
-                    </tr>
+                    {reservas.map(reserva => (
+
+                        <tr>
+                            <td>{reserva.event_name}</td>
+                            <td>Salón</td>
+                            <td>{reserva.user_id}</td>
+                            <td>
+                                <button onClick={() => deleteReserva(reserva.id)} className="btn btn-danger">Cancelar</button>
+                                <Link to={`/crear-editar-evento/${reserva.id}`} className="btn btn-primary">
+                                    Editar
+                                </Link>
+                            </td>
+                        </tr>
+
+                    ))}
                 </tbody>
             </table>
         </div>
