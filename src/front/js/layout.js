@@ -24,6 +24,7 @@ import { Biblioteca } from "./pages/Biblioteca";
 import { Reservas } from "./pages/Reservas";
 import { FirstEventView } from "./component/FirstEventView";
 import { SecondEventView } from "./component/SecondEventView";
+import {CrearEditarEvento} from "./pages/CrearEditarEvento"
 
 import { Single } from "./pages/single";
 import injectContext, { Context } from "./store/appContext";
@@ -102,6 +103,9 @@ const Layout = () => {
                                 <Route element={<Reservas />} path="reservas/:id" />
                             </Route>
 
+
+                            <Route path="crear-editar-evento" element={<CrearEditarEvento />} />
+                            <Route path="crear-editar-evento/:id" element={<CrearEditarEvento />} />
                             
                             {/* Eventos con sus rutas hijas correspondientes */}
                             <Route element={<FirstEventView />} path="/eventos" />
