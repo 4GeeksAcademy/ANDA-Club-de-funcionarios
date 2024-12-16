@@ -92,7 +92,11 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"msg": "User registered successfully. Awaiting admin approval."}), 201
+    # Retornar la información del usuario registrado
+    return jsonify({
+        "msg": "User registered successfully. Awaiting admin approval.",
+        "user": new_user.serialize()
+    }), 201
 
 
 @app.route('/api/login', methods=['POST'])

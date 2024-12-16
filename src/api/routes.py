@@ -7,7 +7,7 @@ from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token
-
+from datetime import datetime
 import pendulum
 
 api = Blueprint('api', __name__)
@@ -177,7 +177,8 @@ def create_user_profile():
     Requiere autenticación.
     """
     data = request.get_json()
-
+    print("Datos recibidos:", data)
+    
     # Validar campos requeridos
     if not data or not data.get('user_id') or not data.get('first_name') or not data.get('last_name'):
         return jsonify({"msg": "user_id, first_name, and last_name are required"}), 400
@@ -193,26 +194,40 @@ def create_user_profile():
     if not user:
         return jsonify({"msg": "User not found"}), 404
 
+    # Validar birth_date
+    birth_date = data.get('birth_date')
+    if birth_date:
+        try:
+            birth_date = datetime.strptime(birth_date, "%Y-%m-%d").date()
+        except ValueError:
+            return jsonify({"msg": "Invalid birth_date format. Use YYYY-MM-DD."}), 400
+    else:
+        birth_date = None
+
     # Crear nuevo perfil
     new_profile = UserProfiles(
         user_id=data['user_id'],
         first_name=data['first_name'],
         last_name=data['last_name'],
-        email=data.get('email'),
-        identification=data.get('identification'),
-        address=data.get('address'),
-        phone_number=data.get('phone_number'),
-        birth_date=data.get('birth_date'),
-        department=data.get('department'),
-        sector=data.get('sector')
+        email=data.get('email') or None,
+        identification=data.get('identification') or None,
+        address=data.get('address') or None,
+        phone_number=data.get('phone_number') or None,
+        birth_date=birth_date,
+        department=data.get('department') or None,
+        sector=data.get('sector') or None
     )
 
     # Guardar en la base de datos
-    db.session.add(new_profile)
-    db.session.commit()
-
-    return jsonify(new_profile.serialize()), 201
-
+    try:
+        db.session.add(new_profile)
+        db.session.commit()
+        print(f"Perfil creado con ID: {new_profile.id}")  # Confirmar que el ID fue generado
+        return jsonify(new_profile.serialize()), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error al guardar el perfil: {e}")
+        return jsonify({"msg": "Error interno del servidor al guardar el perfil."}), 500
 
 @api.route('/user-profiles/<int:user_id>', methods=['PUT'])
 @jwt_required()

@@ -1,218 +1,216 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useContextApp } from "../store/appContext";
 
 export const TuPerfil = () => {
+    const { store, actions } = useContextApp();
     const [perfil, setPerfil] = useState({
-        nombre: "Juan",
-        apellido: "Pérez",
-        departamento: "Montevideo",
-        fechaNacimiento: "1990-01-01",
-        cedula: "4.123.456-7",
-        codigoPostal: "12345",
-        direccion: "Calle Falsa 123",
-        sector: "Administración",
-        telefono: "099123456",
-        email: "juan.perez@correo.com",
+        first_name: "",
+        last_name: "",
+        email: "",
+        identification: "",
+        department: "",
+        sector: "",
+        phone_number: "",
+        birth_date: "",
+        address: "",
     });
-
     const [editMode, setEditMode] = useState(false);
-    const [perfilOriginal, setPerfilOriginal] = useState(perfil); // Guardar copia del estado original
+    const [perfilExiste, setPerfilExiste] = useState(false);
+
+    // Verificar si el perfil existe al cargar
+    useEffect(() => {
+        const loadProfile = async () => {
+            const userId = store.user?.id;
+            if (userId) {
+                const profile = await actions.fetchUserProfileById(userId);
+                if (profile) {
+                    setPerfil(profile);
+                    setPerfilExiste(true);
+                } else {
+                    setPerfilExiste(false);
+                }
+            }
+        };
+        loadProfile();
+    }, [store.user, actions]);
 
     // Manejar cambios en los inputs
     const handleChange = (e) => {
-        const { id, value } = e.target;
-        setPerfil((prevPerfil) => ({
-            ...prevPerfil,
-            [id]: value,
-        }));
+        const { name, value } = e.target;
+        setPerfil((prevPerfil) => ({ ...prevPerfil, [name]: value }));
     };
 
-    // Habilitar modo edición y guardar el estado original
-    const handleEdit = () => {
-        setPerfilOriginal(perfil); // Guarda el estado actual
-        setEditMode(true); // Activa el modo edición
-    };
-
-    // Guardar cambios
-    const handleSave = () => {
-        setEditMode(false);
-        alert("Cambios guardados correctamente");
-    };
-
-    // Cancelar cambios
-    const handleCancel = () => {
-        setPerfil(perfilOriginal); // Restaura el estado original
-        setEditMode(false);
+    // Crear perfil si no existe
+    const handleCreateProfile = async () => {
+        const userId = store.user?.id;
+    
+        if (!userId) {
+            alert("Error: No se encontró el ID del usuario.");
+            return;
+        }
+    
+        const newProfile = {
+            user_id: userId,
+            first_name: perfil.first_name,
+            last_name: perfil.last_name,
+            email: perfil.email,
+            identification: perfil.identification,
+            address: perfil.address || "",
+            phone_number: perfil.phone_number || "",
+            birth_date: perfil.birth_date || "",
+            department: perfil.department || "",
+            sector: perfil.sector || "",
+        };
+    
+        console.log("Enviando perfil al backend:", newProfile);
+        const result = await actions.createUserProfile(newProfile);
+    
+        if (result) {
+            console.log("Perfil creado:", result);
+            setPerfil(result);  // Asegúrate de que el id del perfil sea recibido y guardado
+            setPerfilExiste(true);
+            setEditMode(false);
+            alert("Perfil creado exitosamente.");
+        } else {
+            alert("Error al crear el perfil. Verifica los datos e intenta de nuevo.");
+        }
     };
 
     return (
-        <div className="container-fluid mt-5">
-            <h2 className="mb-4 text-center">Perfil de Administrador</h2>
+        <div className="container mt-4">
+            <h4 className="text-left p-4">Perfil de Administrador</h4>
             <form className="bg-white p-3 shadow rounded">
-                <div className="row g-3">
+                <div className="row mb-3">
                     <div className="col-md-6">
-                        <label htmlFor="nombre" className="form-label">Nombre</label>
+                        <label htmlFor="first_name" className="form-label">
+                            Nombre <span style={{ color: "red" }}>*</span>
+                        </label>
                         <input
                             type="text"
+                            name="first_name"
                             className="form-control"
-                            id="nombre"
-                            value={perfil.nombre}
+                            value={perfil.first_name || ""}
                             onChange={handleChange}
-                            disabled={!editMode}
+                            disabled={perfilExiste}
                         />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="apellido" className="form-label">Apellido</label>
+                        <label htmlFor="last_name" className="form-label">
+                            Apellido <span style={{ color: "red" }}>*</span>
+                        </label>
                         <input
                             type="text"
+                            name="last_name"
                             className="form-control"
-                            id="apellido"
-                            value={perfil.apellido}
+                            value={perfil.last_name || ""}
                             onChange={handleChange}
-                            disabled={!editMode}
+                            disabled={perfilExiste}
+                        />
+                    </div>
+                </div>
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="email" className="form-label">Correo Electrónico</label>
+                        <input
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            value={perfil.email || ""}
+                            onChange={handleChange}
+                            disabled
                         />
                     </div>
                     <div className="col-md-6">
-                        <label htmlFor="departamento" className="form-label">Departamento</label>
-                        <select
-                            id="departamento"
-                            className="form-select"
-                            value={perfil.departamento}
-                            onChange={handleChange}
-                            disabled={!editMode}
-                        >
-                            <option>Artigas</option>
-                            <option>Canelones</option>
-                            <option>Colonia</option>
-                            <option>Durazno</option>
-                            <option>Flores</option>
-                            <option>Florida</option>
-                            <option>Lavalleja</option>
-                            <option>Maldonado</option>
-                            <option>Montevideo</option>
-                            <option>Paysandú</option>
-                            <option>Río Negro</option>
-                            <option>Rivera</option>
-                            <option>Rocha</option>
-                            <option>Salto</option>
-                            <option>San José</option>
-                            <option>Soriano</option>
-                            <option>Tacuarembo</option>
-                            <option>Treinta y Tres</option>
-                        </select>
-                    </div>
-                    <div className="col-md-6">
-                        <label htmlFor="fechaNacimiento" className="form-label">Fecha de Nacimiento</label>
-                        <input
-                            type="date"
-                            className="form-control"
-                            id="fechaNacimiento"
-                            value={perfil.fechaNacimiento}
-                            onChange={handleChange}
-                            disabled={!editMode}
-                        />
-                    </div>
-                    <div className="col-md-6">
-                        <label htmlFor="cedula" className="form-label">Cédula de Identidad</label>
+                        <label htmlFor="identification" className="form-label">
+                            Cédula de Identidad <span style={{ color: "red" }}>*</span>
+                        </label>
                         <input
                             type="text"
+                            name="identification"
                             className="form-control"
-                            id="cedula"
-                            value={perfil.cedula}
+                            value={perfil.identification || ""}
                             onChange={handleChange}
-                            disabled={!editMode}
+                            disabled={perfilExiste}
                         />
                     </div>
+                </div>
+                <div className="row mb-3">
                     <div className="col-md-6">
-                        <label htmlFor="codigoPostal" className="form-label">Código Postal</label>
+                        <label htmlFor="department" className="form-label">Departamento</label>
                         <input
                             type="text"
+                            name="department"
                             className="form-control"
-                            id="codigoPostal"
-                            value={perfil.codigoPostal}
-                            onChange={handleChange}
-                            disabled={!editMode}
-                        />
-                    </div>
-                    <div className="col-md-6">
-                        <label htmlFor="direccion" className="form-label">Dirección</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="direccion"
-                            value={perfil.direccion}
+                            value={perfil.department || ""}
                             onChange={handleChange}
                             disabled={!editMode}
                         />
                     </div>
                     <div className="col-md-6">
                         <label htmlFor="sector" className="form-label">Sector</label>
-                        <select
-                            id="sector"
-                            className="form-select"
-                            value={perfil.sector}
-                            onChange={handleChange}
-                            disabled={!editMode}
-                        >
-                            <option>Administración</option>
-                            <option>Recursos Humanos</option>
-                            <option>Comercial</option>
-                        </select>
-                    </div>
-                    <div className="col-md-6">
-                        <label htmlFor="telefono" className="form-label">Teléfono</label>
                         <input
                             type="text"
+                            name="sector"
                             className="form-control"
-                            id="telefono"
-                            value={perfil.telefono}
-                            onChange={handleChange}
-                            disabled={!editMode}
-                        />
-                    </div>
-                    <div className="col-md-6">
-                        <label htmlFor="email" className="form-label">Correo Electrónico</label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            id="email"
-                            value={perfil.email}
+                            value={perfil.sector || ""}
                             onChange={handleChange}
                             disabled={!editMode}
                         />
                     </div>
                 </div>
-                <div className="row mt-4">
-                    {editMode ? (
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <label htmlFor="birth_date" className="form-label">Fecha de Nacimiento</label>
+                        <input
+                            type="date"
+                            name="birth_date"
+                            className="form-control"
+                            value={perfil.birth_date || ""}
+                            onChange={handleChange}
+                            disabled={!editMode}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="phone_number" className="form-label">Teléfono</label>
+                        <input
+                            type="text"
+                            name="phone_number"
+                            className="form-control"
+                            value={perfil.phone_number || ""}
+                            onChange={handleChange}
+                            disabled={!editMode}
+                        />
+                    </div>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="address" className="form-label">Dirección</label>
+                    <input
+                        type="text"
+                        name="address"
+                        className="form-control"
+                        value={perfil.address || ""}
+                        onChange={handleChange}
+                        disabled={!editMode}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    {!perfilExiste ? (
+                        <button type="button" className="btn btn-primary" onClick={handleCreateProfile}>
+                            Crear Perfil
+                        </button>
+                    ) : editMode ? (
                         <>
-                            <div className="col-6">
-                                <button
-                                    type="button"
-                                    className="btn btn-dark w-100"
-                                    onClick={handleSave}
-                                >
-                                    Guardar
-                                </button>
-                            </div>
-                            <div className="col-6">
-                                <button
-                                    type="button"
-                                    className="btn btn-light w-100"
-                                    onClick={handleCancel}
-                                >
-                                    Cancelar
-                                </button>
-                            </div>
+                            <button type="button" className="btn btn-success me-2" onClick={() => setEditMode(false)}>
+                                Guardar
+                            </button>
+                            <button type="button" className="btn btn-secondary" onClick={() => setEditMode(false)}>
+                                Cancelar
+                            </button>
                         </>
                     ) : (
-                        <div className="col-12">
-                            <button
-                                type="button"
-                                className="btn btn-dark w-100"
-                                onClick={handleEdit}
-                            >
-                                Modificar
-                            </button>
-                        </div>
+                        <button type="button" className="btn btn-primary me-2" onClick={() => setEditMode(true)}>
+                            Modificar
+                        </button>
                     )}
                 </div>
             </form>
