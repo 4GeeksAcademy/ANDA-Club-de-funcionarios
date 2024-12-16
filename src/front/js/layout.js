@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
@@ -22,12 +22,13 @@ import { Demo } from "./pages/demo";
 import { CalendarioEventosUser } from "./pages/CalendarioEventosUser";
 import { Biblioteca } from "./pages/Biblioteca";
 import { Reservas } from "./pages/Reservas";
+import { FirstEventView } from "./component/FirstEventView";
+import { SecondEventView } from "./component/SecondEventView";
 
 import { Single } from "./pages/single";
 import injectContext, { Context } from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
-
 import { ProtectedRoute } from './component/protectedRoute';
 
 
@@ -53,6 +54,9 @@ const Layout = () => {
         return !noNavbarRoutes.includes(location.pathname);  // Si la ruta no está en noNavbarRoutes, muestra el Navbar
     };
 
+
+
+
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
     return (
@@ -73,6 +77,7 @@ const Layout = () => {
                                 <Route path="perfil-administrador" element={<TuPerfil />} />
                                 <Route path="editar-cargar-libro" element={<EditarCargarLibro />} />
                                 <Route path="subir-libro" element={<SubirLibro />} />
+                                <Route path="subir-libro/:id" element={<SubirLibro />} />
                                 <Route path="editar-cargar-salon" element={<EditarCargarSalon />} />
                                 <Route path="administrador-usuarios" element={<AdministradorUsuarios />} />
                             </Route>
@@ -85,6 +90,8 @@ const Layout = () => {
 
                             {/* Panel de Usuario con sus rutas hijas correspondientes */}
                             <Route path="panel-de-usuario" element={<PanelUsuario />}>
+                                {/* Redirección cuando se ingresa a "panel-de-usuario" */}
+                                <Route index element={<Navigate to="perfil-usuario" />} />
                                 <Route path="perfil-usuario" element={<TuPerfilUser />} />
                                 <Route path="historial" element={<HistorialUser />} />
                                 <Route path="calendario-eventos" element={<CalendarioEventosUser />} />
@@ -92,8 +99,14 @@ const Layout = () => {
 
                             {/* Biblioteca con sus rutas hijas correspondientes */}
                             <Route element={<Biblioteca />} path="biblioteca">
-                                <Route element={<Reservas />} path="reservas" />
+                                <Route element={<Reservas />} path="reservas/:id" />
                             </Route>
+
+                            
+                            {/* Eventos con sus rutas hijas correspondientes */}
+                            <Route element={<FirstEventView />} path="/eventos" />
+                                <Route element={<SecondEventView />} path="/reservar-evento" />
+                            
 
                             {/* Otras rutas */}
                             <Route path="/" element={<Home />} />
