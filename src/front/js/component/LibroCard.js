@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export const LibroCard = ({ libro, onDelete, onEdit }) => {
+  const navigate = useNavigate(); // Hook para manejar la navegación
+
   if (!libro) {
     console.warn("Libro no definido:", libro);
     return null; // Evitar fallos si libro es undefined
@@ -21,7 +24,13 @@ export const LibroCard = ({ libro, onDelete, onEdit }) => {
       <td>{author || "Autor no disponible"}</td>
       <td>{book_gender || "Género no disponible"}</td>
       <td>
-        <button className="btn btn-primary btn-sm" onClick={() => onEdit(id)}>
+ <button
+          className="btn btn-primary btn-sm"
+          onClick={() => {
+            onEdit(id); // Mantiene la función pasada como prop
+            navigate(`/modificar-libro/${id}`); // Navega a la ruta de modificación
+          }}
+        >
           Modificar
         </button>
         <button
