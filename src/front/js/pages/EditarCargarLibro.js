@@ -1,27 +1,29 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { LibroCard } from "../component/LibroCard";
+import { useNavigate } from "react-router-dom";
 
 export const EditarCargarLibro = () => {
-    const { store } = useContext(Context);
+    const { store, actions } = useContext(Context);
     const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (!store.libros || store.libros.length === 0) {
+            actions.fetchLibros();
+        }
+    }, []);
 
     return (
-        <div className="container mt-5">
-            <h2 className="mb-4">Editar / Subir Libro</h2>
-            <div className="d-flex justify-content-between mb-4">
-                <button
-                    className="btn btn-primary"
-                    onClick={() => navigate("/panel-admin/subir-libro")}
-                >
-                    Subir +
-                </button>
-                <span className="text-muted">
-                    Has creado {Array.isArray(store.libros) ? store.libros.length : 0} publicaciones
-                </span>
-            </div>
-            <table className="table table-bordered table-hover">
+        <div className="container mt-4">
+            <h2>Editar / Subir Libro</h2>
+            <button
+                className="btn btn-primary"
+                onClick={() => navigate("/panel-admin/subir-libro")}
+            >
+                Subir +
+            </button>
+
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>Miniatura</th>
@@ -32,14 +34,19 @@ export const EditarCargarLibro = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.isArray(store.libros) && store.libros.length > 0 ? (
-                        store.libros.map((libro, index) => (
-                            <LibroCard key={index} book={libro} />
+                    {store.libros && store.libros.length > 0 ? (
+                        store.libros.map((libro) => (
+                            <LibroCard
+                                key={libro.id}
+                                libro={libro}
+                                onDelete={(id) => actions.deleteLibro(id)} // Borrar libro
+                                onEdit={(id) => console.log("Editar libro con ID:", id)} // Editar libro
+                            />
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="6" className="text-center text-muted">
-                                No hay libros cargados. Agrega uno nuevo con el botón "Subir +".
+                            <td colSpan="5" className="text-center">
+                                No hay libros disponibles.
                             </td>
                         </tr>
                     )}

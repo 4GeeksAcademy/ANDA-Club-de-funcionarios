@@ -170,6 +170,7 @@ class Books(db.Model):
         'Novela', 'Cuento', 'Fantasía', 'Ciencia_Ficción', 'Romántico', 'Aventura', 
         'Histórico', 'Biografía', 'Documental', 'Poesía', 'Teatro', 'Terror', 
         name='book_gender_enum'), nullable=False)
+    summary = db.Column(db.Text)
     # Campo availability como Boolean (True: Disponible, False: No disponible)
     availability= db.Column(db.Boolean, default=True, nullable=False)
     created_at= db.Column(db.DateTime(timezone=True), default=lazy_utc_now)
@@ -189,7 +190,8 @@ class Books(db.Model):
             "id": self.id, 
             "title": self.title, 
             "author": self.author, 
-            "book_gender": self.book_gender, 
+            "book_gender": self.book_gender,
+            "summary": self.summary, 
             "availability": self.availability, 
             "created_at": self.created_at.isoformat() if self.created_at else None, 
             "updated_at": self.updated_at.isoformat() if self.updated_at else None

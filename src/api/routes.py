@@ -42,7 +42,7 @@ def get_pending_users():
 
     # Si no hay usuarios pendientes, devolver un mensaje
     if not pending_users:
-        return jsonify({"msg": "No pending users found"}), 200
+        return jsonify([]), 200
 
     # Devolver la lista de usuarios pendientes serializados
     return jsonify([user.serialize() for user in pending_users]), 200
@@ -404,15 +404,18 @@ def add_new_book():
         return jsonify({"msg": "Unauthorized"}), 403
 
     data = request.get_json()
-    if not data or not data.get('title') or not data.get('author') or not data.get('book_gender'):
-        return jsonify({"msg": "Title, author, and book_gender are required"}), 400
+    print("Datos recibidos en el backend:", data)
+    if not data or not data.get('title') or not data.get('author') or not data.get('book_gender') or not data.get('summary'):
+        return jsonify({"msg": "Title, author, book_gender, and summary are required"}), 400
+
 
     new_book = Books(
         title=data['title'],
         author=data['author'],
-        book_gender=data['book_gender']
+        book_gender=data['book_gender'],
+        summary=data.get('summary', "")
     )
-
+    
     db.session.add(new_book)
     db.session.commit()
 
@@ -441,6 +444,7 @@ def edit_book(book_id):
     book.title = data.get('title', book.title)
     book.author = data.get('author', book.author)
     book.book_gender = data.get('book_gender', book.book_gender)
+    book.summary = data.get('summary', book.summary)
     book.availability = data.get('availability', book.availability)
 
     db.session.commit()
