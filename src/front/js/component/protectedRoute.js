@@ -1,23 +1,27 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useContextApp } from '../store/appContext';
 
-
-// Componente que protege las rutas que solo deben ser accesibles por administradores
 const ProtectedRoute = ({ children, requiredRole }) => {
-    const { store } = useContextApp();  // Obtener el rol del usuario desde el contexto
+    const { store } = useContextApp();
     const navigate = useNavigate();
-    const { location } = useLocation();  // Obtener la ruta actual
 
     useEffect(() => {
-        // Si el rol del usuario no coincide con el requerido, redirige a otra página
-        if (store.user.role !== requiredRole) {
-            navigate("/");  // Redirigir al home
+        // Esperar hasta que el estado de user sea definido
+        if (store.user === null) return;
+
+        // Redirigir si no hay usuario o no tiene el rol requerido
+        if (!store.user || store.user.role !== requiredRole) {
+            navigate("/"); // Redirigir al login o home
         }
-    }, [store.user.role, location, navigate]);
+    }, [store.user, navigate, requiredRole]);
 
-    return children;  // Si el usuario tiene el rol correcto, renderiza el contenido protegido
+    // Renderiza solo si el usuario está definido y tiene el rol correcto
+    if (store.user === null) {
+        return <div>Cargando...</div>; // Muestra un loader mientras se verifica
+    }
+
+    return store.user && store.user.role === requiredRole ? children : null;
 };
-
 
 export { ProtectedRoute };

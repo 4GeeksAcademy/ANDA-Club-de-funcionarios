@@ -17,7 +17,9 @@ export const EditarCargarLibro = () => {
                 >
                     Subir +
                 </button>
-                <span className="text-muted">Has creado {store.libros.length} publicaciones</span>
+                <span className="text-muted">
+                    Has creado {Array.isArray(store.libros) ? store.libros.length : 0} publicaciones
+                </span>
             </div>
             <table className="table table-bordered table-hover">
                 <thead>
@@ -30,7 +32,7 @@ export const EditarCargarLibro = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {store.libros.length > 0 ? (
+                    {Array.isArray(store.libros) && store.libros.length > 0 ? (
                         store.libros.map((libro, index) => (
                             <LibroCard key={index} book={libro} />
                         ))

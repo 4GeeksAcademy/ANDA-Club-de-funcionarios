@@ -2,7 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 import pendulum
 import re #módulo re de Python para validar si un correo electrónico tiene un formato válido antes de que sea almacenado en la base de datos.
 from sqlalchemy.orm import validates
-
+from api.extensions import db, bcrypt
+from sqlalchemy.engine import reflection
 
 # Clase personalizada para errores de validación (opcional)
 class ValidationError(Exception):
@@ -38,8 +39,34 @@ class User(db.Model):
     def validate_email_field(self, key, email):
         validate_email(email)
         return email
+    
+    @staticmethod
+    def create_default_admin():
+        """Crea un administrador por defecto si no existe"""
+        inspector = reflection.Inspector.from_engine(db.engine)
+        if 'users' in inspector.get_table_names():
+            admin_email = "admin@anda.com.uy"
+            admin_password = "admin123"
 
-   
+            # Verificar si el administrador ya existe
+            existing_admin = User.query.filter_by(email=admin_email).first()
+            if not existing_admin:
+                # Crear el administrador
+                admin = User(
+                    user_name="admin",
+                    email=admin_email,
+                    password_hash=bcrypt.generate_password_hash(admin_password).decode('utf-8'),
+                    role="admin",
+                    status="activo"
+                )
+                db.session.add(admin)
+                db.session.commit()
+                print(f"Administrador creado: {admin_email} / {admin_password}")
+            else:
+                print("El administrador ya existe en la base de datos.")
+        else:
+            print("La tabla 'users' no existe. Corre las migraciones primero.")
+
     # relacion con Reservations uno a muchos un usuario puede tener varias reservas
     reservations = db.relationship('Reservations', back_populates='user')
 
@@ -61,7 +88,6 @@ class User(db.Model):
         "updated_at": self.updated_at.isoformat() if self.updated_at else None
     }
 
-#cambie campos obligatorios
 
 class UserProfiles(db.Model):
     id = db.Column(db.Integer, primary_key=True)

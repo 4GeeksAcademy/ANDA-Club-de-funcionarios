@@ -11,10 +11,12 @@ from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
+from api.extensions import bcrypt
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
 from dotenv import load_dotenv # Cargar variables de entorno
+from functools import wraps
 # from models import Person
 
 #importo decorador necesario para proteger rutas 
@@ -25,10 +27,10 @@ static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 load_dotenv()
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') # Clave secreta en .env
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=365)  # Configura 1 año de expiración para el token
 jwt = JWTManager(app)
-bcrypt = Bcrypt(app)
 app.url_map.strict_slashes = False
 
 # database configuration
@@ -45,9 +47,6 @@ db.init_app(app)
 
 # Habilitar CORS
 CORS(app)
-
-# Configuración adicional
-app.url_map.strict_slashes = False
 
 # add the admin
 setup_admin(app)
@@ -127,9 +126,6 @@ def login():
         "access_token": access_token,
         "user": user.serialize()
     }), 200
-
-
-
 
 #-----------------------------------------------------------------------
 # Decorador para verificar si el usuario tiene el rol de administrador
@@ -219,6 +215,8 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0  # avoid cache memory
     return response
 
+with app.app_context():
+    User.create_default_admin()
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
