@@ -25,8 +25,8 @@ const PanelUsuario = () => {
         position: "absolute",
         backgroundrepeat: "no-repeat",
         right: "5px", 
-        height: "220px", 
-        bottom: "-110px",
+        height: "240px", 
+        bottom: "-119px",
         objectFit: "contain",
         clipPath: "inset(0 0 50% 0)"
       }}
