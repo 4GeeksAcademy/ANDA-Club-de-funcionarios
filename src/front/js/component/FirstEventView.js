@@ -81,7 +81,7 @@ export const FirstEventView = () => {
           >
             Selecciona una fecha disponible en nuestro calendario.
           </p>
-          <Link to="/segunda-vista-evento">
+          <Link to="/reservar-evento">
             <div className="d-grid gap-2 d-md-block">
               <button
                 className="btn btn-primary"

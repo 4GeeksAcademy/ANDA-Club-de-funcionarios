@@ -15,7 +15,9 @@ export const TuPerfil = () => {
     });
 
     const [editMode, setEditMode] = useState(false);
+    const [perfilOriginal, setPerfilOriginal] = useState(perfil); // Guardar copia del estado original
 
+    // Manejar cambios en los inputs
     const handleChange = (e) => {
         const { id, value } = e.target;
         setPerfil((prevPerfil) => ({
@@ -24,9 +26,22 @@ export const TuPerfil = () => {
         }));
     };
 
+    // Habilitar modo edición y guardar el estado original
+    const handleEdit = () => {
+        setPerfilOriginal(perfil); // Guarda el estado actual
+        setEditMode(true); // Activa el modo edición
+    };
+
+    // Guardar cambios
     const handleSave = () => {
         setEditMode(false);
-        alert("Cambios guardados");
+        alert("Cambios guardados correctamente");
+    };
+
+    // Cancelar cambios
+    const handleCancel = () => {
+        setPerfil(perfilOriginal); // Restaura el estado original
+        setEditMode(false);
     };
 
     return (
@@ -141,7 +156,6 @@ export const TuPerfil = () => {
                             <option>Administración</option>
                             <option>Recursos Humanos</option>
                             <option>Comercial</option>
-                            {/* agregar los sectores que falten */}
                         </select>
                     </div>
                     <div className="col-md-6">
@@ -183,7 +197,7 @@ export const TuPerfil = () => {
                                 <button
                                     type="button"
                                     className="btn btn-light w-100"
-                                    onClick={() => setEditMode(false)}
+                                    onClick={handleCancel}
                                 >
                                     Cancelar
                                 </button>
@@ -194,7 +208,7 @@ export const TuPerfil = () => {
                             <button
                                 type="button"
                                 className="btn btn-dark w-100"
-                                onClick={() => setEditMode(true)}
+                                onClick={handleEdit}
                             >
                                 Modificar
                             </button>
@@ -205,4 +219,3 @@ export const TuPerfil = () => {
         </div>
     );
 };
-

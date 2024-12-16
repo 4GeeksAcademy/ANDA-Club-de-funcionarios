@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import { es } from "date-fns/locale";
-import { useNavigate, Link } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
+import salon_logo_ from "../../img/salon_logo_.png";
 
 export const SecondEventView = () => {
   const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const navigate = useNavigate();
+  const [horaInicio, setHoraInicio] = useState(""); // Estado para la hora de inicio
+  const [horaFin, setHoraFin] = useState(""); // Estado para la hora de fin
+  const [cantidadInvitados, setCantidadInvitados] = useState(1); // Estado para cantidad de invitados
 
   const formatDateLuxon = (date) => {
     if (!date) return "";
@@ -17,19 +18,29 @@ export const SecondEventView = () => {
   };
 
   const handleConfirm = () => {
-    if (startDate && endDate) {
-      const formattedStart = formatDateLuxon(startDate);
-      const formattedEnd = formatDateLuxon(endDate);
-      alert(`Reserva confirmada desde ${formattedStart} hasta ${formattedEnd}`);
+    if (startDate && horaInicio && horaFin && cantidadInvitados) {
+      const formattedDate = formatDateLuxon(startDate);
+      alert(
+        `Reserva confirmada para el ${formattedDate} desde ${horaInicio} hasta ${horaFin} para ${cantidadInvitados} invitados.`
+      );
     } else {
-      alert("Por favor selecciona un rango de fechas.");
+      alert("Por favor completa todos los campos.");
     }
   };
 
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+  // Generar las opciones de horas (de 00:00 a 23:30, en incrementos de 30 minutos)
+  const generateHourOptions = () => {
+    const options = [];
+    for (let i = 0; i < 24; i++) {
+      const hour = i.toString().padStart(2, "0");
+      options.push(`${hour}:00`, `${hour}:30`);
+    }
+    return options;
+  };
 
   return (
     <div className="d-flex flex-column" style={{ height: "100%" }}>
@@ -48,22 +59,30 @@ export const SecondEventView = () => {
         <img
           src="https://www.segurosaludglobal.cl/sites/default/files/inline-images/qqsmartart2.png"
           style={{ maxHeight: "150px" }}
+          alt="Evento"
         />
       </div>
-      <div className="container mt-4 mb-5">
+      <div className="container mt-4 mb-">
         <div className="row align-items-stretch">
           <div className="col-12 col-md-5 col-lg-4">
             <div className="card h-auto">
               <img
-                src="https://media.istockphoto.com/id/165591664/es/vector/fiesta-multitud.jpg?s=612x612&w=0&k=20&c=f8H5rJsWvhYJzgHSrvWO8B2aOTcfwMnHn18Cyha8zvc="
+                src={salon_logo_}
                 className="card-img-top img-fluid"
-                style={{
-                  objectFit: "auto",
-                  maxHeight: "auto",
-                }}
+                alt="Imagen de evento"
               />
             </div>
+            <div className="card-body">
+                <button
+                  className="btn btn-secondary btn-sm w-100"
+                  onClick={() => navigate("/eventos")}
+                >
+                  Anterior
+                </button>
+              </div>
           </div>
+
+          
 
           <div className="col-12 col-md-7 col-lg-8">
             <div className="card h-100 d-flex flex-column">
@@ -79,26 +98,51 @@ export const SecondEventView = () => {
                 </div>
                 <div className="mb-4">
                   <strong>Cantidad de invitados:</strong>
-                  <input type="text" className="form-control" placeholder="Ingresa la cantidad de invitados" />
+                  <input
+                    type="number"
+                    className="form-control"
+                    min="1"
+                    max="500"
+                    value={cantidadInvitados}
+                    onChange={(e) => setCantidadInvitados(e.target.value)}
+                  />
                 </div>
                 <div className="mb-4">
                   <strong>Hora inicio:</strong>
-                  <input type="text" className="form-control" placeholder="Ingresa la de hora de comienzo " />
-                  <div>
-                    <strong>Hora finalización:</strong>
-                    <input type="text" className="form-control" placeholder="Ingresa la hora de finalización" />
-                  </div>
+                  <select
+                    className="form-select"
+                    value={horaInicio}
+                    onChange={(e) => setHoraInicio(e.target.value)}
+                  >
+                    <option value="">Selecciona hora</option>
+                    {generateHourOptions().map((hora) => (
+                      <option key={hora} value={hora}>
+                        {hora}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <strong>Hora finalización:</strong>
+                  <select
+                    className="form-select"
+                    value={horaFin}
+                    onChange={(e) => setHoraFin(e.target.value)}
+                  >
+                    <option value="">Selecciona hora</option>
+                    {generateHourOptions().map((hora) => (
+                      <option key={hora} value={hora}>
+                        {hora}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
-
-                <div className="mb-4" >
+                <div className="mb-4">
                   <strong>Fecha:</strong>
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
-                    selectsStart
-                    startDate={startDate}
-                    endDate={endDate}
                     minDate={today}
                     maxDate={endOfMonth}
                     className="form-control"
@@ -106,24 +150,19 @@ export const SecondEventView = () => {
                     placeholderText="Selecciona fecha"
                     locale={es}
                   />
-                  <div>
-                    <Link to="/segunda-vista-evento">
-                      <div className="d-grid gap-2 d-md-block">
-                        <button
-                          className="btn btn-primary"
-                          type="button"
-                          style={{
-                            backgroundColor: "#3865e5",
-                            color: "white",
-                            marginTop: "1rem"
-                          }}
-                        >
-                          Confirmar
-                        </button>
-                      </div>
-                    </Link>
-                  </div>
-
+                </div>
+                <div>
+                  <button
+                    onClick={handleConfirm}
+                    className="btn btn-primary"
+                    style={{
+                      backgroundColor: "#3865e5",
+                      color: "white",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    Confirmar
+                  </button>
                 </div>
               </div>
             </div>
