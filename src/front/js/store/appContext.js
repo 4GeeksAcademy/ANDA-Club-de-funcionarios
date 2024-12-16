@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import getState from "./flux.js";
 
-// Don't change, here is where we initialize our context, by default it's just going to be null.
+// Inicialización del contexto global
 export const Context = React.createContext(null);
 
-// Función para usar el contexto en los componentes
+// Hook para consumir el contexto
 export const useContextApp = () => {
     const context = useContext(Context);
     if (!context) {
@@ -13,35 +13,31 @@ export const useContextApp = () => {
     return context;
 };
 
-// This function injects the global store to any view/component where you want to use it, we will inject the context to layout.js, you can see it here:
-// https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
-const injectContext = PassedComponent => {
-	const StoreWrapper = props => {
-		//this will be passed as the contenxt value
-		const [state, setState] = useState(
-			getState({
-				getStore: () => state.store,
-				getActions: () => state.actions,
-				setStore: updatedStore =>
-					setState({
-						store: Object.assign(state.store, updatedStore),
-						actions: { ...state.actions }
-					})
-			})
-		);
+// HOC para inyectar el contexto en componentes
+const injectContext = (PassedComponent) => {
+    const StoreWrapper = (props) => {
+        const [state, setState] = useState(
+            getState({
+                getStore: () => state.store,
+                getActions: () => state.actions,
+                setStore: (updatedStore) =>
+                    setState({
+                        store: Object.assign(state.store, updatedStore),
+                        actions: { ...state.actions },
+                    }),
+            })
+        );
 
-		useEffect(() => {
-            // Recuperar usuario y token del localStorage
+        useEffect(() => {
             const token = localStorage.getItem("token");
-            const user = JSON.parse(localStorage.getItem("user")); // Guarda el usuario en JSON
+            const user = JSON.parse(localStorage.getItem("user"));
 
-			if (token && user) {
-				state.actions.restoreSession(token, user);
-			} else {
-				state.actions.logoutUser(); // Asegura que el usuario se desloguee si no hay token
-			}
-
-            state.actions.getMessage();
+            if (token && user) {
+                state.actions.restoreSession(token, user);
+                console.log("Sesión restaurada correctamente.");
+            } else {
+                console.log("No se encontró sesión activa.");
+            }
         }, []);
 
         return (

@@ -1,44 +1,36 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { Context } from "../store/appContext";
+import React from "react";
 
-export const LibroCard = ({ book }) => {
-    const navigate = useNavigate();
-    const { actions } = useContext(Context);
+export const LibroCard = ({ libro, onDelete, onEdit }) => {
+  if (!libro) {
+    console.warn("Libro no definido:", libro);
+    return null; // Evitar fallos si libro es undefined
+  }
 
-    const handleEdit = () => {
-        navigate(`/panel-admin/subir-libro/${book.id}`);
-    };
+  const { id, title, author, book_gender, miniatura } = libro;
 
-    const handleDelete = () => {
-        if (window.confirm(`¿Estás seguro de que deseas eliminar el libro: ${book.titulo}?`)) {
-            actions.deleteLibro(book.id);
-            alert("Libro eliminado exitosamente.");
-        }
-    };
-
-    return (
-        <tr>
-            <td>
-                <img
-                    src={book.miniatura || "https://via.placeholder.com/150"}
-                    alt={book.titulo}
-                    style={{ height: "50px", objectFit: "cover" }}
-                />
-            </td>
-            <td>{book.titulo}</td>
-            <td>{book.autor}</td>
-            <td>{book.genero}</td>
-
-            <td>
-                <button className="btn btn-outline-primary btn-sm me-2" onClick={handleEdit}>
-                    Modificar
-                </button>
-                <button className="btn btn-danger btn-sm" onClick={handleDelete}>
-                    Borrar
-                </button>
-            </td>
-        </tr>
-    );
+  return (
+    <tr>
+      <td>
+        <img
+          src={miniatura || "https://via.placeholder.com/150"}
+          alt="Miniatura del libro"
+          style={{ width: "50px", height: "50px" }}
+        />
+      </td>
+      <td>{title || "Título no disponible"}</td>
+      <td>{author || "Autor no disponible"}</td>
+      <td>{book_gender || "Género no disponible"}</td>
+      <td>
+        <button className="btn btn-primary btn-sm" onClick={() => onEdit(id)}>
+          Modificar
+        </button>
+        <button
+          className="btn btn-danger btn-sm ms-2"
+          onClick={() => onDelete(id)}
+        >
+          Borrar
+        </button>
+      </td>
+    </tr>
+  );
 };
-

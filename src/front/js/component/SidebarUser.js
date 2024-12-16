@@ -58,6 +58,7 @@ export const SidebarUser = () => {
       <ul className="nav flex-column">
         <li className="nav-item">
           <button className="btn btn-link text-light nav-link text-start">
+
             <i className="fas fa-sign-out"></i>
             {!isCollapsed && <span className="ms-2">Cerrar Sesión</span>}
           </button>

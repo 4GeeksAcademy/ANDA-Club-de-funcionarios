@@ -2,7 +2,9 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             message: null,
-            libros: [],
+            libros: [], 
+            reservas: [],
+            user: null,
             demo: [
                 {
                     title: "FIRST",
@@ -15,11 +17,11 @@ const getState = ({ getStore, getActions, setStore }) => {
                     initial: "white",
                 },
             ],
-            user: null,
         },
 
         actions: {
-            
+           
+            // --RESTAURAR SESIÓN--
             restoreSession: (token, user) => {
                 // Guarda el token y usuario en el localStorage
                 localStorage.setItem("token", token);
@@ -29,6 +31,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ user: user });
             },
 
+            // --CERRAR SESIÓN--
+            logoutUser: () => {
+                // Elimina los datos de sesión
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                setStore({ user: null });
+            },
+
+            // --LOGUEARSE--
             loginUser: async (email, password) => {
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
@@ -51,7 +62,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false;
                 }
             },
-
+            
+            // --REGISTRAR NUEVO USUARIO--
             registerUser: async (userData) => {
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}/api/register`, {
@@ -75,8 +87,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // Acciones de administración
+            // --ACCIONES DE ADMINISTRACION--
             adminActions: {
+                
+                // --OBTENER USUARIOS EN ESTADO DE "en_revision"--
                 getUsersPending: async function () {
                     try {
                         const response = await fetch(
@@ -104,6 +118,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
                 },
 
+                // --ACTUALIZAR ESTADO DE LOS USUARIOS--
                 updateUserStatus: async function (userId, status) {
                     try {
                         const response = await fetch(`${process.env.BACKEND_URL}/api/admin/users/${userId}/status`, {
@@ -127,6 +142,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
                 },
 
+                // --OBTENER USUARIOS CON ESTADO "activo"--
                 getUsersActive: async function () {
                     try {
                         const response = await fetch(`${process.env.BACKEND_URL}/api/admin/users-active`, {
@@ -150,11 +166,157 @@ const getState = ({ getStore, getActions, setStore }) => {
                 },
             },
 
-            logoutUser: () => {
-                // Elimina los datos de sesión
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                setStore({ user: null });
+             // --FETCH DE LIBROS--
+             fetchLibros: async () => {
+                try {
+                  const response = await fetch(`${process.env.BACKEND_URL}/api/books`);
+                  if (response.ok) {
+                    const libros = await response.json();
+                    setStore({ libros });
+                    console.log("Libros cargados:", libros);
+                  } else {
+                    console.error("Error al obtener libros:", await response.text());
+                  }
+                } catch (error) {
+                  console.error("Error en la solicitud de libros:", error);
+                }
+              },
+
+            // --CARGAR/EDITAR NUEVO LIBRO--
+            addOrUpdateLibro: async (libro) => {
+                try {
+                    console.log("Payload final enviado al backend:", libro);
+                    const method = libro.id ? "PUT" : "POST";
+                    const endpoint = libro.id
+                        ? `${process.env.BACKEND_URL}/api/books/${libro.id}`
+                        : `${process.env.BACKEND_URL}/api/books`;
+            
+                    const response = await fetch(endpoint, {
+                        method,
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        body: JSON.stringify(libro),
+                    });
+            
+                    if (response.ok) {
+                        getActions().fetchLibros();
+                        console.log("Libro guardado correctamente");
+                        return true;
+                    } else {
+                        console.error("Error al guardar el libro:", await response.text());
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud:", error);
+                    return false;
+                }
+            },
+
+            // --OBTENER DETALLES DE LIBRO POR ID--
+            getBookDetails: async (id) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/books/${id}`);
+                    if (response.ok) {
+                        const book = await response.json();
+                        console.log("Detalles del libro:", book);
+                        return book;
+                    } else {
+                        console.error("Error al obtener detalles del libro:", await response.text());
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud:", error);
+                }
+            },
+
+            // --ELIMINAR LIBRO--
+            deleteLibro: async (bookId) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/books/${bookId}`, {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+            
+                    if (response.ok) {
+                        getActions().fetchLibros();
+                        console.log("Libro eliminado correctamente");
+                    } else {
+                        console.error("Error al eliminar el libro:", await response.text());
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud:", error);
+                }
+            },
+
+            // --FETCH DE RESERVAS--
+            fetchReservas: async () => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/book-reservations`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    });
+
+                    if (response.ok) {
+                        const reservas = await response.json();
+                        setStore({ reservas });
+                        console.log("Reservas cargadas:", reservas);
+                    } else {
+                        console.error("Error al obtener reservas:", await response.text());
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud de reservas:", error);
+                }
+            },
+
+            // --CREAR NUEVA RESERVA--
+            createReserva: async (bookId) => {
+                try {
+                    const response = await fetch(`${process.env.BACKEND_URL}/api/book-reservations`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        body: JSON.stringify({ book_id: bookId }),
+                    });
+
+                    if (response.ok) {
+                        getActions().fetchReservas();
+                        console.log("Reserva creada correctamente");
+                    } else {
+                        console.error("Error al crear la reserva:", await response.text());
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud:", error);
+                }
+            },
+            
+            // --CANCELAR RESERVA--
+            returnReserva: async (reservationId) => {
+                try {
+                    const response = await fetch(
+                        `${process.env.BACKEND_URL}/api/book-reservations/${reservationId}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                        }
+                    );
+
+                    if (response.ok) {
+                        getActions().fetchReservas();
+                        console.log("Libro devuelto correctamente");
+                    } else {
+                        console.error("Error al devolver el libro:", await response.text());
+                    }
+                } catch (error) {
+                    console.error("Error en la solicitud:", error);
+                }
             },
 
             getMessage: async () => {
