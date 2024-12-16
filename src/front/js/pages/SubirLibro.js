@@ -7,13 +7,11 @@ export const SubirLibro = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [libro, setLibro] = useState({
-        titulo: "",
-        autor: "",
-        isbn: "",
-        resumen: "",
-        miniatura: "",
-        genero: "",
+   const [libro, setLibro] = useState({
+        title: "",
+        author: "",
+        summary: "",
+        book_gender: ""
     });
 
     useEffect(() => {
@@ -41,10 +39,16 @@ export const SubirLibro = () => {
         }
     };
 
-    const handleGuardar = () => {
-        actions.addOrUpdateLibro(libro);
-        alert("Libro guardado exitosamente");
-        navigate("/panel-admin/editar-cargar-libro");
+    const handleGuardar = async () => {
+        console.log("Payload antes de enviarlo al backend:", libro);
+        const success = await actions.addOrUpdateLibro(libro);
+    
+        if (success) {
+            alert("Libro guardado exitosamente");
+            navigate("/panel-admin/editar-cargar-libro");
+        } else {
+            alert("Error al guardar el libro. Intente nuevamente.");
+        }
     };
 
     return (
@@ -62,8 +66,8 @@ export const SubirLibro = () => {
                         <label>Título</label>
                         <input
                             type="text"
-                            name="titulo"
-                            value={libro.titulo}
+                            name="title"
+                            value={libro.title}
                             onChange={handleChange}
                             className="form-control"
                         />
@@ -72,18 +76,8 @@ export const SubirLibro = () => {
                         <label>Autor</label>
                         <input
                             type="text"
-                            name="autor"
-                            value={libro.autor}
-                            onChange={handleChange}
-                            className="form-control"
-                        />
-                    </div>
-                    <div className="col-md-6">
-                        <label>ISBN</label>
-                        <input
-                            type="text"
-                            name="isbn"
-                            value={libro.isbn}
+                            name="author"
+                            value={libro.author}
                             onChange={handleChange}
                             className="form-control"
                         />
@@ -91,8 +85,8 @@ export const SubirLibro = () => {
                     <div className="col-md-6">
                         <label>Género</label>
                         <select
-                            name="genero"
-                            value={libro.genero}
+                            name="book_gender"
+                            value={libro.book_gender}
                             onChange={handleChange}
                             className="form-select"
                         >
@@ -105,8 +99,8 @@ export const SubirLibro = () => {
                     <div className="col-12">
                         <label>Resumen</label>
                         <textarea
-                            name="resumen"
-                            value={libro.resumen}
+                            name="summary"
+                            value={libro.summary}
                             onChange={handleChange}
                             className="form-control"
                         />
