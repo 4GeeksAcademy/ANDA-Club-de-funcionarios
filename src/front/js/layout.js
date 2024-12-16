@@ -8,6 +8,7 @@ import About from "./pages/About";
 import { TuPerfil } from "./pages/TuPerfil";
 import { EditarCargarLibro } from "./pages/EditarCargarLibro";
 import { SubirLibro } from "./pages/SubirLibro";
+import { ModificarLibro } from "./pages/ModificarLibro";
 import { PanelAdministrador } from "./component/PanelAdministrador";
 import { EditarCargarSalon } from "./pages/EditarCargarSalon";
 import { AdministradorUsuarios } from "./pages/AdministradorUsuarios";
@@ -24,7 +25,7 @@ import { Biblioteca } from "./pages/Biblioteca";
 import { Reservas } from "./pages/Reservas";
 import { FirstEventView } from "./component/FirstEventView";
 import { SecondEventView } from "./component/SecondEventView";
-import {CrearEditarEvento} from "./pages/CrearEditarEvento"
+
 
 import { Single } from "./pages/single";
 import injectContext, { Context } from "./store/appContext";
@@ -77,6 +78,7 @@ const Layout = () => {
                                 <Route index element={<Navigate to="perfil-administrador" />} />
                                 <Route path="perfil-administrador" element={<TuPerfil />} />
                                 <Route path="editar-cargar-libro" element={<EditarCargarLibro />} />
+                                <Route path="modificar-libro" element={<ModificarLibro />} />
                                 <Route path="subir-libro" element={<SubirLibro />} />
                                 <Route path="subir-libro/:id" element={<SubirLibro />} />
                                 <Route path="editar-cargar-salon" element={<EditarCargarSalon />} />
@@ -95,7 +97,7 @@ const Layout = () => {
                                 <Route index element={<Navigate to="perfil-usuario" />} />
                                 <Route path="perfil-usuario" element={<TuPerfilUser />} />
                                 <Route path="historial" element={<HistorialUser />} />
-                                <Route path="calendario-eventos" element={<CalendarioEventosUser />} />
+                                <Route path="mis-reservas" element={<CalendarioEventosUser />} />
                             </Route>
 
                             {/* Biblioteca con sus rutas hijas correspondientes */}
@@ -103,9 +105,6 @@ const Layout = () => {
                                 <Route element={<Reservas />} path="reservas/:id" />
                             </Route>
 
-
-                            <Route path="crear-editar-evento" element={<CrearEditarEvento />} />
-                            <Route path="crear-editar-evento/:id" element={<CrearEditarEvento />} />
                             
                             {/* Eventos con sus rutas hijas correspondientes */}
                             <Route element={<FirstEventView />} path="/eventos" />

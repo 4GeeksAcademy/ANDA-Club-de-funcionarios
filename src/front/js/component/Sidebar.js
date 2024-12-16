@@ -1,22 +1,28 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { actions } = useContext(Context); // Acceso al contexto global
+  const navigate = useNavigate();
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
+  const handleLogout = () => {
+    actions.logoutUser(); // Llama a la acción definida en flux.js
+    navigate("/"); // Redirige al usuario a la página principal
+  };
+
   return (
     <nav
-      className={`bg-dark text-white sidebar d-flex flex-column ${isCollapsed ? "collapsed" : ""
-        }`}
+      className={`bg-dark text-white sidebar d-flex flex-column ${isCollapsed ? "collapsed" : ""}`}
       style={{
         width: isCollapsed ? "80px" : "250px",
         transition: "width 0.3s ease-in-out",
         minHeight: "100%",
-
       }}
     >
       {/* Botón para colapsar/expandir */}
@@ -59,7 +65,10 @@ export const Sidebar = () => {
       </ul>
       <ul className="nav flex-column">
         <li className="nav-item">
-          <button className="btn btn-link text-danger nav-link text-start">
+          <button
+            className="btn btn-link text-danger nav-link text-start"
+            onClick={handleLogout}
+          >
             <i className="fas fa-sign-out-alt"></i>
             {!isCollapsed && <span className="ms-2">Cerrar Sesión</span>}
           </button>

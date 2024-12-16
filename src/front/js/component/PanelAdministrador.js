@@ -15,7 +15,7 @@ export const PanelAdministrador = () => {
         }}
       >
         <div>
-          <h3 className="mb-1">Panel de administrador</h3>
+          <h4 className="mb-1">Panel de administrador</h4>
           <p className="mb-0">
           Aprueba funcionario/as, gestiona el salón para eventos y la reserva o préstamo de libros.
           </p>
