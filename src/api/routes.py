@@ -390,7 +390,7 @@ def get_all_books():
     """
     Lista todos los libros disponibles en la biblioteca.
     """
-    books = Books.query.filter_by(availability=True).all()
+    books = Books.query.all()
     return jsonify([book.serialize() for book in books]), 200
 
 
