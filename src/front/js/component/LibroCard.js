@@ -28,7 +28,7 @@ export const LibroCard = ({ libro, onDelete, onEdit }) => {
           className="btn btn-primary btn-sm"
           onClick={() => {
             onEdit(id); // Mantiene la función pasada como prop
-            navigate(`/modificar-libro/${id}`); // Navega a la ruta de modificación
+            navigate(`/panel-admin/modificar-libro/${id}`);
           }}
         >
           Modificar

@@ -78,7 +78,7 @@ const Layout = () => {
                                 <Route index element={<Navigate to="perfil-administrador" />} />
                                 <Route path="perfil-administrador" element={<TuPerfil />} />
                                 <Route path="editar-cargar-libro" element={<EditarCargarLibro />} />
-                                <Route path="modificar-libro" element={<ModificarLibro />} />
+                                <Route path="modificar-libro/:id" element={<ModificarLibro />} />
                                 <Route path="subir-libro" element={<SubirLibro />} />
                                 <Route path="subir-libro/:id" element={<SubirLibro />} />
                                 <Route path="editar-cargar-salon" element={<EditarCargarSalon />} />
