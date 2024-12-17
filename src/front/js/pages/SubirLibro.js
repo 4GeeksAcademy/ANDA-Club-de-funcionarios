@@ -3,17 +3,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { toast } from "sonner";
 
+
+const initialLibroState = {
+    title: "",
+    author: "",
+    summary: "",
+    book_gender: "",
+    miniatura: ""
+}
+
 export const SubirLibro = () => {
     const { store, actions } = useContext(Context);
     const { id } = useParams();
     const navigate = useNavigate();
 
-   const [libro, setLibro] = useState({
-        title: "",
-        author: "",
-        summary: "",
-        book_gender: ""
-    });
+    const [libro, setLibro] = useState(initialLibroState);
 
     useEffect(() => {
         if (id) {
@@ -24,26 +28,29 @@ export const SubirLibro = () => {
         }
     }, [id, store.libros]);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setLibro({ ...libro, [name]: value });
+    const handleChange = ({ target }) => {
+
+        setLibro({
+            ...libro,
+            [target.name]: target.value
+        });
     };
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setLibro({ ...libro, miniatura: reader.result });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
 
     const handleGuardar = async () => {
-        console.log("Payload antes de enviarlo al backend:", libro);
-        const success = await actions.addOrUpdateLibro(libro);
-    
+
+        // crear una instancia de formData
+        const formData = new FormData()
+        formData.append("title", libro.title)
+        formData.append("author", libro.author)
+        formData.append("summary", libro.summary)
+        formData.append("book_gender", libro.book_gender)
+        formData.append("miniatura", libro.miniatura)
+
+
+
+        const success = await actions.addLibro(formData);
+
         if (success) {
             toast.success("¡Libro guardado exitosamente!"); // Mensaje de éxito
             navigate("/panel-admin/editar-cargar-libro");
@@ -112,20 +119,13 @@ export const SubirLibro = () => {
                             type="file"
                             className="form-control"
                             accept="image/*"
-                            onChange={handleFileChange}
+                            onChange={(event) => {
+                                setLibro({ ...libro, miniatura: event.target.files[0] })
+                            }}
                         />
-                        {libro.miniatura && (
-                            <div className="mt-3">
-                                <img
-                                    src={libro.miniatura}
-                                    alt="Vista previa de la miniatura"
-                                    style={{ maxWidth: "200px", maxHeight: "200px" }}
-                                />
-                            </div>
-                        )}
                     </div>
                     <button className="btn btn-primary mt-3" onClick={handleGuardar}>
-                        Guardar
+                        Guardar deimian
                     </button>
                 </div>
             </div>

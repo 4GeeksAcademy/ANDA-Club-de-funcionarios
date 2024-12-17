@@ -420,17 +420,28 @@ def add_new_book():
     if not current_user or current_user.role != 'admin':
         return jsonify({"msg": "Unauthorized"}), 403
 
-    data = request.get_json()
-    print("Datos recibidos en el backend:", data)
-    if not data or not data.get('title') or not data.get('author') or not data.get('book_gender') or not data.get('summary'):
+    # data = request.get_json()
+    data_form = request.form
+    data_files = request.files
+
+
+    # print("Datos recibidos en el backend:", data)
+    if not data_form or not data_form.get('title') or not data_form.get('author') or not data_form.get('book_gender') or not data_form.get('summary'):
         return jsonify({"msg": "Title, author, book_gender, and summary are required"}), 400
 
+    miniatura = data_files.get("miniatura", None)
+
+    if miniatura is not None :
+        # subirlo a cloudinary
+        miniatura = uploader.upload(miniatura)
+        miniatura = miniatura.get("secure_url")
 
     new_book = Books(
-        title=data['title'],
-        author=data['author'],
-        book_gender=data['book_gender'],
-        summary=data.get('summary', "")
+        title=data_form['title'],
+        author=data_form['author'],
+        book_gender=data_form['book_gender'],
+        summary=data_form.get('summary', ""),
+        miniatura=miniatura
     )
     
     db.session.add(new_book)
