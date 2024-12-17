@@ -1,15 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DateTime } from "luxon";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import salon_logo_ from "../../img/salon_logo_.png";
+import { getReservas, crearReserva, getReservaById, actualizarReserva, eliminarReserva } from '../services/ReservasService';
+
 
 export const SecondEventView = () => {
   const [startDate, setStartDate] = useState(null);
   const [horaInicio, setHoraInicio] = useState(""); // Estado para la hora de inicio
   const [horaFin, setHoraFin] = useState(""); // Estado para la hora de fin
   const [cantidadInvitados, setCantidadInvitados] = useState(1); // Estado para cantidad de invitados
+  const [nombreEvento, setNombreEvento] = useState('');
+  const { id } = useParams();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      const cargarEvento = async () => {
+        try {
+          const reserva = await getReservaById(id); // Obtener el evento por ID
+          setNombreEvento(reserva.event_name);
+
+        } catch (error) {
+          console.error("Error al cargar el evento:", error);
+        }
+      };
+      cargarEvento();
+    }
+  }, [id]);
+
 
   const formatDateLuxon = (date) => {
     if (!date) return "";
@@ -17,12 +40,56 @@ export const SecondEventView = () => {
     return zonaUruguay.toFormat("yyyy/MM/dd");
   };
 
-  const handleConfirm = () => {
+  // Función para convertir fechas a formato ISO 8601
+  const convertirAISO8601 = (fecha, hora) => {
+    // Reemplazar las barras por guiones para asegurar el formato correcto
+    const fechaFormateada = fecha.replace(/\//g, "-");
+    console.log(`${fechaFormateada}T${hora}:00`);
+    return new Date(`${fechaFormateada}T${hora}:00`).toISOString();
+  };
+
+
+
+  const handleConfirm = async (e) => {
     if (startDate && horaInicio && horaFin && cantidadInvitados) {
       const formattedDate = formatDateLuxon(startDate);
-      alert(
-        `Reserva confirmada para el ${formattedDate} desde ${horaInicio} hasta ${horaFin} para ${cantidadInvitados} invitados.`
-      );
+
+
+
+      // Convertir fechas al formato ISO 8601
+      const fechaInicioISO = convertirAISO8601(formattedDate, horaInicio);
+      const fechaFinISO = convertirAISO8601(formattedDate, horaFin);
+
+      const eventoBody = {
+        "event_name": nombreEvento,
+        "start_time": fechaInicioISO,
+        "end_time": fechaFinISO
+      };
+
+
+
+      try {
+        if (id) {
+          await actualizarReserva(id, eventoBody);
+        } else {
+          await crearReserva(eventoBody);
+        }
+
+
+        alert(
+          `Reserva confirmada para el ${formattedDate} desde ${horaInicio} hasta ${horaFin} para ${cantidadInvitados} invitados.`
+        );
+
+        navigate('/panel-de-usuario/calendario-eventos'); // Redirigir a la lista de reservas
+      } catch (error) {
+        console.error("Error al crear el evento:", error);
+        alert('Hubo un error al crear el evento.');
+      }
+
+
+
+
+
     } else {
       alert("Por favor completa todos los campos.");
     }
@@ -73,28 +140,27 @@ export const SecondEventView = () => {
               />
             </div>
             <div className="card-body">
-                <button
-                  className="btn btn-secondary btn-sm w-100"
-                  onClick={() => navigate("/eventos")}
-                >
-                  Anterior
-                </button>
-              </div>
+              <button
+                className="btn btn-secondary btn-sm w-100"
+                onClick={() => navigate("/eventos")}
+              >
+                Anterior
+              </button>
+            </div>
           </div>
 
-          
+
 
           <div className="col-12 col-md-7 col-lg-8">
             <div className="card h-100 d-flex flex-column">
               <div className="card-body">
                 <h3 className="mb-4">Reservar:</h3>
                 <div className="mb-4">
-                  <strong>Dirección:</strong>
-                  <input type="text" className="form-control" placeholder="Ingresa la dirección" />
-                </div>
-                <div className="mb-4">
                   <strong>Tipo de evento:</strong>
-                  <input type="text" className="form-control" placeholder="Ingresa el tipo de evento" />
+                  <input type="text" className="form-control"
+                    value={nombreEvento}
+                    onChange={(e) => setNombreEvento(e.target.value)}
+                    placeholder="Ingresa el tipo de evento" />
                 </div>
                 <div className="mb-4">
                   <strong>Cantidad de invitados:</strong>
