@@ -4,6 +4,7 @@ import { Context } from "../store/appContext";
 import Libros from "../../img/Libros.png";
 
 export const Biblioteca = () => {
+  
   const location = useLocation();
   const navigate = useNavigate();
   const { store, actions } = useContext(Context);
@@ -12,6 +13,7 @@ export const Biblioteca = () => {
   useEffect(() => {
     actions.fetchLibros();
   }, []);
+  
 
   // Renderizar solo el Outlet en las rutas hijas
   if (location.pathname !== "/biblioteca") {
