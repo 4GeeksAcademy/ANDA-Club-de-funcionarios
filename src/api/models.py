@@ -174,6 +174,7 @@ class Books(db.Model):
     summary = db.Column(db.Text)
     # Campo availability como Boolean (True: Disponible, False: No disponible)
     availability= db.Column(db.Boolean, default=True, nullable=False)
+    miniatura = db.Column(db.String(180), default="https://res.cloudinary.com/dpijy3gj2/image/upload/v1734476101/Not_found_imagen_1_tvzujq.jpg")
     created_at= db.Column(db.DateTime(timezone=True), default=lazy_utc_now)
     updated_at= db.Column(db.DateTime(timezone=True), default=lazy_utc_now, onupdate=lazy_utc_now)
     
@@ -193,6 +194,7 @@ class Books(db.Model):
             "author": self.author, 
             "book_gender": self.book_gender,
             "summary": self.summary, 
+            "miniatura": self.miniatura,
             "availability": self.availability, 
             "created_at": self.created_at.isoformat() if self.created_at else None, 
             "updated_at": self.updated_at.isoformat() if self.updated_at else None
