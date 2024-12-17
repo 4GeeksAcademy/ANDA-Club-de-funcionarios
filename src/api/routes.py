@@ -174,25 +174,23 @@ def get_user_profile(user_id):
 def create_user_profile():
     """
     Crea un nuevo perfil para un usuario.
-    Requiere autenticación.
     """
     data = request.get_json()
     print("Datos recibidos:", data)
-    
+
     # Validar campos requeridos
     if not data or not data.get('user_id') or not data.get('first_name') or not data.get('last_name'):
         return jsonify({"msg": "user_id, first_name, and last_name are required"}), 400
-    
-    # Verificar que el usuario actual sea el mismo que el del perfil o administrador
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get(current_user_id)
-    if data['user_id'] != int(current_user_id) and (not current_user or current_user.role != 'admin'):
-        return jsonify({"msg": "You are not authorized to create this profile"}), 403
-    
+
     # Verificar que el usuario exista
     user = User.query.get(data['user_id'])
     if not user:
         return jsonify({"msg": "User not found"}), 404
+
+    # Validar si el perfil ya existe
+    existing_profile = UserProfiles.query.filter_by(user_id=data['user_id']).first()
+    if existing_profile:
+        return jsonify({"msg": "Profile already exists for this user."}), 400
 
     # Validar birth_date
     birth_date = data.get('birth_date')
@@ -204,64 +202,67 @@ def create_user_profile():
     else:
         birth_date = None
 
+    # Validar duplicados de email e identificación
+    existing_email = UserProfiles.query.filter_by(email=data['email']).first()
+    if existing_email:
+        return jsonify({"msg": "Email already exists in another profile."}), 400
+
+    existing_identification = UserProfiles.query.filter_by(identification=data['identification']).first()
+    if existing_identification:
+        return jsonify({"msg": "Identification already exists in another profile."}), 400
+
     # Crear nuevo perfil
     new_profile = UserProfiles(
         user_id=data['user_id'],
         first_name=data['first_name'],
         last_name=data['last_name'],
-        email=data.get('email') or None,
-        identification=data.get('identification') or None,
-        address=data.get('address') or None,
-        phone_number=data.get('phone_number') or None,
+        email=data['email'],
+        identification=data['identification'],
+        address=data.get('address'),
+        phone_number=data.get('phone_number'),
         birth_date=birth_date,
-        department=data.get('department') or None,
-        sector=data.get('sector') or None
+        department=data.get('department'),
+        sector=data.get('sector')
     )
 
     # Guardar en la base de datos
     try:
         db.session.add(new_profile)
         db.session.commit()
-        print(f"Perfil creado con ID: {new_profile.id}")  # Confirmar que el ID fue generado
+        print(f"Perfil creado con ID: {new_profile.id}")
         return jsonify(new_profile.serialize()), 201
     except Exception as e:
         db.session.rollback()
         print(f"Error al guardar el perfil: {e}")
-        return jsonify({"msg": "Error interno del servidor al guardar el perfil."}), 500
+        return jsonify({"msg": f"Error interno del servidor al guardar el perfil: {str(e)}"}), 500
 
 @api.route('/user-profiles/<int:user_id>', methods=['PUT'])
 @jwt_required()
 def update_user_profile(user_id):
-    """
-    Actualiza el perfil de un usuario existente.
-    Requiere autenticación.
-    """
-    # Verificar que el usuario actual sea el mismo que el del perfil o administrador
-    current_user_id = get_jwt_identity()
-    current_user = User.query.get(current_user_id)
-    if user_id != int(current_user_id) and (not current_user or current_user.role != 'admin'):
-        return jsonify({"msg": "You are not authorized to update this profile"}), 403
-    
-    # Query para obtener el perfil asociado al usuario especificado
     profile = UserProfiles.query.filter_by(user_id=user_id).first()
+
     if not profile:
         return jsonify({"msg": "User profile not found"}), 404
-    
-    # Actualizar los campos del perfil
+
     data = request.get_json()
-    profile.first_name = data.get('first_name', profile.first_name)
-    profile.last_name = data.get('last_name', profile.last_name)
-    profile.email = data.get('email', profile.email)
-    profile.identification = data.get('identification', profile.identification)
-    profile.address = data.get('address', profile.address)
-    profile.phone_number = data.get('phone_number', profile.phone_number)
-    profile.birth_date = data.get('birth_date', profile.birth_date)
-    profile.department = data.get('department', profile.department)
-    profile.sector = data.get('sector', profile.sector)
 
-    db.session.commit()
+    profile.first_name = data["first_name"] if "first_name" in data and data["first_name"] else profile.first_name
+    profile.last_name = data["last_name"] if "last_name" in data and data["last_name"] else profile.last_name
+    profile.email = data["email"] if "email" in data and data["email"] else profile.email
+    profile.identification = data["identification"] if "identification" in data and data["identification"] else profile.identification
+    profile.address = data["address"] if "address" in data and data["address"] else profile.address
+    profile.phone_number = data["phone_number"] if "phone_number" in data and data["phone_number"] else profile.phone_number
+    profile.birth_date = data["birth_date"] if "birth_date" in data and data["birth_date"] else profile.birth_date
+    profile.department = data["department"] if "department" in data and data["department"] else profile.department
+    profile.sector = data["sector"] if "sector" in data and data["sector"] else profile.sector
 
-    return jsonify(profile.serialize()), 200
+    try:
+        db.session.commit()
+        return jsonify(profile.serialize()), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error al actualizar perfil: {e}")
+        return jsonify({"msg": "Error al actualizar perfil"}), 500
 
 # -----------------------------------------------------------------
 # RESERVATION MANAGEMENT ROUTES
