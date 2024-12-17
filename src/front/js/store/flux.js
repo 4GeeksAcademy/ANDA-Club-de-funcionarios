@@ -387,9 +387,15 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             // Actualizar un perfil de usuario (PUT /user-profiles/:id)
-            updateUserProfile: async (id, profile) => {
+            updateUserProfile: async (user_id, profile) => {
                 try {
-                    const response = await fetch(`${process.env.BACKEND_URL}/api/user-profiles/${id}`, {
+                    console.log("ID del usuario a actualizar:", user_id);
+                    console.log("Datos enviados al backend:", JSON.stringify(profile));
+            
+                    const url = `${process.env.BACKEND_URL}/api/user-profiles/${user_id}`; 
+                    console.log("URL de la petición:", url);
+            
+                    const response = await fetch(url, {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
@@ -397,17 +403,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify(profile),
                     });
+            
                     if (response.ok) {
                         const updatedProfile = await response.json();
-                        getActions().fetchUserProfiles();
+                        console.log("Perfil actualizado correctamente:", updatedProfile);
                         return updatedProfile;
                     } else {
-                        console.error("Error al actualizar perfil");
+                        const error = await response.json();
+                        console.error("Error al actualizar perfil:", error.msg || "Error desconocido");
+                        return null;
                     }
                 } catch (error) {
                     console.error("Error en la actualización del perfil:", error);
+                    return null;
                 }
             },
+            
             
             getMessage: async () => {
                 try {
@@ -416,7 +427,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ message: data.message });
                     return data;
                 } catch (error) {
-                    console.log("Error loading message from backend", error);
+                    console.log("Error al cargar el mensaje desde el backend", error);
                 }
             },
 
