@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextApp } from "../store/appContext";
+import { toast } from "sonner";
 
 export const Login = () => {
     const { actions } = useContextApp();
@@ -28,10 +29,10 @@ export const Login = () => {
         const success = await actions.loginUser(formData.email, formData.password);
 
         if (success) {
-            alert("Inicio de sesión exitoso");
+            toast.success("Inicio de sesión exitoso 🎉");
             navigate("/panel-de-usuario"); 
         } else {
-            alert("Credenciales incorrectas. Intenta nuevamente.");
+            toast.error("Credenciales incorrectas. Intenta nuevamente.");
         }
     };
 

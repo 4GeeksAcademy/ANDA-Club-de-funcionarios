@@ -35,7 +35,7 @@ export const LibroCard = ({ libro, onDelete, onEdit }) => {
         </button>
         <button
           className="btn btn-danger btn-sm ms-2"
-          onClick={() => onDelete(id)}
+          onClick={() => onDelete(id)} // Llama a la función principal que maneja el borrado para la ALERTA
         >
           Borrar
         </button>

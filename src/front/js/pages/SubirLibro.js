@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { toast } from "sonner";
 
 export const SubirLibro = () => {
     const { store, actions } = useContext(Context);
@@ -44,10 +45,10 @@ export const SubirLibro = () => {
         const success = await actions.addOrUpdateLibro(libro);
     
         if (success) {
-            alert("Libro guardado exitosamente");
+            toast.success("¡Libro guardado exitosamente!"); // Mensaje de éxito
             navigate("/panel-admin/editar-cargar-libro");
         } else {
-            alert("Error al guardar el libro. Intente nuevamente.");
+            toast.error("Error al guardar el libro. Intente nuevamente."); // Mensaje de error
         }
     };
 

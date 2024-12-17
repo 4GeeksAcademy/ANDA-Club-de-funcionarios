@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
+import { Toaster } from "sonner"; // Importa el Toaster
 
 import { Home } from "./pages/home";
 import About from "./pages/About";
@@ -63,6 +64,8 @@ const Layout = () => {
 
     return (
         <div className="d-flex flex-column h-100">
+            {/* Toaster para alertas de la aplicación */}
+            <Toaster position="top-center" richColors />
             <ScrollToTop>
                 {mostrarNavbar() && <Navbar />}  {/* Solo mostrar Navbar si mostrarNavbar es true */}
 
@@ -105,11 +108,11 @@ const Layout = () => {
                                 <Route element={<Reservas />} path="reservas/:id" />
                             </Route>
 
-                            
+
                             {/* Eventos con sus rutas hijas correspondientes */}
                             <Route element={<FirstEventView />} path="/eventos" />
-                                <Route element={<SecondEventView />} path="/reservar-evento" />
-                            
+                            <Route element={<SecondEventView />} path="/reservar-evento" />
+
 
                             {/* Otras rutas */}
                             <Route path="/" element={<Home />} />

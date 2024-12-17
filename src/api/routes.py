@@ -9,6 +9,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import get_jwt_identity, jwt_required, create_access_token
 from datetime import datetime
 import pendulum
+import cloudinary.uploader as uploader
 
 api = Blueprint('api', __name__)
 bcrypt = Bcrypt()
