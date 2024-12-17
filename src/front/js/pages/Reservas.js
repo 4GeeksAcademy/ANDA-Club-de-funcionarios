@@ -39,12 +39,13 @@ export const Reservas = () => {
     fetchBookDetails();
   }, [id, actions]);
 
-  const handleReserve = () => {
+  const handleReserve =async() => {
     if (startDate && endDate) {
       if (bookDetails.availability) {
         const formattedStart = formatDateLuxon(startDate);
         const formattedEnd = formatDateLuxon(endDate);
-        alert(`Reserva confirmada desde ${formattedStart} hasta ${formattedEnd}`);
+        const response=await actions.fetchReservas(id)
+        //alert(`Reserva confirmada desde ${formattedStart} hasta ${formattedEnd}`);
       } else {
         alert("El libro no está disponible para reserva.");
       }
@@ -124,7 +125,7 @@ export const Reservas = () => {
               className={`btn ${
                 bookDetails.availability ? "btn-primary" : "btn-secondary"
               } w-100`}
-              onClick={handleReserve}
+              onClick={()=>handleReserve()}
               disabled={!bookDetails.availability} // Deshabilita si el libro no está disponible
             >
               {bookDetails.availability ? "Reservar" : "No disponible"}

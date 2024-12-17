@@ -253,12 +253,15 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             // --FETCH DE RESERVAS--
-            fetchReservas: async () => {
+            fetchReservas: async (id) => {
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}/api/book-reservations`, {
+                        method:"POST",
                         headers: {
+                            "Content-Type":"application/json",
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
+                        body:JSON.stringify({book_id:id})
                     });
 
                     if (response.ok) {

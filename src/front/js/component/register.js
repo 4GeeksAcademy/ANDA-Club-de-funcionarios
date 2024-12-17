@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextApp } from "../store/appContext";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 export const Register = () => {
     const { actions } = useContextApp();
@@ -22,7 +23,7 @@ export const Register = () => {
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            alert("Las contraseñas no coinciden");
+            toast.error("Las contraseñas no coinciden");
             return;
         }
 
@@ -35,10 +36,10 @@ export const Register = () => {
         const success = await actions.registerUser(userData);
 
         if (success) {
-            alert("Registro exitoso");
+            toast.success("Registro exitoso");
             navigate("/login");
         } else {
-            alert("Error al registrar. Intenta nuevamente.");
+            toast.error("Error al registrar. Intenta nuevamente.")
         }
     };
 

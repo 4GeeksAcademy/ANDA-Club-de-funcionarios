@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { LibroCard } from "../component/LibroCard";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const EditarCargarLibro = () => {
     const { store, actions } = useContext(Context);
@@ -12,6 +13,20 @@ export const EditarCargarLibro = () => {
             actions.fetchLibros();
         }
     }, []);
+
+    const onDelete = (id) => {
+        // Mostrar alerta de confirmación
+        toast("¿Seguro deseas borrar el libro seleccionado?", {
+            action: {
+                label: "Confirmar",
+                onClick: () => {
+                    actions.deleteLibro(id);
+                    toast.success("Libro borrado exitosamente");
+                },
+            },
+            duration: 5000, // Tiempo visible
+        });
+    };
 
     return (
         <div className="container mt-4">
@@ -39,7 +54,7 @@ export const EditarCargarLibro = () => {
                             <LibroCard
                                 key={libro.id}
                                 libro={libro}
-                                onDelete={(id) => actions.deleteLibro(id)} // Borrar libro
+                                onDelete={(id) => onDelete(id)} // Borrar libro
                                 onEdit={(id) => console.log("Editar libro con ID:", id)} // Editar libro
                             />
                         ))
