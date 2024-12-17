@@ -22,10 +22,10 @@ export const CalendarioEventosUser = () => {
         }
     };
 
-    const deleteReserva = (idReserva) => {
+    const deleteReserva = async (idReserva) => {
 
-        eliminarReserva(idReserva);
-        cargarReservas();
+        await eliminarReserva(idReserva);
+        await cargarReservas();
     };
 
     useEffect(() => {
@@ -35,7 +35,7 @@ export const CalendarioEventosUser = () => {
     return (
         <div className="container mt-4">
             <h2>Reservas Activas</h2>
-            <Link to={`/crear-editar-evento`} className="btn btn-primary">
+            <Link to={`/reservar-evento`} className="btn btn-primary">
                 Realizar Reserva
             </Link>
             <table className="table table-striped">
@@ -53,10 +53,10 @@ export const CalendarioEventosUser = () => {
                         <tr>
                             <td>{reserva.event_name}</td>
                             <td>Salón</td>
-                            <td>{reserva.user_id}</td>
+                            <td>{reserva.user_email}</td>
                             <td>
                                 <button onClick={() => deleteReserva(reserva.id)} className="btn btn-danger">Cancelar</button>
-                                <Link to={`/crear-editar-evento/${reserva.id}`} className="btn btn-primary">
+                                <Link to={`/reservar-evento/${reserva.id}`} className="btn btn-primary">
                                     Editar
                                 </Link>
                             </td>

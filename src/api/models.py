@@ -154,6 +154,7 @@ class Reservations(db.Model):
             "id": self.id, 
             "event_name": self.event_name,
             "user_id": self.user_id, 
+            "user_email": self.user.email if self.user else None,
             "start_time": self.start_time, 
             "end_time": self.end_time, 
             "created_at": self.created_at.isoformat() if self.created_at else None, 
