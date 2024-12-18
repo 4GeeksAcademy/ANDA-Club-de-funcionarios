@@ -1,38 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { DateTime } from "luxon";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import salon_logo_ from "../../img/salon_logo_.png";
-import { getReservas, crearReserva, getReservaById, actualizarReserva, eliminarReserva } from '../services/ReservasService';
+import { Context } from "../store/appContext";
 
 
 export const SecondEventView = () => {
+  const { store, actions } = useContext(Context);
   const [startDate, setStartDate] = useState(null);
-  const [horaInicio, setHoraInicio] = useState(""); // Estado para la hora de inicio
-  const [horaFin, setHoraFin] = useState(""); // Estado para la hora de fin
-  const [cantidadInvitados, setCantidadInvitados] = useState(1); // Estado para cantidad de invitados
+  const [horaInicio, setHoraInicio] = useState("");
+  const [horaFin, setHoraFin] = useState("");
+  const [cantidadInvitados, setCantidadInvitados] = useState(1);
   const [nombreEvento, setNombreEvento] = useState('');
   const { id } = useParams();
-
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
-      const cargarEvento = async () => {
-        try {
-          const reserva = await getReservaById(id); // Obtener el evento por ID
-          setNombreEvento(reserva.event_name);
-
-        } catch (error) {
-          console.error("Error al cargar el evento:", error);
-        }
-      };
-      cargarEvento();
+      actions.ReservaById(id);
     }
   }, [id]);
 
+  useEffect(() => {
+    if (store.reservaActual) {
+      setNombreEvento(store.reservaActual.event_name);
+    }
+  }, [store.reservaActual]);
 
   const formatDateLuxon = (date) => {
     if (!date) return "";
@@ -53,9 +49,6 @@ export const SecondEventView = () => {
   const handleConfirm = async (e) => {
     if (startDate && horaInicio && horaFin && cantidadInvitados) {
       const formattedDate = formatDateLuxon(startDate);
-
-
-
       // Convertir fechas al formato ISO 8601
       const fechaInicioISO = convertirAISO8601(formattedDate, horaInicio);
       const fechaFinISO = convertirAISO8601(formattedDate, horaFin);
@@ -66,30 +59,18 @@ export const SecondEventView = () => {
         "end_time": fechaFinISO
       };
 
-
-
       try {
         if (id) {
-          await actualizarReserva(id, eventoBody);
+          await actions.actualizarReserva(id, eventoBody);
         } else {
-          await crearReserva(eventoBody);
+          await actions.crearReservaEvent(eventoBody);
         }
-
-
-        alert(
-          `Reserva confirmada para el ${formattedDate} desde ${horaInicio} hasta ${horaFin} para ${cantidadInvitados} invitados.`
-        );
-
-        navigate('/panel-de-usuario/calendario-eventos'); // Redirigir a la lista de reservas
+        alert(`Reserva confirmada para el ${formattedDate} desde ${horaInicio} hasta ${horaFin}.`);
+        navigate('/panel-de-usuario/mis-reservas');
       } catch (error) {
-        console.error("Error al crear el evento:", error);
-        alert('Hubo un error al crear el evento.');
+        console.error("Error:", error);
+        alert("Hubo un error al confirmar la reserva.");
       }
-
-
-
-
-
     } else {
       alert("Por favor completa todos los campos.");
     }

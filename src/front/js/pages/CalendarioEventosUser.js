@@ -1,41 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate, Link } from "react-router-dom";
-import { getReservas, crearReserva, getReservaById, actualizarReserva, eliminarReserva } from '../services/ReservasService';
+import React, { useEffect, useContext } from 'react';
+import { useNavigate, Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 export const CalendarioEventosUser = () => {
-
-    const location = useLocation();
-    const navigate = useNavigate(); // Hook para navegación
-
-
-    const [reservas, setReservas] = useState([]); // Estado para manejar la carga de datos
-    const [error, setError] = useState(null);  // Estado para manejar errores
+    const { store, actions } = useContext(Context); // Acceso al store y a las acciones del flux
+    const navigate = useNavigate();
 
     // Función para cargar las reservas
     const cargarReservas = async () => {
-        try {
-
-            const data = await getReservas();  // Llamada al servicio
-            setReservas(data);  // Actualizar el estado con las reservas obtenidas
-        } catch (error) {
-            console.error(error);
-        }
+        await actions.fetchReservasEvent(); // Llamada a la acción del flux
     };
 
+    // Función para eliminar una reserva
     const deleteReserva = async (idReserva) => {
-
-        await eliminarReserva(idReserva);
-        await cargarReservas();
+        await actions.deleteReserva(idReserva); // Llamada a la acción del flux
+        await cargarReservas(); // Recargar las reservas actualizadas
     };
 
+    // Cargar reservas cuando el componente se monte
     useEffect(() => {
-        cargarReservas();  // Llamar a la función cuando el componente se monte
+        cargarReservas();
     }, []);
 
     return (
         <div className="container mt-4">
             <h2>Reservas Activas</h2>
-            <Link to={`/reservar-evento`} className="btn btn-primary">
+            <Link to={`/reservar-evento`} className="btn btn-primary mb-3">
                 Realizar Reserva
             </Link>
             <table className="table table-striped">
@@ -48,21 +38,30 @@ export const CalendarioEventosUser = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {reservas.map(reserva => (
-
+                    {store.reservas && store.reservas.length > 0 ? (
+                        store.reservas.map(reserva => (
+                            <tr key={reserva.id}>
+                                <td>{reserva.event_name}</td>
+                                <td>Salón</td>
+                                <td>{reserva.user_email}</td>
+                                <td>
+                                    <button
+                                        onClick={() => deleteReserva(reserva.id)}
+                                        className="btn btn-danger me-2"
+                                    >
+                                        Cancelar
+                                    </button>
+                                    <Link to={`/reservar-evento/${reserva.id}`} className="btn btn-primary">
+                                        Editar
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
                         <tr>
-                            <td>{reserva.event_name}</td>
-                            <td>Salón</td>
-                            <td>{reserva.user_email}</td>
-                            <td>
-                                <button onClick={() => deleteReserva(reserva.id)} className="btn btn-danger">Cancelar</button>
-                                <Link to={`/reservar-evento/${reserva.id}`} className="btn btn-primary">
-                                    Editar
-                                </Link>
-                            </td>
+                            <td colSpan="4" className="text-center">No hay reservas activas.</td>
                         </tr>
-
-                    ))}
+                    )}
                 </tbody>
             </table>
         </div>
