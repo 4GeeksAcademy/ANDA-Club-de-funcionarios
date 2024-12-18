@@ -1,15 +1,43 @@
-import React, { Component } from "react";
+import React from "react";
+import "../../styles/footer.css";
 
 export const Footer = () => (
-	
-  <footer class="py-3 my-4">
-    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Pricing</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
-    </ul>
-    <p class="text-center text-body-secondary">© 2024 Company, Inc</p>
+  <footer className="footer bg-transparent text-center py-4">
+    <div className="container">
+      {/* Información principal */}
+      <div className="mb-3">
+        <span className="text-muted">
+          © {new Date().getFullYear()} ANDA Uruguay. Todos los derechos reservados.
+        </span>
+      </div>
+
+      {/* Redes sociales */}
+      <div className="d-flex justify-content-center gap-3">
+        <a
+          href="https://anda.com.uy/servicios-en-linea/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link"
+        >
+          <i className="fas fa-globe fa-lg"></i>
+        </a>
+        <a
+          href="https://www.facebook.com/ANDAOficial/?locale=es_LA"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link"
+        >
+          <i className="fab fa-facebook fa-lg"></i>
+        </a>
+        <a
+          href="https://www.instagram.com/anda_uy/reels/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link"
+        >
+          <i className="fab fa-instagram fa-lg"></i>
+        </a>
+      </div>
+    </div>
   </footer>
 );

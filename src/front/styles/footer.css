@@ -1,0 +1,20 @@
+.footer {
+    background-color: transparent;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .footer-link {
+    color: #3865e5; /* Color principal de ANDA */
+    transition: color 0.3s ease, transform 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .footer-link:hover {
+    color: #27408b; /* Color más oscuro en hover */
+    transform: scale(1.1);
+  }
+  
+  .text-muted {
+    font-size: 0.9rem;
+  }
+  
