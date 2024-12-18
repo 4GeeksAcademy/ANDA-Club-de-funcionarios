@@ -1,0 +1,83 @@
+/* Contenedor principal */
+.biblioteca-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  /* Banner superior */
+  .biblioteca-banner {
+    background-color: #3865e5;
+    color: white;
+    padding: 2rem 1rem;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .banner-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .banner-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .banner-image {
+    max-height: 120px;
+    transition: transform 0.5s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .banner-image:hover {
+    transform: rotate(-5deg) scale(1.1); /* Efecto interactivo */
+  }
+  
+  /* Tarjeta de libro */
+  .libro-card {
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .libro-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .libro-imagen {
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+  
+  .libro-titulo {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #3865e5;
+  }
+  
+  .libro-autor {
+    font-size: 0.9rem;
+  }
+  
+  .libro-genero {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+  
+  .libro-boton {
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+  
+  .libro-boton:hover {
+    background-color: #3865e5;
+    color: white;
+  }
+  

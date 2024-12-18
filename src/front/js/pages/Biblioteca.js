@@ -2,9 +2,9 @@ import React, { useEffect, useContext } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import Libros from "../../img/Libros.png";
+import "../../styles/biblioteca.css"; // Importamos los estilos interactivos
 
 export const Biblioteca = () => {
-  
   const location = useLocation();
   const navigate = useNavigate();
   const { store, actions } = useContext(Context);
@@ -13,7 +13,6 @@ export const Biblioteca = () => {
   useEffect(() => {
     actions.fetchLibros();
   }, []);
-  
 
   // Renderizar solo el Outlet en las rutas hijas
   if (location.pathname !== "/biblioteca") {
@@ -25,62 +24,46 @@ export const Biblioteca = () => {
   }
 
   return (
-    <div className="d-flex flex-column" style={{ height: "100%" }}>
+    <div className="biblioteca-container">
       {/* Banner superior */}
-      <div
-        className="text-white py-3 px-4 d-flex align-items-center justify-content-between"
-        style={{
-          backgroundColor: "#3865E5",
-          width: "100%",
-          height: "150px",
-        }}
-      >
-        <div>
-          <h1 className="mb-1">Biblioteca</h1>
-          <p className="mb-0">
-            Consultá nuestro amplio catálogo de libros para reserva en línea.
-          </p>
+      <div className="biblioteca-banner d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <div className="banner-text text-center text-md-start">
+          <h1 className="banner-title">Biblioteca</h1>
+          <p>Consultá nuestro amplio catálogo de libros para reserva en línea.</p>
         </div>
-        <img
-          src={Libros}
-          className="img-fluid"
-          style={{ maxHeight: "150px" }}
-          alt="Decoración del banner"
-        />
+        <div className="banner-image-container">
+          <img
+            src={Libros}
+            className="banner-image"
+            alt="Decoración del banner"
+          />
+        </div>
       </div>
 
       {/* Info biblioteca */}
-      <div className="container mt-4">
-        <div className="row g-3">
+      <div className="container mt-5">
+        <div className="row g-4">
           {store.libros.length > 0 ? (
             store.libros.map((libro, index) => (
-              <div key={index} className="col-12 col-sm-6 col-md-4">
-                <div className="card h-100 shadow-sm">
+              <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div className="card libro-card shadow-sm">
                   <img
                     src={libro.miniatura || "https://via.placeholder.com/150"}
-                    className="card-img-top img-fluid"
-                    style={{
-                      height: "180px",
-                      objectFit: "cover",
-                    }}
+                    className="card-img-top libro-imagen"
                     alt={`Portada del libro ${libro.titulo}`}
                   />
-                  <div className="card-body d-flex flex-column">
-                    <h5 className="card-title text-primary">{libro.title}</h5>
-                    <h6 className="card-subtitle mb-2 text-muted">
-                      {libro.author}
-                    </h6>
-                    <p className="card-text small text-secondary">
+                  <div className="card-body d-flex flex-column text-center">
+                    <h5 className="libro-titulo">{libro.title}</h5>
+                    <h6 className="libro-autor text-muted">{libro.author}</h6>
+                    <p className="libro-genero">
                       {libro.book_gender || "Género no especificado"}
                     </p>
-                    <div className="mt-auto d-flex justify-content-between">
-                      <button
-                        className="btn btn-outline-primary mt-auto"
-                        onClick={() => navigate(`reservas/${libro.id}`)}
-                      >
-                        Ver más
-                      </button>
-                    </div>
+                    <button
+                      className="btn btn-outline-primary mt-auto libro-boton"
+                      onClick={() => navigate(`reservas/${libro.id}`)}
+                    >
+                      Ver más
+                    </button>
                   </div>
                 </div>
               </div>
@@ -92,7 +75,6 @@ export const Biblioteca = () => {
           )}
         </div>
       </div>
-      <div className="mt-4" style={{ height: "10px" }}></div>
     </div>
   );
 };

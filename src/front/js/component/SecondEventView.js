@@ -6,6 +6,7 @@ import { es } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import salon_logo_ from "../../img/salon_logo_.png";
 import { Context } from "../store/appContext";
+import "../../styles/SecondEventView.css";
 
 
 export const SecondEventView = () => {
