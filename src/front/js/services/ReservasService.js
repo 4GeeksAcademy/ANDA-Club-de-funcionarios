@@ -2,17 +2,19 @@ const BASE_URL = process.env.BACKEND_URL + '/api/reservations'; // Cambia esto p
 
 // Obtener el token de autenticación desde el almacenamiento (localStorage, contexto, etc.)
 const getAuthToken = () => {
-    return localStorage.getItem('auth_token');  // Suponiendo que el token está almacenado en localStorage
+    return localStorage.getItem('token');  // Suponiendo que el token está almacenado en localStorage
 }
 
 // Configuración común para todas las solicitudes
 const getHeaders = () => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNDIxNDI3OSwianRpIjoiOGMyOWMyNzQtNWNmZC00OTkwLWIzZDMtZDQxMzVjMTVhZWU5IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIiLCJuYmYiOjE3MzQyMTQyNzksImNzcmYiOiI3OWE1MWI0YS1lOGRmLTQwN2UtODBmMS0xODVjNWRiNmUyYTMiLCJleHAiOjE3NjU3NTAyNzl9.TutxhhfBltK0U4bKGhsTrG0B3VvRJD0Rbne3QXFr5n4";
+    const token = getAuthToken();
     return {
         'Content-Type': 'application/json',
         'Authorization': token ? `Bearer ${token}` : ''
     };
 }
+
+
 
 // Obtener todas las reservas (GET)
 export const getReservas = async () => {

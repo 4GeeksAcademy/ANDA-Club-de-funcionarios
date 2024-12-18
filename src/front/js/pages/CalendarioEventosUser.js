@@ -6,6 +6,7 @@ export const CalendarioEventosUser = () => {
 
     const location = useLocation();
     const navigate = useNavigate(); // Hook para navegación
+    const [token, setToken] = useState(null);
 
 
     const [reservas, setReservas] = useState([]); // Estado para manejar la carga de datos
@@ -29,11 +30,15 @@ export const CalendarioEventosUser = () => {
     };
 
     useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(storedToken);
+        }
         cargarReservas();  // Llamar a la función cuando el componente se monte
     }, []);
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4">           
             <h2>Reservas Activas</h2>
             <Link to={`/reservar-evento`} className="btn btn-primary">
                 Realizar Reserva
