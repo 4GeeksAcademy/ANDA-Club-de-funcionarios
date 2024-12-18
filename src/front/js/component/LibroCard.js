@@ -10,7 +10,6 @@ export const LibroCard = ({ libro, onDelete, onEdit }) => {
   }
 
   const { id, title, author, book_gender, miniatura } = libro;
-  console.log(libro);
 
   return (
     <tr>
@@ -25,7 +24,7 @@ export const LibroCard = ({ libro, onDelete, onEdit }) => {
       <td>{author || "Autor no disponible"}</td>
       <td>{book_gender || "Género no disponible"}</td>
       <td>
-        <button
+ <button
           className="btn btn-primary btn-sm"
           onClick={() => {
             onEdit(id); // Mantiene la función pasada como prop

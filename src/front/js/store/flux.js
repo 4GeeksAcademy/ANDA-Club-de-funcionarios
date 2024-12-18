@@ -2,7 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             message: null,
-            libros: [],
+            libros: [], 
             reservas: [],
             userProfiles: [],
             user: null,
@@ -21,7 +21,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
 
         actions: {
-
+           
             // --RESTAURAR SESIÓN--
             restoreSession: (token, user) => {
                 // Guarda el token y usuario en el localStorage
@@ -63,7 +63,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false;
                 }
             },
-
+            
             // --REGISTRAR NUEVO USUARIO--
             registerUser: async (userData) => {
                 try {
@@ -90,7 +90,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             // --ACCIONES DE ADMINISTRACION--
             adminActions: {
-
+                
                 // --OBTENER USUARIOS EN ESTADO DE "en_revision"--
                 getUsersPending: async function () {
                     try {
@@ -107,8 +107,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                         if (response.ok) {
                             const usersPending = await response.json();
-                            console.log("Usuarios Pendientes:", usersPending);
-                            return usersPending;
+                            console.log("Usuarios Pendientes:", usersPending); 
+                            return usersPending; 
                         } else {
                             console.error("Error al obtener usuarios pendientes:", await response.text());
                             return [];
@@ -167,31 +167,31 @@ const getState = ({ getStore, getActions, setStore }) => {
                 },
             },
 
-            // --FETCH DE LIBROS--
-            fetchLibros: async () => {
+             // --FETCH DE LIBROS--
+             fetchLibros: async () => {
                 try {
-                    const response = await fetch(`${process.env.BACKEND_URL}/api/books`);
-                    if (response.ok) {
-                        const libros = await response.json();
-                        setStore({ libros });
-                        console.log("Libros cargados:", libros);
-                    } else {
-                        console.error("Error al obtener libros:", await response.text());
-                    }
+                  const response = await fetch(`${process.env.BACKEND_URL}/api/books`);
+                  if (response.ok) {
+                    const libros = await response.json();
+                    setStore({ libros });
+                    console.log("Libros cargados:", libros);
+                  } else {
+                    console.error("Error al obtener libros:", await response.text());
+                  }
                 } catch (error) {
-                    console.error("Error en la solicitud de libros:", error);
+                  console.error("Error en la solicitud de libros:", error);
                 }
-            },
+              },
 
             // --CARGAR/EDITAR NUEVO LIBRO--
             addOrUpdateLibro: async (libro) => {
                 try {
-                    // console.log("Payload final enviado al backend:", libro);
+                    console.log("Payload final enviado al backend:", libro);
                     const method = libro.id ? "PUT" : "POST";
                     const endpoint = libro.id
                         ? `${process.env.BACKEND_URL}/api/books/${libro.id}`
                         : `${process.env.BACKEND_URL}/api/books`;
-
+            
                     const response = await fetch(endpoint, {
                         method,
                         headers: {
@@ -200,33 +200,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify(libro),
                     });
-
-                    if (response.ok) {
-                        getActions().fetchLibros();
-                        console.log("Libro guardado correctamente");
-                        return true;
-                    } else {
-                        console.error("Error al guardar el libro:", await response.text());
-                        return false;
-                    }
-                } catch (error) {
-                    console.error("Error en la solicitud:", error);
-                    return false;
-                }
-            },
-            // GUARDAR LIBRO
-            addLibro: async (libro) => {
-                try {
-                    console.log("Payload final enviado al backend:", libro)
-
-                    const response = await fetch(`${process.env.BACKEND_URL}api/books`, {
-                        method: "POST",
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("token")}`,
-                        },
-                        body: libro,
-                    });
-
+            
                     if (response.ok) {
                         getActions().fetchLibros();
                         console.log("Libro guardado correctamente");
@@ -266,7 +240,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
                     });
-
+            
                     if (response.ok) {
                         getActions().fetchLibros();
                         console.log("Libro eliminado correctamente");
@@ -282,12 +256,12 @@ const getState = ({ getStore, getActions, setStore }) => {
             fetchReservas: async (id) => {
                 try {
                     const response = await fetch(`${process.env.BACKEND_URL}/api/book-reservations`, {
-                        method: "POST",
+                        method:"POST",
                         headers: {
-                            "Content-Type": "application/json",
+                            "Content-Type":"application/json",
                             Authorization: `Bearer ${localStorage.getItem("token")}`,
                         },
-                        body: JSON.stringify({ book_id: id })
+                        body:JSON.stringify({book_id:id})
                     });
 
                     if (response.ok) {
@@ -324,7 +298,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error en la solicitud:", error);
                 }
             },
-
+            
             // --CANCELAR RESERVA--
             returnReserva: async (reservationId) => {
                 try {
@@ -420,10 +394,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     console.log("ID del usuario a actualizar:", user_id);
                     console.log("Datos enviados al backend:", JSON.stringify(profile));
-
-                    const url = `${process.env.BACKEND_URL}/api/user-profiles/${user_id}`;
+            
+                    const url = `${process.env.BACKEND_URL}/api/user-profiles/${user_id}`; 
                     console.log("URL de la petición:", url);
-
+            
                     const response = await fetch(url, {
                         method: "PUT",
                         headers: {
@@ -432,7 +406,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify(profile),
                     });
-
+            
                     if (response.ok) {
                         const updatedProfile = await response.json();
                         console.log("Perfil actualizado correctamente:", updatedProfile);
@@ -447,8 +421,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return null;
                 }
             },
-
-
+            
+            
             getMessage: async () => {
                 try {
                     const response = await fetch(process.env.BACKEND_URL + "/api/hello");
