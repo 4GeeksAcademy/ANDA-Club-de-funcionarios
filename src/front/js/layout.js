@@ -18,7 +18,7 @@ import { EditarCargarSalon } from "./pages/EditarCargarSalon";
 import { AdministradorUsuarios } from "./pages/AdministradorUsuarios";
 import PanelUsuario from "./pages/PanelUsuario";
 import { Login } from "./component/login";
-import { HistorialUser } from "./pages/HistorialUser";
+//import { HistorialUser } from "./pages/HistorialUser";
 import { TuPerfilUser } from "./pages/TuPerfilUser";
 import { Register } from "./component/register";
 import { Recover_account1 } from "./component/recover_account1";
@@ -60,7 +60,7 @@ const Layout = () => {
     return (
         <div className="d-flex flex-column h-100">
             {/* Toaster para notificaciones */}
-            <Toaster position="top-center" richColors />
+            <Toaster position="top-right" richColors />
             <ScrollToTop />
 
             {/* Mostrar Navbar si corresponde */}
@@ -96,14 +96,14 @@ const Layout = () => {
                                 <Route path="/panel-de-usuario" element={<PanelUsuario />}>
                                     <Route index element={<Navigate to="perfil-usuario" />} />
                                     <Route path="perfil-usuario" element={<TuPerfilUser />} />
-                                    <Route path="historial" element={<HistorialUser />} />
+                                    {/*<Route path="historial" element={<HistorialUser />} />*/}
                                     <Route path="mis-reservas" element={<CalendarioEventosUser />} />
                                 </Route>
                                 <Route path="/biblioteca" element={<Biblioteca />}>
                                     <Route path="reservas/:id" element={<Reservas />} />
                                 </Route>
-                                <Route path="/eventos" element={<FirstEventView />} />
-                                <Route path="/reservar-evento" element={<SecondEventView />} />
+                                <Route element={<FirstEventView />} path="/eventos" />
+                                <Route element={<SecondEventView />} path="/reservar-evento" />
 
                                 {/* Otras rutas */}
                                 <Route path="/" element={<Home />} />

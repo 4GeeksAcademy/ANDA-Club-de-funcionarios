@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { es } from "date-fns/locale";
+import { toast } from "sonner";
 
 export const Reservas = () => {
   const { id } = useParams(); // Obtener el ID de la URL
@@ -33,7 +34,7 @@ export const Reservas = () => {
       if (details) {
         setBookDetails(details);
       } else {
-        console.error("No se encontraron los detalles del libro.");
+        toast.error("No se encontraron los detalles del libro.");
       }
     };
     fetchBookDetails();
@@ -47,10 +48,10 @@ export const Reservas = () => {
         const response=await actions.fetchReservas(id)
         //alert(`Reserva confirmada desde ${formattedStart} hasta ${formattedEnd}`);
       } else {
-        alert("El libro no está disponible para reserva.");
+        toast.error("El libro no está disponible para reserva.");
       }
     } else {
-      alert("Por favor selecciona un rango de fechas.");
+      toast.error("Por favor selecciona un rango de fechas.");
     }
 };
 

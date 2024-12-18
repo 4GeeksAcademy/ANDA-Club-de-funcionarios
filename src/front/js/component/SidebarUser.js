@@ -51,12 +51,7 @@ export const SidebarUser = () => {
             {!isCollapsed && <span className="ms-2">Mis reservas</span>}
           </Link>
         </li>
-        <li className="nav-item">
-          <Link to="historial" className="nav-link text-white text-start">
-            <i className="fa-regular fa-calendar"></i>
-            {!isCollapsed && <span className="ms-2">Historial</span>}
-          </Link>
-        </li>
+
       </ul>
       <ul className="nav flex-column">
         <li className="nav-item">
