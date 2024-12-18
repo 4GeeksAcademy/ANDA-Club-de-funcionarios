@@ -1,27 +1,22 @@
 import React, { useEffect, useContext } from 'react';
 import { useNavigate, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-
 export const CalendarioEventosUser = () => {
     const { store, actions } = useContext(Context); // Acceso al store y a las acciones del flux
     const navigate = useNavigate();
-
     // Función para cargar las reservas
     const cargarReservas = async () => {
         await actions.fetchReservasEvent(); // Llamada a la acción del flux
     };
-
     // Función para eliminar una reserva
     const deleteReserva = async (idReserva) => {
         await actions.deleteReserva(idReserva); // Llamada a la acción del flux
         await cargarReservas(); // Recargar las reservas actualizadas
     };
-
     // Cargar reservas cuando el componente se monte
     useEffect(() => {
         cargarReservas();
     }, []);
-
     return (
         <div className="container mt-4">
             <h2>Reservas Activas</h2>

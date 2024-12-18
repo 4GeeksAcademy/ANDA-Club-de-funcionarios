@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useContextApp } from "../store/appContext";
 import "../../styles/tu_perfil_user.css";
+import { toast } from "sonner";
 
 export const TuPerfilUser = () => {
     const { store, actions } = useContextApp();
@@ -73,7 +74,7 @@ export const TuPerfilUser = () => {
         const userId = store.user?.id;
 
         if (!userId) {
-            alert("Error: No se encontró el ID del usuario.");
+            toast.error("Error: No se encontró el ID del usuario.");
             return;
         }
 
@@ -87,9 +88,9 @@ export const TuPerfilUser = () => {
             setPerfil(result); // Guarda el perfil con su ID
             setPerfilExiste(true);
             setEditMode(false);
-            alert("Perfil creado exitosamente.");
+            toast.success("Perfil actualizado exitosamente.");
         } else {
-            alert("Error al crear el perfil.");
+            toast.error("Error al actualizar el perfil.");
         }
     };
 
@@ -98,7 +99,7 @@ export const TuPerfilUser = () => {
         const userId = store.user?.id; // Aquí debe ser el ID del usuario, no del perfil
     
         if (!userId) {
-            alert("Error: No se encontró el ID del usuario.");
+            toast.error("Error: No se encontró el ID del usuario.");
             return;
         }
     
@@ -121,9 +122,9 @@ export const TuPerfilUser = () => {
             console.log("Perfil actualizado exitosamente:", result);
             setPerfil(result);
             setEditMode(false);
-            alert("Perfil actualizado exitosamente.");
+            toast.success("Perfil actualizado exitosamente.");
         } else {
-            alert("Error al actualizar el perfil.");
+            toast.error("Error al actualizar el perfil.");
         }
     };
 

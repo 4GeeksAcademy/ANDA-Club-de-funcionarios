@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import salon_logo_ from "../../img/salon_logo_.png";
 import { Context } from "../store/appContext";
 import "../../styles/SecondEventView.css";
+import { toast } from "sonner";
 
 
 export const SecondEventView = () => {
@@ -63,17 +64,18 @@ export const SecondEventView = () => {
       try {
         if (id) {
           await actions.actualizarReserva(id, eventoBody);
+          toast.success("Reserva actualizada correctamente.");
         } else {
           await actions.crearReservaEvent(eventoBody);
+          toast.success("Reserva creada correctamente.");
         }
-        alert(`Reserva confirmada para el ${formattedDate} desde ${horaInicio} hasta ${horaFin}.`);
         navigate('/panel-de-usuario/mis-reservas');
       } catch (error) {
         console.error("Error:", error);
-        alert("Hubo un error al confirmar la reserva.");
+        toast.error("Hubo un error al confirmar la reserva. Inténtalo nuevamente.");
       }
     } else {
-      alert("Por favor completa todos los campos.");
+      toast.warning("Por favor completa todos los campos.");
     }
   };
 
