@@ -1,0 +1,49 @@
+.event-banner {
+    background-color: #3865e5; /* Fondo azul */
+    padding: 1.5rem;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 30px; /* Bordes redondeados abajo */
+    border-bottom-right-radius: 30px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Sombra para dar profundidad */
+}
+
+.event-banner h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Profundidad en la letra */
+}
+
+.event-banner p {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.event-banner img {
+    max-width: 150px;
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.3)); /* Sombra ligera */
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+    .event-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .event-banner img {
+        margin-top: 1rem;
+    }
+
+    .event-banner h2 {
+        font-size: 1.5rem;
+    }
+
+    .event-banner p {
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,107 @@
+/* Contenedor principal */
+.event-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+  
+  .event-banner h3 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+  
+  .event-banner-image {
+    width: 150px;
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+/* Banner superior */
+.event-banner {
+    background-color: #3865e5;
+    color: white;
+    padding: 1.5rem 2rem;
+    border-radius: 0; 
+    margin-bottom: 0; 
+    position: relative;
+    z-index: 2;
+}
+
+/* Ajustar el fondo interactivo para pegarse directamente al banner */
+.event-background {
+    position: relative;
+    flex: 1;
+    background: url("https://img.freepik.com/vector-gratis/fondo-brillo-azul-marino-realista_23-2150036758.jpg?semt=ais_hybrid")
+        no-repeat center center;
+    background-size: cover;
+    overflow: hidden;
+    z-index: 1; /* Asegura que esté detrás del banner */
+    margin-top: -5px; /* Elimina cualquier separación indeseada */
+}
+
+  .event-banner-image:hover {
+    transform: scale(1.1) rotate(-5deg); /* Efecto interactivo */
+  }
+  
+  /* Efecto de destellos */
+  .sparkle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+    animation: sparkle-animation 1s ease-out;
+  }
+  
+  @keyframes sparkle-animation {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(3);
+      opacity: 0;
+    }
+  }
+  
+  /* Contenido principal */
+  .event-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  }
+  
+  .event-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .event-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .event-button {
+    background-color: #3865e5;
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .event-button:hover {
+    background-color: #2f54c3;
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(56, 101, 229, 0.3);
+  }
+  

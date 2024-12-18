@@ -1,3 +1,74 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+
+/* Asegura un ancho fijo del sidebar */
+/* Estilo global */
+/* Transiciones suaves entre páginas */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(10px); /* Desplazamiento inicial hacia abajo */
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-10px); /* Desplazamiento hacia arriba */
+  transition: opacity 300ms ease-in, transform 300ms ease-in;
+}
+
+.sidebar.collapsed {
+    width: 80px;
+  }
+  
+  .sidebar .nav-link {
+    white-space: nowrap;
+  }
+  
+  .sidebar .nav-link span {
+    display: inline-block;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .sidebar.collapsed .nav-link span {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .bg-dark {
+    height: 150px !important; /* Establezco altura fija en todas las pantallas */
+  }
+
+  .card {
+    border-radius: 15px; /* Bordes redondeados a las tarjetas */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.card img {
+    border-radius: 15px 15px 0 0; /* Redondear solo la parte superior */
+}
+
+@media (max-width: 992px) {
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .col-12 {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+
+  

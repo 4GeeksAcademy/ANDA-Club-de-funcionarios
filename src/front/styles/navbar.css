@@ -1,0 +1,45 @@
+/* Logo del navbar */
+.navbar-logo {
+    width: 100px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.navbar-logo:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(56, 101, 229, 0.5));
+}
+
+/* Navbar minimalista */
+.custom-navbar {
+    background-color: #ffffff; /* Fondo blanco fijo */
+    margin-top: 1rem; /* Espacio superior */
+    margin-bottom: 1.5rem; /* Espacio inferior */
+}
+
+/* Opciones de navegación */
+.nav-link {
+    color: #3865e5; /* Azul del esquema */
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.nav-link:hover {
+    color: #2f54c3; /* Azul más oscuro en hover */
+    transform: scale(1.05); /* Leve zoom */
+}
+
+/* Enlace activo */
+.nav-link.active-link {
+    color: #2f54c3; /* Azul más oscuro para el enlace activo */
+    font-weight: bold; /* Resalta el enlace activo */
+    border-bottom: 2px solid #3865e5; /* Subrayado minimalista */
+}
+
+.nav-link:hover, .nav-link:focus,
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: transparent !important; /* Elimina fondo en hover */
+    color: #27408b !important; /* Azul más oscuro al pasar */
+    transform: scale(1.05); /* Efecto de leve zoom */
+    text-decoration: none; /* Elimina subrayado si existe */
+}

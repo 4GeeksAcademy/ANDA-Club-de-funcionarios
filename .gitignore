@@ -1,6 +1,5 @@
 # ignore all files starting with .
 .*
-
 # track this file .gitignore (i.e. do NOT ignore it)
 !.gitignore
 !.github

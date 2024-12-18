@@ -1,46 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import getState from "./flux.js";
 
-// Don't change, here is where we initialize our context, by default it's just going to be null.
+// Inicialización del contexto global
 export const Context = React.createContext(null);
 
-// This function injects the global store to any view/component where you want to use it, we will inject the context to layout.js, you can see it here:
-// https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
-const injectContext = PassedComponent => {
-	const StoreWrapper = props => {
-		//this will be passed as the contenxt value
-		const [state, setState] = useState(
-			getState({
-				getStore: () => state.store,
-				getActions: () => state.actions,
-				setStore: updatedStore =>
-					setState({
-						store: Object.assign(state.store, updatedStore),
-						actions: { ...state.actions }
-					})
-			})
-		);
+// Hook para consumir el contexto
+export const useContextApp = () => {
+    const context = useContext(Context);
+    if (!context) {
+        throw new Error("useContextApp debe usarse dentro de un proveedor de Contexto.");
+    }
+    return context;
+};
 
-		useEffect(() => {
-			/**
-			 * EDIT THIS!
-			 * This function is the equivalent to "window.onLoad", it only runs once on the entire application lifetime
-			 * you should do your ajax requests or fetch api requests here. Do not use setState() to save data in the
-			 * store, instead use actions, like this:
-			 **/
-			state.actions.getMessage(); // <---- calling this function from the flux.js actions
-		}, []);
+// HOC para inyectar el contexto en componentes
+const injectContext = (PassedComponent) => {
+    const StoreWrapper = (props) => {
+        const [state, setState] = useState(
+            getState({
+                getStore: () => state.store,
+                getActions: () => state.actions,
+                setStore: (updatedStore) =>
+                    setState({
+                        store: Object.assign(state.store, updatedStore),
+                        actions: { ...state.actions },
+                    }),
+            })
+        );
 
-		// The initial value for the context is not null anymore, but the current state of this component,
-		// the context will now have a getStore, getActions and setStore functions available, because they were declared
-		// on the state of this component
-		return (
-			<Context.Provider value={state}>
-				<PassedComponent {...props} />
-			</Context.Provider>
-		);
-	};
-	return StoreWrapper;
+        useEffect(() => {
+            const token = localStorage.getItem("token");
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            if (token && user) {
+                state.actions.restoreSession(token, user);
+                console.log("Sesión restaurada correctamente.");
+            } else {
+                console.log("No se encontró sesión activa.");
+            }
+        }, []);
+
+        return (
+            <Context.Provider value={state}>
+                <PassedComponent {...props} />
+            </Context.Provider>
+        );
+    };
+    return StoreWrapper;
 };
 
 export default injectContext;

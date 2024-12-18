@@ -1,0 +1,58 @@
+/* Banner superior */
+.admin-panel-banner {
+    background-color: #212529; /* Fondo oscuro */
+    color: white;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom-right-radius: 20px; /* Borde inferior derecho redondeado */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+/* Imagen en el banner */
+.admin-panel-banner img {
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Contenedor principal */
+.admin-panel-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Layout principal */
+.admin-panel-content {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.admin-main-content {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto; /* Scroll si el contenido excede */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .admin-panel-banner {
+        flex-direction: column; /* Alinear verticalmente */
+        height: auto;
+        border-bottom-right-radius: 0; /* Sin borde redondeado */
+        text-align: center;
+    }
+
+    .admin-panel-banner img {
+        height: 100px; /* Ajustar altura */
+        margin-top: 0.5rem;
+    }
+}
+.title-admin {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
