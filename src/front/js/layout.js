@@ -31,6 +31,7 @@ import { FirstEventView } from "./component/FirstEventView";
 import { SecondEventView } from "./component/SecondEventView";
 import { Single } from "./pages/single";
 import { Navbar } from "./component/navbar";
+import { Footer } from "./component/footer";
 import { ProtectedRoute } from "./component/protectedRoute";
 
 const Layout = () => {
@@ -65,54 +66,59 @@ const Layout = () => {
             {/* Mostrar Navbar si corresponde */}
             {mostrarNavbar() && <Navbar />}
 
-            {/* Transición de páginas */}
-            <TransitionGroup component="div" className="flex-grow-1">
-                <CSSTransition key={location.pathname} classNames="fade" timeout={300}>
-                    <div className="flex-grow-1">
-                        <Routes location={location}>
-                            {/* Rutas protegidas */}
-                            <Route path="/panel-admin" element={
-                                <ProtectedRoute requiredRole="admin" userRole={role}>
-                                    <PanelAdministrador />
-                                </ProtectedRoute>
-                            }>
-                                <Route index element={<Navigate to="perfil-administrador" />} />
-                                <Route path="perfil-administrador" element={<TuPerfil />} />
-                                <Route path="editar-cargar-libro" element={<EditarCargarLibro />} />
-                                <Route path="modificar-libro/:id" element={<ModificarLibro />} />
-                                <Route path="subir-libro" element={<SubirLibro />} />
-                                <Route path="subir-libro/:id" element={<SubirLibro />} />
-                                <Route path="editar-cargar-salon" element={<EditarCargarSalon />} />
-                                <Route path="administrador-usuarios" element={<AdministradorUsuarios />} />
-                            </Route>
+            {/* Contenido Principal */}
+            <div className="flex-grow-1">
+                <TransitionGroup component="div" className="flex-grow-1">
+                    <CSSTransition key={location.pathname} classNames="fade" timeout={300}>
+                        <div className="flex-grow-1">
+                            <Routes location={location}>
+                                {/* Rutas protegidas */}
+                                <Route path="/panel-admin" element={
+                                    <ProtectedRoute requiredRole="admin" userRole={role}>
+                                        <PanelAdministrador />
+                                    </ProtectedRoute>
+                                }>
+                                    <Route index element={<Navigate to="perfil-administrador" />} />
+                                    <Route path="perfil-administrador" element={<TuPerfil />} />
+                                    <Route path="editar-cargar-libro" element={<EditarCargarLibro />} />
+                                    <Route path="modificar-libro/:id" element={<ModificarLibro />} />
+                                    <Route path="subir-libro" element={<SubirLibro />} />
+                                    <Route path="subir-libro/:id" element={<SubirLibro />} />
+                                    <Route path="editar-cargar-salon" element={<EditarCargarSalon />} />
+                                    <Route path="administrador-usuarios" element={<AdministradorUsuarios />} />
+                                </Route>
 
-                            {/* Rutas públicas */}
-                            <Route path="/login" element={<Login />} />
-                            <Route path="/register" element={<Register />} />
-                            <Route path="/recover-account1" element={<Recover_account1 />} />
-                            <Route path="/recover-account2" element={<Recover_account2 />} />
-                            <Route path="/panel-de-usuario" element={<PanelUsuario />}>
-                                <Route index element={<Navigate to="perfil-usuario" />} />
-                                <Route path="perfil-usuario" element={<TuPerfilUser />} />
-                                <Route path="historial" element={<HistorialUser />} />
-                                <Route path="mis-reservas" element={<CalendarioEventosUser />} />
-                            </Route>
-                            <Route path="/biblioteca" element={<Biblioteca />}>
-                                <Route path="reservas/:id" element={<Reservas />} />
-                            </Route>
-                            <Route path="/eventos" element={<FirstEventView />} />
-                            <Route path="/reservar-evento" element={<SecondEventView />} />
+                                {/* Rutas públicas */}
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/register" element={<Register />} />
+                                <Route path="/recover-account1" element={<Recover_account1 />} />
+                                <Route path="/recover-account2" element={<Recover_account2 />} />
+                                <Route path="/panel-de-usuario" element={<PanelUsuario />}>
+                                    <Route index element={<Navigate to="perfil-usuario" />} />
+                                    <Route path="perfil-usuario" element={<TuPerfilUser />} />
+                                    <Route path="historial" element={<HistorialUser />} />
+                                    <Route path="mis-reservas" element={<CalendarioEventosUser />} />
+                                </Route>
+                                <Route path="/biblioteca" element={<Biblioteca />}>
+                                    <Route path="reservas/:id" element={<Reservas />} />
+                                </Route>
+                                <Route path="/eventos" element={<FirstEventView />} />
+                                <Route path="/reservar-evento" element={<SecondEventView />} />
 
-                            {/* Otras rutas */}
-                            <Route path="/" element={<Home />} />
-                            <Route path="/about" element={<About />} />
-                            <Route path="/demo" element={<Demo />} />
-                            <Route path="/single/:theid" element={<Single />} />
-                            <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
-                        </Routes>
-                    </div>
-                </CSSTransition>
-            </TransitionGroup>
+                                {/* Otras rutas */}
+                                <Route path="/" element={<Home />} />
+                                <Route path="/about" element={<About />} />
+                                <Route path="/demo" element={<Demo />} />
+                                <Route path="/single/:theid" element={<Single />} />
+                                <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
+                            </Routes>
+                        </div>
+                    </CSSTransition>
+                </TransitionGroup>
+            </div>
+
+            {/* Footer siempre al final */}
+            <Footer />
         </div>
     );
 };
