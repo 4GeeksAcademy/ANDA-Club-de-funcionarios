@@ -1,7 +1,157 @@
-/*
-    home.css: This website contains selectors only used in home.css
+/* Reset y estilos base */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Evita scroll lateral */
+    box-sizing: border-box;
+    width: 100%;
+}
 
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+* {
+    box-sizing: inherit;
+}
+
+/* Contenedor principal */
+.home-container {
+    position: relative;
+    min-height: 100vh; /* Altura mínima, pero permite crecer si hay más contenido */
+    overflow-y: auto; /* Habilita el scroll vertical solo si es necesario */
+    background-color: #ffffff;
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+/* Transición hacia el "agujero negro" */
+.home-container.transitioning {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+/* Header */
+.home-header {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: start;
+    background-color: #fff;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.home-logo {
+    width: 100px;
+    height: auto;
+    transition: filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.home-logo:hover {
+    filter: drop-shadow(0 0 8px rgba(56, 101, 229, 0.6));
+    transform: scale(1.05);
+}
+
+/* Navbar */
+.custom-navbar {
+    background-color: #eef2ff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    height: 3rem;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+/* Sección Hero */
+.hero-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5rem 1rem;
+    margin-top: 3rem;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #3865e5;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 2rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.1);
+    line-height: 1.5;
+}
+
+/* Botones */
+.btn-primary, .btn-outline-primary {
+    letter-spacing: 0.8px;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #3865e5;
+    border-color: #3865e5;
+    color: #fff;
+}
+
+.btn-outline-primary {
+    color: #3865e5;
+    border-color: #3865e5;
+}
+
+.btn-primary:hover, .btn-outline-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(56, 101, 229, 0.3);
+}
+
+.btn-primary:active, .btn-outline-primary:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 5px rgba(56, 101, 229, 0.3);
+}
+
+/* Imagen de las manos */
+.hands-image {
+    max-width: 100%;
+    filter: grayscale(20%) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1));
+    transition: transform 0.5s ease, filter 0.5s ease-in-out;
+    animation: subtle-pulse 5s infinite ease-in-out;
+}
+
+.hands-image:hover {
+    transform: scale(1.03) rotate(-1deg);
+    filter: grayscale(0%) drop-shadow(0 15px 20px rgba(0, 0, 0, 0.15));
+}
+
+/* Efecto de pulso */
+@keyframes subtle-pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.01);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+}

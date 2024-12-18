@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
-import { Toaster } from "sonner"; // Importa el Toaster
+import { Toaster } from "sonner"; // Notificaciones
+import injectContext, { Context } from "./store/appContext";
 
+// Componentes y páginas
 import { Home } from "./pages/home";
 import About from "./pages/About";
 import { TuPerfil } from "./pages/TuPerfil";
@@ -26,19 +29,12 @@ import { Biblioteca } from "./pages/Biblioteca";
 import { Reservas } from "./pages/Reservas";
 import { FirstEventView } from "./component/FirstEventView";
 import { SecondEventView } from "./component/SecondEventView";
-
-
 import { Single } from "./pages/single";
-import injectContext, { Context } from "./store/appContext";
-
 import { Navbar } from "./component/navbar";
-import { ProtectedRoute } from './component/protectedRoute';
-
-
-
+import { ProtectedRoute } from "./component/protectedRoute";
 
 const Layout = () => {
-    const location = useLocation();  // Obtenemos la ruta actual
+    const location = useLocation(); // Ubicación actual
     const { store } = React.useContext(Context);
     const role = store.user?.role || "guest";
 
@@ -49,32 +45,34 @@ const Layout = () => {
         "/recover-account1",
         "/recover-account2",
         "/",
-        "/about"    // No mostrar Navbar en la ruta /about
+        "/about"
     ];
 
-    // Función que determina si debemos mostrar el Navbar
+    // Determinar si mostramos el Navbar
     const mostrarNavbar = () => {
-        return !noNavbarRoutes.includes(location.pathname);  // Si la ruta no está en noNavbarRoutes, muestra el Navbar
+        return !noNavbarRoutes.includes(location.pathname);
     };
 
-
-
-
+    // Validar si falta el BACKEND_URL
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
     return (
         <div className="d-flex flex-column h-100">
-            {/* Toaster para alertas de la aplicación */}
+            {/* Toaster para notificaciones */}
             <Toaster position="top-center" richColors />
-            <ScrollToTop>
-                {mostrarNavbar() && <Navbar />}  {/* Solo mostrar Navbar si mostrarNavbar es true */}
+            <ScrollToTop />
 
-                <div className="d-flex flex-grow-1">
-                    <div className="flex-grow-1 p-0">
-                        <Routes>
-                            {/* Rutas protegidas para el panel de administración */}
+            {/* Mostrar Navbar si corresponde */}
+            {mostrarNavbar() && <Navbar />}
+
+            {/* Transición de páginas */}
+            <TransitionGroup component="div" className="flex-grow-1">
+                <CSSTransition key={location.pathname} classNames="fade" timeout={300}>
+                    <div className="flex-grow-1">
+                        <Routes location={location}>
+                            {/* Rutas protegidas */}
                             <Route path="/panel-admin" element={
-                                <ProtectedRoute requiredRole="admin" userRole={role}> {/* Envia el role del usuario */}
+                                <ProtectedRoute requiredRole="admin" userRole={role}>
                                     <PanelAdministrador />
                                 </ProtectedRoute>
                             }>
@@ -88,42 +86,33 @@ const Layout = () => {
                                 <Route path="administrador-usuarios" element={<AdministradorUsuarios />} />
                             </Route>
 
-                            {/* Rutas para el manejo de registro, login y recuperar contraseña */}
+                            {/* Rutas públicas */}
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/recover-account1" element={<Recover_account1 />} />
                             <Route path="/recover-account2" element={<Recover_account2 />} />
-
-                            {/* Panel de Usuario con sus rutas hijas correspondientes */}
-                            <Route path="panel-de-usuario" element={<PanelUsuario />}>
-                                {/* Redirección cuando se ingresa a "panel-de-usuario" */}
+                            <Route path="/panel-de-usuario" element={<PanelUsuario />}>
                                 <Route index element={<Navigate to="perfil-usuario" />} />
                                 <Route path="perfil-usuario" element={<TuPerfilUser />} />
                                 <Route path="historial" element={<HistorialUser />} />
                                 <Route path="mis-reservas" element={<CalendarioEventosUser />} />
                             </Route>
-
-                            {/* Biblioteca con sus rutas hijas correspondientes */}
-                            <Route element={<Biblioteca />} path="biblioteca">
-                                <Route element={<Reservas />} path="reservas/:id" />
+                            <Route path="/biblioteca" element={<Biblioteca />}>
+                                <Route path="reservas/:id" element={<Reservas />} />
                             </Route>
-
-
-                            {/* Eventos con sus rutas hijas correspondientes */}
-                            <Route element={<FirstEventView />} path="/eventos" />
-                            <Route element={<SecondEventView />} path="/reservar-evento" />
-
+                            <Route path="/eventos" element={<FirstEventView />} />
+                            <Route path="/reservar-evento" element={<SecondEventView />} />
 
                             {/* Otras rutas */}
                             <Route path="/" element={<Home />} />
                             <Route path="/about" element={<About />} />
                             <Route path="/demo" element={<Demo />} />
                             <Route path="/single/:theid" element={<Single />} />
-                            <Route element={<h1>Not found!</h1>} />
+                            <Route path="*" element={<h1>404 - Página no encontrada</h1>} />
                         </Routes>
                     </div>
-                </div>
-            </ScrollToTop>
+                </CSSTransition>
+            </TransitionGroup>
         </div>
     );
 };

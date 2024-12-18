@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useContextApp } from "../store/appContext";
+import "../../styles/tu_perfil_user.css";
 
 export const TuPerfilUser = () => {
     const { store, actions } = useContextApp();
@@ -16,6 +17,7 @@ export const TuPerfilUser = () => {
     });
     const [editMode, setEditMode] = useState(false);
     const [perfilExiste, setPerfilExiste] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(true);
 
     // Función auxiliar para construir el payload
     const buildProfilePayload = (userId) => ({
@@ -49,6 +51,13 @@ export const TuPerfilUser = () => {
             }
         };
         loadProfile();
+        
+        const timer = setTimeout(() => {
+            setIsTransitioning(false);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+
     }, [store.user, actions]);
 
     // Manejar cambios en los inputs
@@ -119,7 +128,7 @@ export const TuPerfilUser = () => {
     };
 
     return (
-        <div className="container mt-4">
+        <div className={`container mt-4 ${isTransitioning ? "transitioning" : ""}`}>
             <h4 className="text-left p-4">Perfil de Administrador</h4>
             <form className="bg-white p-3 shadow rounded">
                 <div className="row mb-3">
