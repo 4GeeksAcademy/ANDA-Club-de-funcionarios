@@ -5,6 +5,8 @@ const getState = ({ getStore, getActions, setStore }) => {
             libros: [], 
             reservas: [],
             userProfiles: [],
+            reservas: [], 
+            reservaActual: null,
             user: null,
             demo: [
                 {
@@ -165,6 +167,95 @@ const getState = ({ getStore, getActions, setStore }) => {
                         return [];
                     }
                 },
+            },
+             
+            // Obtener todas las reservas
+             fetchReservasEvent: async () => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + '/api/reservations', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        }
+                    });
+                    if (!response.ok) throw new Error("Error al obtener reservas");
+                    const data = await response.json();
+                    setStore({ reservas: data });
+                } catch (error) {
+                    console.error("Error al cargar reservas:", error);
+                }
+            },
+
+            // Crear una nueva reserva
+            crearReservaEvent: async (reservaData) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + '/api/reservations', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        },
+                        body: JSON.stringify(reservaData)
+                    });
+                    if (!response.ok) throw new Error("Error al crear reserva");
+                    getActions().fetchReservas();
+                } catch (error) {
+                    console.error("Error al crear reserva:", error);
+                }
+            },
+
+            // Obtener una reserva por ID
+            fetchReservaById: async (id) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + `/api/reservations/${id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        }
+                    });
+                    if (!response.ok) throw new Error("Error al obtener la reserva");
+                    const data = await response.json();
+                    setStore({ reservaActual: data });
+                } catch (error) {
+                    console.error("Error al obtener reserva:", error);
+                }
+            },
+
+            // Actualizar una reserva
+            actualizarReserva: async (id, reservaData) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + `/api/reservations/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        },
+                        body: JSON.stringify(reservaData)
+                    });
+                    if (!response.ok) throw new Error("Error al actualizar reserva");
+                    getActions().fetchReservas();
+                } catch (error) {
+                    console.error("Error al actualizar reserva:", error);
+                }
+            },
+
+            // Eliminar una reserva
+            eliminarReserva: async (id) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL + `/api/reservations/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem("token")}`
+                        }
+                    });
+                    if (!response.ok) throw new Error("Error al eliminar reserva");
+                    getActions().fetchReservas();
+                } catch (error) {
+                    console.error("Error al eliminar reserva:", error);
+                }
             },
 
              // --FETCH DE LIBROS--

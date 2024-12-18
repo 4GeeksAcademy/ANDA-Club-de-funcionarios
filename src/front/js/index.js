@@ -1,6 +1,6 @@
 //import react into the bundle
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 
 //include your index.scss file into the bundle
 import "../styles/index.css";
@@ -11,9 +11,9 @@ import { BrowserRouter } from "react-router-dom";  // Import BrowserRouter
 import Layout from "./layout"; // Import Layout
 
 //render your react application
-ReactDOM.render(
-  <BrowserRouter>  {/* Envuelve el componente Layout en BrowserRouter */}
+const root = ReactDOM.createRoot(document.querySelector("#app"));
+root.render(
+  <BrowserRouter>
     <Layout />
-  </BrowserRouter>,
-  document.querySelector("#app")
+  </BrowserRouter>
 );
