@@ -1,0 +1,90 @@
+/* Contenedor principal */
+.about-container {
+    padding: 2rem 1rem;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* Logo con efecto hover */
+.about-logo {
+    width: 100px;
+    transition: filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.about-logo:hover {
+    filter: drop-shadow(0 0 8px rgba(56, 101, 229, 0.6));
+    transform: scale(1.05);
+}
+
+/* Navbar con sombra */
+.custom-navbar {
+    background-color: #eef2ff;
+    height: 3rem;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagen con efecto */
+.about-image {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.2));
+    transition: transform 0.5s ease-in-out;
+}
+
+.about-image:hover {
+    transform: scale(1.05) rotate(-2deg);
+}
+
+/* Títulos y textos */
+.about-title {
+    color: #3865e5;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.about-subtitle {
+    color: #3865e5;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.about-description {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* Formulario translúcido */
+.about-translucent-form {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 2rem;
+    max-width: 100%;
+    margin: auto;
+}
+
+/* Acordeón estilizado */
+.accordion-button {
+    background-color: #f8f9fa;
+    border: none;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.accordion-button:hover {
+    background-color: rgba(56, 101, 229, 0.1);
+    color: #3865e5;
+}
+
+.accordion-item {
+    border: none;
+}
+
+.accordion-header {
+    font-weight: bold;
+}

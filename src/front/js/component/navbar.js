@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import "../../styles/navbar.css";
 
 export const Navbar = () => {
   const [activeLink, setActiveLink] = useState("/");
@@ -29,8 +30,8 @@ export const Navbar = () => {
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-light px-4 shadow-sm">
         <div className="container-fluid">
-          {/* Logo */}
-          <Link
+           {/* Logo */}
+           <Link
             to={
               store.user?.role === "admin"
                 ? "/panel-admin/perfil-administrador"
@@ -38,12 +39,12 @@ export const Navbar = () => {
                 ? "/panel-de-usuario/perfil-usuario"
                 : "/"
             }
-            className="navbar-brand"
+            className="navbar-brand logo-container"
           >
             <img
               src="https://logoteca.uy/wp-content/uploads/sites/3/2024/09/Logo-ANDA.svg"
               alt="Anda"
-              style={{ width: "100px" }}
+              className="navbar-logo"
             />
           </Link>
 

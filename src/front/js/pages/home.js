@@ -1,53 +1,77 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
+import "../../styles/login.css";
 import logoANDA from "../../img/logo-ANDA.png";
 import manos from "../../img/manos.png";
 
-import { Link } from "react-router-dom";
-
 export const Home = () => {
-	const { store, actions } = useContext(Context);
+    const { store, actions } = useContext(Context);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    const navigate = useNavigate();
 
-	return (
-		<div style={{ padding: '2rem' }}>
-			<div style={{ marginBottom: '1rem' }}>
-				<img src={logoANDA} alt="Bootstrap" width="100rem" height="auto" />
-			</div>
-			<nav className="navbar" style={{ backgroundColor: '#eef2ff', height: '3rem' }}>
-				<div className="container">
-					<a className="navbar-brand" href="#"></a>
-				</div>
-			</nav>
-			
+    // Manejar la transición al Login
+    const handleAccessClick = () => {
+        setIsTransitioning(true);
+        setTimeout(() => {
+            navigate("/login");
+        }, 1000); // Tiempo sincronizado con la animación
+    };
 
-			<div className="container col-xxl-8 px-4 py-5">
-				<div className="row flex-lg-row-reverse align-items-center g-5 py-5">
-					<div className="col-10 col-sm-8 col-lg-6 d-flex justify-content-end">
-						<img src={manos} className="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy" />
-					</div>
-					<div className="col-lg-6">
-						<h1 className="display-1 fw-bold  lh-1 mb-3" style={{ color: '#3865e5' }}>Club de funcionarios</h1>
-						<p className="lead fw-bold" style={{ fontSize: '1.5rem' }} >¡Disfruta de los beneficios pensados para ti!</p>
-						<div className="d-grid gap-2 d-md-flex justify-content-md-start" style={{ marginTop: '5rem' }}>
-							<Link to="/login" >
-								<button type="button" className=" btn btn-lg px-4 me-md-2"
-									style={{ backgroundColor: '#3865e5', borderColor: '#3865e5', color: '#fff' }}>Acceder</button>
-							</Link>
-							<button
-								type="button"
-								className="btn btn-lg me-md-2"
-								style={{ backgroundColor: '#fff', borderColor: '#3865e5', color: '#3865e5' }}
-							>
-								<Link to='/about'>Más información</Link>
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+    // Manejar la transición al About
+    const handleMoreInfoClick = () => {
+        setIsTransitioning(true);
+        setTimeout(() => {
+            navigate("/about");
+        }, 1000); // Tiempo sincronizado con la animación
+    };
 
+    return (
+        <div className={`home-container ${isTransitioning ? "transitioning" : ""}`}>
+            {/* Header con el logo */}
+            <header className="home-header">
+                <img src={logoANDA} alt="ANDA Logo" className="home-logo" />
+            </header>
 
-		</div>
-	);
+            {/* Navbar */}
+            <nav className="navbar custom-navbar">
+                <div className="container">
+                    <a className="navbar-brand" href="#"></a>
+                </div>
+            </nav>
+
+            {/* Sección Hero */}
+            <section className="hero-section container py-5">
+                <div className="row align-items-center">
+                    {/* Imagen a la derecha */}
+                    <div className="col-lg-6 order-lg-2 text-center">
+                        <img
+                            src={manos}
+                            alt="Manos Unidas"
+                            className="img-fluid hands-image"
+                            loading="lazy"
+                        />
+                    </div>
+
+                    {/* Texto e interacción */}
+                    <div className="col-lg-6 text-center text-lg-start">
+                        <h1 className="hero-title fw-bold">Club de Funcionarios</h1>
+                        <p className="hero-subtitle">¡Disfruta de los beneficios pensados para ti!</p>
+                        <div className="d-flex gap-3 justify-content-center justify-content-lg-start">
+                            <button className="btn btn-primary btn-lg" onClick={handleAccessClick}>
+                                Acceder
+                            </button>
+                            <button
+                                className="btn btn-outline-primary btn-lg"
+                                onClick={handleMoreInfoClick}
+                            >
+                                Más información
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
 };

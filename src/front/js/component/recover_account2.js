@@ -1,51 +1,54 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../../styles/recover_account2.css"; // Importar los estilos
 
 export const Recover_account2 = () => {
     return (
-        <nav className="navbar navbar-light bg-light">
-            <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-                <div className="card col-11 col-sm-8 col-md-6 col-lg-4 p-4" style={{ minHeight: "500px", position: 'relative' }}>
-                    <div className="d-flex justify-content-between align-items-center ">
-                        <h3 className="card-title mb-0">Recuperar contraseña </h3>
-                        <img 
-                            src="https://logoteca.uy/wp-content/uploads/sites/3/2024/09/Logo-ANDA.svg" 
-                            alt="Icono" 
-                            style={{
-                                width: '70px',  
-                                height: '70px', 
-                            }} 
+        <div className="recover-form d-flex justify-content-center align-items-center">
+            <div className="card recover-card col-11 col-sm-8 col-md-6 col-lg-4 p-4">
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h3 className="card-title mb-0">Recuperar contraseña</h3>
+                    <img
+                        src="https://logoteca.uy/wp-content/uploads/sites/3/2024/09/Logo-ANDA.svg"
+                        alt="Icono"
+                        className="recover-logo"
+                    />
+                </div>
+                <form>
+                    <div className="mb-4">
+                        <label htmlFor="email" className="form-label">Mail:</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="email"
+                            placeholder="usuario@ejemplo.com"
                         />
                     </div>
-                        <form>
-                            <div className="mb-4">
-                                <label htmlFor="username" text-primary-emphasis className="form-label">Mail:</label>
-                                <input type="text" className="form-control" id="username" placeholder="usuario@ejemplo.com" />
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="username" text-primary-emphasis className="form-label">Nueva contraseña:</label>
-                                <input type="text" className="form-control" id="username" placeholder="*****" />
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="username" text-primary-emphasis className="form-label">Repetir contraseña:</label>
-                                <input type="text" className="form-control" id="username" placeholder="*****" />
-                            </div>
-                            <Link to="/\">
-                            <button
-                                type="submit"
-                                className="btn w-100"
-                                style={{
-                                    backgroundColor: '#3865e5',
-                                    color: 'white'
-                                }}
-                            >
-                                Continuar
-                            </button>
-                        </Link>
-                        </form>
-
+                    <div className="mb-4">
+                        <label htmlFor="newPassword" className="form-label">Nueva contraseña:</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="newPassword"
+                            placeholder="*****"
+                        />
                     </div>
-                </div>
-        </nav>
+                    <div className="mb-4">
+                        <label htmlFor="confirmPassword" className="form-label">Repetir contraseña:</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="confirmPassword"
+                            placeholder="*****"
+                        />
+                    </div>
+                    <Link to="/">
+                        <button type="submit" className="btn btn-primary w-100">
+                            Continuar
+                        </button>
+                    </Link>
+                </form>
+            </div>
+        </div>
     );
 };

@@ -1,0 +1,70 @@
+/* Animación de entrada Fade-In y Slide-Up */
+@keyframes fade-slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Contenedor principal */
+.recover-form {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+/* Tarjeta con animación */
+.recover-card {
+    animation: fade-slide-up 1s ease-out;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+}
+
+/* Logo */
+.recover-logo {
+    width: 80px;
+    height: auto;
+    filter: drop-shadow(0 0 8px rgba(56, 101, 229, 0.5));
+    transition: transform 0.3s ease-in-out;
+}
+
+.recover-logo:hover {
+    transform: scale(1.1);
+}
+
+/* Botón principal */
+.btn-primary {
+    background-color: #3865e5;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #2f54c3;
+    box-shadow: 0 4px 10px rgba(56, 101, 229, 0.3);
+    transform: scale(1.03);
+}
+
+.btn-primary:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 5px rgba(56, 101, 229, 0.3);
+}
+
+/* Enlaces estilizados */
+.recover-link {
+    color: #3865e5;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+}
+
+.recover-link:hover {
+    color: #2f54c3;
+    text-decoration: underline;
+}

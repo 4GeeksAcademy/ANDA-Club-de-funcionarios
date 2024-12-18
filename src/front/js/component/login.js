@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextApp } from "../store/appContext";
 import { toast } from "sonner";
+import "../../styles/login.css"; // Estilos del formulario
 
 export const Login = () => {
     const { actions } = useContextApp();
@@ -19,42 +20,35 @@ export const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        
         if (!formData.email || !formData.password) {
             alert("Por favor, completa todos los campos.");
             return;
         }
 
-        
         const success = await actions.loginUser(formData.email, formData.password);
 
         if (success) {
             toast.success("Inicio de sesión exitoso 🎉");
-            navigate("/panel-de-usuario"); 
+            navigate("/panel-de-usuario");
         } else {
             toast.error("Credenciales incorrectas. Intenta nuevamente.");
         }
     };
 
     return (
-        <form className="navbar navbar-light bg-light" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit}>
             <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-                <div className="card col-11 col-sm-8 col-md-6 col-lg-4 p-4" style={{ minHeight: "500px", position: 'relative' }}>
-                    <div className="d-flex justify-content-between align-items-center ">
-                        <img className="mx-auto"
+                <div className="card login-card col-11 col-sm-8 col-md-6 col-lg-4 p-4">
+                    <div className="text-center mb-4">
+                        <img
                             src="https://logoteca.uy/wp-content/uploads/sites/3/2024/09/Logo-ANDA.svg"
                             alt="Icono"
-                            style={{
-                                width: '70px',
-                                height: '70px',
-                            }}
+                            className="login-logo"
                         />
                     </div>
-                    <div className="card-body d-flex flex-column justify-content-between flex-grow-1">
-                        <div className="d-flex justify-content-start mb-4">
-                            <h5>Iniciar sesión</h5>
-                        </div>
-                        <div className="mb-4">
+                    <div className="card-body">
+                        <h5 className="text-center mb-4">Iniciar sesión</h5>
+                        <div className="mb-3">
                             <label htmlFor="email" className="form-label">Correo Electrónico:</label>
                             <input
                                 type="email"
@@ -65,7 +59,7 @@ export const Login = () => {
                                 onChange={handleChange}
                             />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-3">
                             <label htmlFor="password" className="form-label">Contraseña:</label>
                             <input
                                 type="password"
@@ -76,20 +70,13 @@ export const Login = () => {
                                 onChange={handleChange}
                             />
                         </div>
-                        <button
-                            type="submit"
-                            className="btn w-100"
-                            style={{
-                                backgroundColor: '#3865e5',
-                                color: 'white'
-                            }}
-                        >
+                        <button type="submit" className="btn btn-primary w-100">
                             Acceder
                         </button>
-                        <div className="d-flex justify-content-center mt-4">
+                        <div className="text-center mt-3">
                             <a href="/recover-account1" className="card-link">Recuperar contraseña</a>
                         </div>
-                        <div className="d-flex justify-content-center mt-4">
+                        <div className="text-center mt-2">
                             <a href="/register" className="card-link">¿No tienes cuenta? Regístrate</a>
                         </div>
                     </div>

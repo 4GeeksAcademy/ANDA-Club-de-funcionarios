@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContextApp } from "../store/appContext";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import "../../styles/register.css"; // Importar el archivo CSS
 
 export const Register = () => {
     const { actions } = useContextApp();
@@ -32,35 +33,32 @@ export const Register = () => {
             email: formData.email,
             password: formData.password
         };
-        console.log("Datos enviados al backend:", userData);
         const success = await actions.registerUser(userData);
 
         if (success) {
             toast.success("Registro exitoso");
             navigate("/login");
         } else {
-            toast.error("Error al registrar. Intenta nuevamente.")
+            toast.error("Error al registrar. Intenta nuevamente.");
         }
     };
 
     return (
-        <form className="container d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }} onSubmit={handleSubmit}>
-            <div className="card col-11 col-sm-8 col-md-6 col-lg-4 p-4" style={{ minHeight: "500px", position: 'relative' }}>
-                <div className="d-flex justify-content-between align-items-center ">
-                    <img className="mx-auto"
+        <form
+            className="register-form d-flex justify-content-center align-items-center"
+            onSubmit={handleSubmit}
+        >
+            <div className="card register-card col-11 col-sm-8 col-md-6 col-lg-4 p-4">
+                <div className="text-center mb-4">
+                    <img
                         src="https://logoteca.uy/wp-content/uploads/sites/3/2024/09/Logo-ANDA.svg"
                         alt="Icono"
-                        style={{
-                            width: '70px',
-                            height: '70px',
-                        }}
+                        className="register-logo"
                     />
                 </div>
-                <div className="card-body d-flex flex-column justify-content-between flex-grow-1">
-                    <div className="d-flex justify-content-start mb-4">
-                        <h5>Registrarse</h5>
-                    </div>
-                    <div className="mb-4">
+                <div className="card-body">
+                    <h5 className="text-center mb-4">Registrarse</h5>
+                    <div className="mb-3">
                         <label htmlFor="user_name" className="form-label">Nombre:</label>
                         <input
                             type="text"
@@ -71,18 +69,18 @@ export const Register = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="form-label">Mail:</label>
+                    <div className="mb-3">
+                        <label htmlFor="email" className="form-label">Correo Electrónico:</label>
                         <input
                             type="email"
                             className="form-control"
                             id="email"
-                            placeholder="Ingrese su mail"
+                            placeholder="Ingrese su correo"
                             value={formData.email}
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <label htmlFor="password" className="form-label">Contraseña:</label>
                         <input
                             type="password"
@@ -93,7 +91,7 @@ export const Register = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <label htmlFor="confirmPassword" className="form-label">Reingrese la contraseña:</label>
                         <input
                             type="password"
@@ -104,19 +102,12 @@ export const Register = () => {
                             onChange={handleChange}
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="btn w-100"
-                        style={{
-                            backgroundColor: '#3865e5',
-                            color: 'white'
-                        }}
-                    >
+                    <button type="submit" className="btn btn-primary w-100">
                         Regístrate
                     </button>
-                    <div className="d-flex justify-content-center mt-4">
-                        <Link to="/login">
-                            <span className="card-link">¿Ya tienes una cuenta? Iniciar sesión</span>
+                    <div className="text-center mt-3">
+                        <Link to="/login" className="register-link">
+                            ¿Ya tienes una cuenta? Iniciar sesión
                         </Link>
                     </div>
                 </div>
