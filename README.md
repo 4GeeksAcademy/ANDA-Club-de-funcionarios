@@ -1,81 +1,207 @@
-# WebApp boilerplate with React JS and Flask API
+ANDA - Club de Funcionarios
+Plataforma web desarrollada para los funcionarios de ANDA, que permite gestionar la reserva de espacios para eventos y el préstamo de libros en una biblioteca en línea, todo mediante una interfaz adaptada a la estética institucional de ANDA.
 
-Build web applications using React.js for the front end and python/flask for your backend API.
+Tabla de Contenidos
+Descripción
 
-- Documentation can be found here: https://start.4geeksacademy.com/starters/react-flask
-- Here is a video on [how to use this template](https://www.loom.com/share/f37c6838b3f1496c95111e515e83dd9b)
-- Integrated with Pipenv for package managing.
-- Fast deployment to heroku [in just a few steps here](https://start.4geeksacademy.com/backend/deploy-heroku-posgres).
-- Use of .env file.
-- SQLAlchemy integration for database abstraction.
+Tecnologías Utilizadas
 
-### 1) Installation:
+Instalación y Configuración
 
-> If you use Github Codespaces (recommended) or Gitpod this template will already come with Python, Node and the Posgres Database installed. If you are working locally make sure to install Python 3.10, Node 
+Backend (Flask)
 
-It is recomended to install the backend first, make sure you have Python 3.8, Pipenv and a database engine (Posgress recomended)
+Frontend (React)
 
-1. Install the python packages: `$ pipenv install`
-2. Create a .env file based on the .env.example: `$ cp .env.example .env`
-3. Install your database engine and create your database, depending on your database you have to create a DATABASE_URL variable with one of the possible values, make sure you replace the valudes with your database information:
+Uso de la Aplicación
 
-| Engine    | DATABASE_URL                                        |
-| --------- | --------------------------------------------------- |
-| SQLite    | sqlite:////test.db                                  |
-| MySQL     | mysql://username:password@localhost:port/example    |
-| Postgress | postgres://username:password@localhost:5432/example |
+Estructura del Proyecto
 
-4. Migrate the migrations: `$ pipenv run migrate` (skip if you have not made changes to the models on the `./src/api/models.py`)
-5. Run the migrations: `$ pipenv run upgrade`
-6. Run the application: `$ pipenv run start`
+Contribuciones
 
-> Note: Codespaces users can connect to psql by typing: `psql -h localhost -U gitpod example`
+Licencia
 
-### Undo a migration
+Autores
 
-You are also able to undo a migration by running
+Recursos Adicionales
 
-```sh
-$ pipenv run downgrade
-```
+Descripción
+Este proyecto tiene como objetivo proporcionar a los funcionarios de ANDA una herramienta eficiente para:
 
-### Backend Populate Table Users
+Reservar espacios: Gestión de reservas de salones y otros espacios para eventos internos.
 
-To insert test users in the database execute the following command:
+Préstamo de libros: Sistema de biblioteca en línea que permite solicitar y gestionar préstamos de libros disponibles.
 
-```sh
-$ flask insert-test-users 5
-```
+La plataforma busca optimizar la organización interna y fomentar el acceso a recursos culturales y educativos entre los funcionarios.
 
-And you will see the following message:
+Tecnologías Utilizadas
+Frontend:
 
-```
-  Creating test users
-  test_user1@test.com created.
-  test_user2@test.com created.
-  test_user3@test.com created.
-  test_user4@test.com created.
-  test_user5@test.com created.
-  Users created successfully!
-```
+React.js
 
-### **Important note for the database and the data inside it**
+Webpack
 
-Every Github codespace environment will have **its own database**, so if you're working with more people eveyone will have a different database and different records inside it. This data **will be lost**, so don't spend too much time manually creating records for testing, instead, you can automate adding records to your database by editing ```commands.py``` file inside ```/src/api``` folder. Edit line 32 function ```insert_test_data``` to insert the data according to your model (use the function ```insert_test_users``` above as an example). Then, all you need to do is run ```pipenv run insert-test-data```.
+Bootstrap (opcional, según diseño)
 
-### Front-End Manual Installation:
+Backend:
 
--   Make sure you are using node version 14+ and that you have already successfully installed and runned the backend.
+Python 3.10
 
-1. Install the packages: `$ npm install`
-2. Start coding! start the webpack dev server `$ npm run start`
+Flask
 
-## Publish your website!
+SQLAlchemy
 
-This boilerplate it's 100% read to deploy with Render.com and Heroku in a matter of minutes. Please read the [official documentation about it](https://start.4geeksacademy.com/deploy).
+Pipenv
 
-### Contributors
+Base de Datos:
 
-This template was built as part of the 4Geeks Academy [Coding Bootcamp](https://4geeksacademy.com/us/coding-bootcamp) by [Alejandro Sanchez](https://twitter.com/alesanchezr) and many other contributors. Find out more about our [Full Stack Developer Course](https://4geeksacademy.com/us/coding-bootcamps/part-time-full-stack-developer), and [Data Science Bootcamp](https://4geeksacademy.com/us/coding-bootcamps/datascience-machine-learning).
+PostgreSQL (recomendado)
 
-You can find other templates and resources like this at the [school github page](https://github.com/4geeksacademy/).
+Soporte para SQLite y MySQL
+
+Despliegue:
+
+Render
+
+Heroku (opcional)
+
+Instalación y Configuración
+Backend (Flask)
+Clonar el repositorio:
+
+bash
+Copiar
+Editar
+git clone https://github.com/4GeeksAcademy/ANDA-Club-de-funcionarios.git
+cd ANDA-Club-de-funcionarios
+Instalar dependencias:
+
+bash
+Copiar
+Editar
+pipenv install
+Configurar variables de entorno:
+
+Copiar el archivo .env.example y renombrarlo a .env. Luego, editar las variables según la configuración local.
+
+bash
+Copiar
+Editar
+cp .env.example .env
+Configurar la base de datos:
+
+Definir la variable DATABASE_URL en el archivo .env con la cadena de conexión correspondiente. Ejemplos:
+
+PostgreSQL:
+
+bash
+Copiar
+Editar
+DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/nombre_basedatos
+SQLite:
+
+ini
+Copiar
+Editar
+DATABASE_URL=sqlite:///test.db
+Inicializar la base de datos:
+
+bash
+Copiar
+Editar
+pipenv run migrate
+pipenv run upgrade
+Ejecutar el servidor:
+
+bash
+Copiar
+Editar
+pipenv run start
+Frontend (React)
+Instalar dependencias:
+
+bash
+Copiar
+Editar
+npm install
+Iniciar el servidor de desarrollo:
+
+bash
+Copiar
+Editar
+npm run start
+La aplicación estará disponible en http://localhost:3000.
+
+Uso de la Aplicación
+Una vez iniciados ambos servidores (frontend y backend), los usuarios pueden:
+
+Iniciar sesión: Acceder con credenciales proporcionadas.
+
+Reservar espacios: Seleccionar fechas y horarios disponibles para eventos.
+
+Solicitar libros: Buscar y solicitar préstamos de libros disponibles en la biblioteca.
+
+Administrar reservas y préstamos: Visualizar, modificar o cancelar solicitudes según permisos.
+
+Estructura del Proyecto
+csharp
+Copiar
+Editar
+ANDA-Club-de-funcionarios/
+├── .devcontainer/
+├── .github/
+├── .vscode/
+├── dist/
+├── docs/
+├── migrations/
+├── public/
+├── src/
+│   ├── api/
+│   ├── front/
+│   └── ...
+├── .env.example
+├── Pipfile
+├── Pipfile.lock
+├── package.json
+├── README.md
+└── ...
+src/api/: Código fuente del backend (Flask).
+
+src/front/: Código fuente del frontend (React).
+
+migrations/: Archivos de migración de la base de datos.
+
+public/: Archivos estáticos públicos.
+
+docs/: Documentación adicional.
+
+Contribuciones
+Las contribuciones son bienvenidas. Para colaborar:
+
+Realizar un fork del repositorio.
+
+Crear una nueva rama:
+
+bash
+Copiar
+Editar
+git checkout -b feature/nueva-funcionalidad
+Realizar los cambios y confirmar los commits.
+
+Enviar un pull request detallando las modificaciones.
+
+Licencia
+Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más información.
+
+Autores
+Equipo de Desarrollo de 4Geeks Academy
+
+Colaboradores: Lista de colaboradores
+
+Recursos Adicionales
+4Geeks Academy
+
+Documentación de React
+
+Documentación de Flask
+
+SQLAlchemy ORM
