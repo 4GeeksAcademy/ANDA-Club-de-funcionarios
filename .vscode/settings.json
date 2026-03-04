@@ -7,5 +7,11 @@
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "editor.language.colorizedBracketPairs": []
+  "editor.language.colorizedBracketPairs": [],
+  "chat.tools.terminal.autoApprove": {
+    "/^cd \"c:/Users/Fede/Documents/DEV/ANDA/ANDA-Club-de-funcionarios\" ; python -m pipenv run flask --app src\\.app create-admin$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
 }
