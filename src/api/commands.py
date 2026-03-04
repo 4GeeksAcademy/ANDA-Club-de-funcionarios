@@ -32,3 +32,8 @@ def setup_commands(app):
     @app.cli.command("insert-test-data")
     def insert_test_data():
         pass
+
+    @app.cli.command("create-admin")
+    def create_admin():
+        """Create a default admin user for testing and development."""
+        User.create_default_admin()

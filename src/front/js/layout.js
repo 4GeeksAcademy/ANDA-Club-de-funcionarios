@@ -39,6 +39,9 @@ const Layout = () => {
     const { store } = React.useContext(Context);
     const role = store.user?.role || "guest";
 
+    // ref used by CSSTransition to avoid findDOMNode calls
+    const nodeRef = React.useRef(null);
+
     // Rutas donde no se debe mostrar el Navbar
     const noNavbarRoutes = [
         "/login",
@@ -69,8 +72,13 @@ const Layout = () => {
             {/* Contenido Principal */}
             <div className="flex-grow-1">
                 <TransitionGroup component="div" className="flex-grow-1">
-                    <CSSTransition key={location.pathname} classNames="fade" timeout={300}>
-                        <div className="flex-grow-1">
+                    <CSSTransition
+                        key={location.pathname}
+                        classNames="fade"
+                        timeout={300}
+                        nodeRef={nodeRef}
+                    >
+                        <div ref={nodeRef} className="flex-grow-1">
                             <Routes location={location}>
                                 {/* Rutas protegidas */}
                                 <Route path="/panel-admin" element={

@@ -16,6 +16,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from datetime import timedelta
 from dotenv import load_dotenv # Cargar variables de entorno
+import secrets
 from functools import wraps
 # from models import Person
 
@@ -28,7 +29,9 @@ static_file_dir = os.path.join(os.path.dirname(
 load_dotenv()
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') # Clave secreta en .env
+# Ensure a JWT secret exists: prefer .env value, otherwise generate a secure dev secret
+jwt_secret = os.getenv('JWT_SECRET_KEY') or secrets.token_hex(32)
+app.config['JWT_SECRET_KEY'] = jwt_secret
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=365)  # Configura 1 año de expiración para el token
 jwt = JWTManager(app)
 app.url_map.strict_slashes = False

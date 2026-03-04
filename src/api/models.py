@@ -46,7 +46,7 @@ class User(db.Model):
         inspector = reflection.Inspector.from_engine(db.engine)
         if 'users' in inspector.get_table_names():
             admin_email = "admin@anda.com.uy"
-            admin_password = "admin123"
+            admin_password = "ANDA_Admin2026$Secure"
 
             # Verificar si el administrador ya existe
             existing_admin = User.query.filter_by(email=admin_email).first()
