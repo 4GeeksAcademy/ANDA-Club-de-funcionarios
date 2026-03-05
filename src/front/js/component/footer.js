@@ -14,7 +14,7 @@ export const Footer = () => (
       {/* Redes sociales */}
       <div className="d-flex justify-content-center gap-3">
         <a
-          href="https://anda.com.uy/servicios-en-linea/"
+          href="https://anda.com.uy"
           target="_blank"
           rel="noopener noreferrer"
           className="footer-link"
@@ -22,7 +22,7 @@ export const Footer = () => (
           <i className="fas fa-globe fa-lg"></i>
         </a>
         <a
-          href="https://www.facebook.com/ANDAOficial/?locale=es_LA"
+          href="https://www.facebook.com/ANDAOficial"
           target="_blank"
           rel="noopener noreferrer"
           className="footer-link"
@@ -30,7 +30,7 @@ export const Footer = () => (
           <i className="fab fa-facebook fa-lg"></i>
         </a>
         <a
-          href="https://www.instagram.com/anda_uy/reels/"
+          href="https://www.instagram.com/anda_uy"
           target="_blank"
           rel="noopener noreferrer"
           className="footer-link"
