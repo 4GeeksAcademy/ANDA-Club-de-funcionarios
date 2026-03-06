@@ -34,17 +34,20 @@ body {
 
 /* Header */
 .home-header {
-  padding: 1rem 2rem;
+  padding: 1rem 0;
   display: flex;
-  justify-content: start;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
 .home-logo {
-  width: 100px;
+  width: 140px;
   height: auto;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
   transition:
     filter 0.3s ease-in-out,
     transform 0.3s ease-in-out;
@@ -138,6 +141,7 @@ body {
 /* Imagen de las manos */
 .hands-image {
   max-width: 100%;
+  margin-left: 113.39px;
   filter: grayscale(20%) drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1));
   transition:
     transform 0.5s ease,
