@@ -10,3 +10,17 @@
   --border: #dee2e6;
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+/* Home header logo */
+.home-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0; /* padding sutil para que no quede pegado */
+}
+
+.home-logo {
+  height: 100px;
+  width: auto;
+  display: block;
+}

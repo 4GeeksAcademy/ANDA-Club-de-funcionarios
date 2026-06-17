@@ -30,16 +30,11 @@ export const Navbar = () => {
     <header>
       <nav className="navbar navbar-expand-lg navbar-light bg-light px-4 shadow-sm">
         <div className="container-fluid">
-           {/* Logo */}
-           <Link
-            to={
-              store.user?.role === "admin"
-                ? "/panel-admin/perfil-administrador"
-                : store.user?.role === "user"
-                ? "/panel-de-usuario/perfil-usuario"
-                : "/"
-            }
+          {/* Logo */}
+          <Link
+            to="/"
             className="navbar-brand logo-container"
+            aria-label="Ir a Home"
           >
             <img
               src="https://logoteca.uy/wp-content/uploads/sites/3/2024/09/Logo-ANDA.svg"
@@ -111,9 +106,8 @@ export const Navbar = () => {
               <li className="nav-item">
                 <Link
                   to="/panel-de-usuario/perfil-usuario"
-                  className={`nav-link ${
-                    activeLink === "/panel-de-usuario" ? "fw-bold" : ""
-                  }`}
+                  className={`nav-link ${activeLink === "/panel-de-usuario" ? "fw-bold" : ""
+                    }`}
                   onClick={() => handleLinkClick("/panel-de-usuario")}
                 >
                   Usuario
@@ -123,9 +117,8 @@ export const Navbar = () => {
                 <li className="nav-item">
                   <Link
                     to="/panel-admin/perfil-administrador"
-                    className={`nav-link ${
-                      activeLink === "/panel-admin" ? "fw-bold" : ""
-                    }`}
+                    className={`nav-link ${activeLink === "/panel-admin" ? "fw-bold" : ""
+                      }`}
                     onClick={() => handleLinkClick("/panel-admin")}
                   >
                     Administrador
@@ -135,9 +128,8 @@ export const Navbar = () => {
               <li className="nav-item">
                 <Link
                   to="/biblioteca"
-                  className={`nav-link ${
-                    activeLink === "/biblioteca" ? "fw-bold" : ""
-                  }`}
+                  className={`nav-link ${activeLink === "/biblioteca" ? "fw-bold" : ""
+                    }`}
                   onClick={() => handleLinkClick("/biblioteca")}
                 >
                   Biblioteca
@@ -146,9 +138,8 @@ export const Navbar = () => {
               <li className="nav-item">
                 <Link
                   to="/eventos"
-                  className={`nav-link ${
-                    activeLink === "/eventos" ? "fw-bold" : ""
-                  }`}
+                  className={`nav-link ${activeLink === "/eventos" ? "fw-bold" : ""
+                    }`}
                   onClick={() => handleLinkClick("/eventos")}
                 >
                   Eventos
