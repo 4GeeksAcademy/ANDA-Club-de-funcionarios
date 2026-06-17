@@ -1,5 +1,6 @@
 
 import click
+from flask_bcrypt import Bcrypt
 from api.models import db, User
 
 """
@@ -8,6 +9,7 @@ Flask commands are usefull to run cronjobs or tasks outside of the API but sill 
 with youy database, for example: Import the price of bitcoin every night as 12am
 """
 def setup_commands(app):
+    command_bcrypt = Bcrypt(app)
     
     """ 
     This is an example command "insert-test-users" that you can run from the command line
@@ -37,3 +39,22 @@ def setup_commands(app):
     def create_admin():
         """Create a default admin user for testing and development."""
         User.create_default_admin()
+
+    @app.cli.command("reset-user-password")
+    @click.argument("email")
+    @click.argument("new_password")
+    @click.option("--activate", is_flag=True, help="Set the user status to activo.")
+    def reset_user_password(email, new_password, activate):
+        """Reset an existing user's password."""
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            raise click.ClickException(f"User not found: {email}")
+
+        user.password_hash = command_bcrypt.generate_password_hash(new_password).decode("utf-8")
+
+        if activate:
+            user.status = "activo"
+
+        db.session.commit()
+        click.echo(f"Password reset for {email}")

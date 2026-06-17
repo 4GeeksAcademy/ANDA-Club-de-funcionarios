@@ -55,14 +55,14 @@ const getState = ({ getStore, getActions, setStore }) => {
                         localStorage.setItem("token", data.access_token);
                         localStorage.setItem("user", JSON.stringify(data.user));
                         setStore({ user: data.user }); // Guarda la información del usuario en el store
-                        return true;
+                        return data.user;
                     } else {
                         console.error("Error al iniciar sesión");
-                        return false;
+                        return null;
                     }
                 } catch (error) {
                     console.error("Error en la solicitud de login:", error);
-                    return false;
+                    return null;
                 }
             },
             

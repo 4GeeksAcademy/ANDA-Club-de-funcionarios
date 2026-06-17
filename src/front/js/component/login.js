@@ -25,11 +25,11 @@ export const Login = () => {
             return;
         }
 
-        const success = await actions.loginUser(formData.email, formData.password);
+        const user = await actions.loginUser(formData.email, formData.password);
 
-        if (success) {
+        if (user) {
             toast.success("Inicio de sesión exitoso 🎉");
-            navigate("/panel-de-usuario");
+            navigate(user.role === "admin" ? "/panel-admin" : "/panel-de-usuario");
         } else {
             toast.error("Credenciales incorrectas. Intenta nuevamente.");
         }

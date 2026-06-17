@@ -2,9 +2,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 //include your index.scss file into the bundle
 import "../styles/index.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 //import your own components
 import { BrowserRouter } from "react-router-dom";  // Import BrowserRouter

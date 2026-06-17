@@ -1,22 +1,16 @@
 @import "./theme.css";
 @import "./forms.css";
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
 
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
-
-/* Asegura un ancho fijo del sidebar */
-/* Estilo global */
-/* Transiciones suaves entre páginas */
 .fade-enter {
   opacity: 0;
-  transform: translateY(10px); /* Desplazamiento inicial hacia abajo */
+  transform: translateY(8px);
 }
 
 .fade-enter-active {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 300ms ease-out, transform 300ms ease-out;
+  transition: opacity 220ms ease-out, transform 220ms ease-out;
 }
 
 .fade-exit {
@@ -26,52 +20,55 @@
 
 .fade-exit-active {
   opacity: 0;
-  transform: translateY(-10px); /* Desplazamiento hacia arriba */
-  transition: opacity 300ms ease-in, transform 300ms ease-in;
+  transform: translateY(-8px);
+  transition: opacity 180ms ease-in, transform 180ms ease-in;
+}
+
+.sidebar {
+  width: 248px;
+  min-height: 100%;
+  background: var(--color-ink) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  transition: width var(--transition);
 }
 
 .sidebar.collapsed {
-    width: 80px;
-  }
-  
-  .sidebar .nav-link {
-    white-space: nowrap;
-  }
-  
-  .sidebar .nav-link span {
-    display: inline-block;
-    transition: opacity 0.3s ease-in-out;
-  }
-  
-  .sidebar.collapsed .nav-link span {
-    opacity: 0;
-    visibility: hidden;
-  }
-  
-  .bg-dark {
-    height: 150px !important; /* Establezco altura fija en todas las pantallas */
-  }
-
-  .card {
-    border-radius: 15px; /* Bordes redondeados a las tarjetas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  width: 80px !important;
 }
 
-.card img {
-    border-radius: 15px 15px 0 0; /* Redondear solo la parte superior */
+.sidebar .nav-link,
+.sidebar .btn-link {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  margin: 0 var(--space-2);
+  border-radius: var(--radius-md);
+  color: rgba(255, 255, 255, 0.82) !important;
+  font-size: var(--text-sm);
+  font-weight: 700;
 }
 
-@media (max-width: 992px) {
-    .row {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .col-12 {
-        margin-bottom: 1.5rem;
-    }
+.sidebar .nav-link:hover,
+.sidebar .btn-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff !important;
+  text-decoration: none;
 }
 
-@import "~@fortawesome/fontawesome-free/css/all.min.css";
+.sidebar .nav-link span,
+.sidebar .btn-link span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  
+.sidebar.collapsed .nav-link span,
+.sidebar.collapsed .btn-link span {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.admin-main-content,
+.panel-main-content {
+  background: var(--color-page);
+}
