@@ -6,7 +6,7 @@ Aplicacion web para funcionarios de ANDA que integra:
 - Gestion de biblioteca y prestamos de libros.
 - Paneles diferenciados para usuarios y administradores.
 
-## Stack Tecnologico
+## Stack Tecnológico
 
 - Frontend: React 19 + Webpack + Bootstrap
 - Backend: Flask + SQLAlchemy + Flask-Migrate + JWT
@@ -133,7 +133,7 @@ ANDA-Club-de-funcionarios/
 `-- README.md
 ```
 
-## Troubleshooting Rapido
+## Troubleshooting Rápido
 
 - `pipenv: command not found`: usar `python -m pipenv ...` o agregar Pipenv al `PATH`.
 - Frontend carga pero no consume API: confirmar `BACKEND_URL` en `.env`.
